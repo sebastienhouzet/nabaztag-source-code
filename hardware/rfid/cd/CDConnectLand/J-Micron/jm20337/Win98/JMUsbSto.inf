@@ -1,0 +1,86 @@
+[Version]
+Signature="$CHICAGO$"
+Class=HDC
+provider=%MSFT%
+
+[Manufacturer]
+%MfgName%=Microsoft
+
+[Microsoft]
+%DeviceDesc%=JMUSB.install,USB\VID_152D&PID_2338
+%JMUS\DISK.DeviceDesc%=jmuspdr.install,USBSTOR\JMDISK
+
+[PreCopySection]
+HKR,,NoSetupUI,,1
+
+[DestinationDirs]
+jmus.files = 10,System32\Drivers
+jmuspdr.files = 12
+
+[JMUSB.install]
+CopyFiles=jmus.files, jmuspdr.files
+AddReg=jmus.addreg
+
+[Sandisk.install]
+CopyFiles=jmus.files, jmuspdr.files
+AddReg=jmus.addreg
+
+[ImationLS120.install]
+CopyFiles=jmus.files, jmuspdr.files
+AddReg=jmus.addreg
+
+[ImationLS120.install.HW]
+AddReg=cb.addreg.HW
+
+[jmus.addreg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,jmusbsto.SYS
+
+
+; If the device does not correctly indicate which protocol it uses,
+; one of the following sections should be added to indicate which protocol
+; the driver should use.
+
+; Indicate that the device uses the C/B/I protocol
+[cbi.addreg.HW]
+HKR,,DeviceProtocol,0x10001,00
+
+; Indicate that the device uses the C/B protocol
+[cb.addreg.HW]
+HKR,,DeviceProtocol,0x10001,01
+
+; Indicate that the device uses the BULK ONLY protocol
+[bulkonly.addreg.HW]
+HKR,,DeviceProtocol,0x10001,50
+
+; Install the port driver
+[jmuspdr.install]
+AddReg=jmuspdr.addreg
+
+[jmuspdr.addreg]
+HKR,,DevLoader,,*ios
+HKR,,PortDriver,,jmuspdr.pdr
+HKLM,%AUTORUN%,JMUsbMon,,"JMUsbMon.exe"
+
+
+[jmus.files]
+jmusbsto.sys
+
+[jmuspdr.files]
+jmuspdr.pdr
+
+[SourceDisksNames]
+1000 = "USB Mass Storage Driver Disk","",,
+
+[SourceDisksFiles]
+jmusbsto.SYS = 1000
+jmusPDR.PDR = 1000
+
+;---------------------------------------------------------------;
+
+[Strings]
+MSFT="JMicron"
+MfgName="JMicron"
+DeviceDesc="JM20338 SATA, USB Combo"
+jmus\DISK.DeviceDesc="USB Mass Storage Device"
+AUTORUN="Software\Microsoft\Windows\CurrentVersion\Run"

@@ -1,0 +1,96 @@
+[Version]
+Signature="$CHICAGO$"
+Class=HDC
+ClassGUID={4D36E96A-E325-11CE-BFC1-08002BE10318}
+Provider=%MfgName%
+DriverVer=04/03/2002, 1.42
+;CatalogFile=U2a98_2000.cat
+
+[ControlFlags]
+ExcludeFromSelect = *
+
+[Manufacturer]
+%MfgName%=USBCompliance
+
+[USBCompliance]
+%USB\VID_10B9&PID_5619.DeviceDesc%=USBSTOR_CBI,  USB\VID_10B9&PID_5619
+%USB\VID_1189&PID_6000.DeviceDesc%=USBSTOR_CBI,  USB\VID_1189&PID_6000
+%USB\VID_1189&PID_6001.DeviceDesc%=USBSTOR_CBI,  USB\VID_1189&PID_6001
+%USB\VID_1189&PID_6002.DeviceDesc%=USBSTOR_CBI,  USB\VID_1189&PID_6002
+%USB\VID_1189&PID_6003.DeviceDesc%=USBSTOR_CBI,  USB\VID_1189&PID_6003
+%USB\VID_1189&PID_6004.DeviceDesc%=USBSTOR_CBI,  USB\VID_1189&PID_6004
+%USB\VID_1189&PID_6005.DeviceDesc%=USBSTOR_CBI,  USB\VID_1189&PID_6005
+%USB\VID_1189&PID_6006.DeviceDesc%=USBSTOR_CBI,  USB\VID_1189&PID_6006
+%USB\VID_1189&PID_6007.DeviceDesc%=USBSTOR_CBI,  USB\VID_1189&PID_6007
+%GenericBulkOnly.DeviceDesc%=USBSTOR_BULK, USB\Class_08&SubClass_02&Prot_50
+%GenericBulkOnly.DeviceDesc%=USBSTOR_BULK, USB\Class_08&SubClass_06&Prot_50
+%U2I\ATAPI.DeviceDesc%=usbpd.Dev,U2I\ATAPI
+
+[DestinationDirs]
+DefaultDestDir = 10, system32\drivers
+USBSTOR.CopyList = 10, system32\drivers
+U2A.Files.Ext = 10,System32\Drivers
+USBDRV.Files.Ext = 12
+
+
+; Windows 98 Install Sections
+;
+[USBSTOR_CBI]
+CopyFiles=U2A.Files.Ext,USBDRV.Files.Ext
+AddReg=U2A.AddReg
+
+[USBSTOR_BULK]
+CopyFiles=U2A.Files.Ext,USBDRV.Files.Ext
+AddReg=U2A.AddReg
+
+[usbpd.Dev]
+AddReg=usbpd.AddReg
+
+
+; Windows 98 Registry Section
+;
+[U2A.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,U2AWDM.SYS
+
+[usbpd.AddReg]
+HKR,,DevLoader,,*ios
+HKR,,PortDriver,,USBDRV.pdr
+
+[USBSTOR.AddService]
+DisplayName    = %USBSTOR.SvcDesc%
+ServiceType    = 1
+StartType      = 3
+ErrorControl   = 1
+ServiceBinary  = %12%\USBSTOR.SYS
+
+[U2A.Files.Ext]
+U2AWDM.sys
+
+[USBDRV.Files.Ext]
+USBDRV.pdr
+
+[SourceDisksNames]
+1000 = %U2A_Driver_Disk%,"",,
+
+[SourceDisksFiles]
+USBU2A.SYS = 1000
+U2AWDM.SYS = 1000
+USBDRV.PDR = 1000
+
+
+[Strings]
+MfgName="USB Compliance."
+USB\VID_10B9&PID_5619.DeviceDesc="USB Optical Storage Device"
+USB\VID_1189&PID_6000.DeviceDesc="USB Optical Storage Device"
+USB\VID_1189&PID_6001.DeviceDesc="USB Optical Storage Device"
+USB\VID_1189&PID_6002.DeviceDesc="USB Optical Storage Device"
+USB\VID_1189&PID_6003.DeviceDesc="USB Optical Storage Device"
+USB\VID_1189&PID_6004.DeviceDesc="USB Optical Storage Device"
+USB\VID_1189&PID_6005.DeviceDesc="USB Optical Storage Device"
+USB\VID_1189&PID_6006.DeviceDesc="USB Optical Storage Device"
+USB\VID_1189&PID_6007.DeviceDesc="USB Optical Storage Device"
+GenericBulkOnly.DeviceDesc = "USB Mass Storage Device"
+USBSTOR.SvcDesc="USB Mass Storage Driver"
+U2I\ATAPI.DeviceDesc="USB to ATAPI Adapter"
+U2A_Driver_Disk="USB Mass Storage Driver Disk"

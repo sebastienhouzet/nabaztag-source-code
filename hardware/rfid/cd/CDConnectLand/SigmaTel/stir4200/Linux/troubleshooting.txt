@@ -1,0 +1,25 @@
+The first thing I'd suggest is to vary the tx_power and 
+rx_sensitivity parameters to the stir4200 kernel module.  
+Considering that the devices appear to be interoperable to 
+some extent, this really looks like a signal quality issue.  
+Also, you can try to vary the distance between the phone and 
+the dongle.  About 6 inches to a foot is ideal -- closer 
+doesn't necessarily mean better signal quality.  See if 
+either of these help.
+
+After intalling the module, to try out these settings do:
+
+    insmod stir4200 rx_sensitivity=3 tx_power=2
+
+rx_sensitivity, the seceiver sensitivity, varies from 0-7; 0 
+is most sensitive.  tx_power, the transmitter power, varies
+from 0-3, 0 is highest power.
+
+The best settings depend on which physical transceiver is on your
+particular str4100-based hardware.  This is indeed why there is a
+settable parameter.  Unfortunately, there is no programmatic way
+to detect what transceiver is attached.  In fact, the only way
+Windows gets this parameter correct is that the ".inf" in the
+windows driver that was shipped with the dongle presumably had a
+value correctly preset.  Alas it's not in a form that I could
+translate directly for you into sensitivity/power values.

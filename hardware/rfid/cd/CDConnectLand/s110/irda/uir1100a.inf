@@ -1,0 +1,102 @@
+;
+; UIR1100A USB/IrDA Bridge Installation Information for Windows XP
+; 
+
+[Version]
+Signature = "$Windows NT$"
+Class = Infrared
+provider = %UIR1100A%
+ClassGUID = {6bdd1fc5-810f-11d0-BEC7-08002BE2092F}
+
+[Manufacturer]
+%UIR1100A%=uir1100a
+
+[ControlFlags]
+ExcludeFromSelect = USB\VID_0E55&PID_110A
+
+[uir1100a]
+%USB\VID_0E55&PID_110A.DeviceDesc%=uir1100a.Dev,USB\VID_0E55&PID_110A
+
+[DestinationDirs]
+uir1100a.CopyFiles = 12
+DefaultDestDir = 12
+                
+[uir1100a.Dev.NT]
+CopyFiles=uir1100a.CopyFiles
+AddReg=uir1100a.AddReg, uir1100a.Params.AddReg
+BusType=1
+Characteristics = 0x84; NCF_PHYSICAL, NCF_HAS_UI
+
+[uir1100a.Dev.NT.Services]
+Addservice = uir1100a, 0x00000002, uir1100a.AddService, common.EventLog
+
+[uir1100a.AddService]
+DisplayName    = %UIR1100A%
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_DEMAND_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\uir1100a.sys
+LoadOrderGroup = NDIS
+
+[uir1100a.AddReg]
+HKR,  Ndi,            HelpText,     0,      %UIR1100A%
+HKR,  Ndi,            Service,      0,      "uir1100a"
+HKR,  Ndi\Interfaces, UpperRange,   0,      "ndisirda"
+HKR,  Ndi\Interfaces, LowerRange,   0,      "nolower"
+HKR,  Ndi,            RequiredAll,  0,      "MS_IrDA"
+
+[uir1100a.Params.AddReg]
+HKR,,ReceiveMode,0,"2"
+HKR,Ndi\params\TransceiverType,ParamDesc,,%UIR1100ATYPE%
+HKR,Ndi\params\TransceiverType,default,,"2"
+HKR,Ndi\params\TransceiverType,type,,"enum"
+HKR,Ndi\params\TransceiverType\enum,"0",,"KwonZhun 2200"
+HKR,Ndi\params\TransceiverType\enum,"1",,"Vishay 6101E"
+HKR,Ndi\params\TransceiverType\enum,"2",,"Vishay 6102F [Default]"
+HKR,Ndi\params\TransceiverType\enum,"3",,"Vishay 6102F"
+HKR,Ndi\params\TransceiverType\enum,"4",,"Infineon"
+HKR,Ndi\params\TransceiverType\enum,"5",,"HP 1100"
+
+HKR,Ndi\params\MinTurnTime,ParamDesc,,%UIR1100ATIME%
+HKR,Ndi\params\MinTurnTime,default,,"10000"
+HKR,Ndi\params\MinTurnTime,type,,"enum"
+HKR,Ndi\params\MinTurnTime\enum,"500",," 0.5 mS"
+HKR,Ndi\params\MinTurnTime\enum,"1000",," 1.0 mS"
+HKR,Ndi\params\MinTurnTime\enum,"5000",," 5.0 mS"
+HKR,Ndi\params\MinTurnTime\enum,"10000",,"10.0 mS [Default]"
+
+HKR,Ndi\params\SpeedEnable,ParamDesc,,%UIR1100ASPEED%
+HKR,Ndi\params\SpeedEnable,type,,"enum"
+HKR,Ndi\params\SpeedEnable,default,,"115200"
+HKR,Ndi\params\SpeedEnable\enum,"9600",,   "   9600"
+HKR,Ndi\params\SpeedEnable\enum,"19200",,  "  19200"
+HKR,Ndi\params\SpeedEnable\enum,"38400",,  "  38400"
+HKR,Ndi\params\SpeedEnable\enum,"57600",,  "  57600"
+HKR,Ndi\params\SpeedEnable\enum,"115200",, " 115200 [Default]" 
+
+[common.EventLog]
+AddReg = common.AddEventLog.reg
+
+[common.AddEventLog.reg]
+HKR, , EventMessageFile, 0x00020000, "%%SystemRoot%%\System32\netevent.dll"
+HKR, , TypesSupported,   0x00010001, 7
+
+[uir1100a.CopyFiles]
+uir1100a.sys
+
+[SourceDisksFiles]
+uir1100a.sys=1
+
+[SourceDisksNames]
+1 = %UIR1100ADISK%,,,
+
+;---------------------------------------------------------------;
+
+[Strings]
+UIR1100A="UIR1100A"
+USB\VID_0E55&PID_110A.DeviceDesc="UIR1100A USB-IrDA Bridge"
+
+UIR1100ATYPE="Transceiver Type"
+UIR1100ATIME="Turn-Around Time"
+UIR1100ASPEED="Baud Rate"
+UIR1100ADISK="UIR1100A Driver Disk"

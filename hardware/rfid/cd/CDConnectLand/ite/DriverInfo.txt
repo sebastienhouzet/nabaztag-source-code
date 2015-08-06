@@ -1,0 +1,4 @@
+  			DRIVER DESCRIPTION
+			==================
+
+(1) IT8903 - Win98/98SE driver and software application for IT8903 chipset       V1.2.5

@@ -1,0 +1,27 @@
+; INF file for USB storage device
+; Copyright (c) 2000-2005
+
+[Version]
+Signature="$CHICAGO$"
+Class=hdc
+provider=%MSFT%
+
+[Manufacturer]
+%MfgName%=General
+
+[General]
+%USBSTOR\DISK.DeviceDesc%=usbmspd.Dev,USBSTOR\DISK
+
+[usbmspd.Dev]
+AddReg=usbmspd.AddReg
+
+[usbmspd.AddReg]
+HKR,,DevLoader,,*ios
+HKR,,PortDriver,,genestor.pdr
+HKR,,GeneUsbStorTag,,1
+;---------------------------------------------------------------;
+
+[Strings]
+MSFT="General"
+MfgName="General"
+USBSTOR\DISK.DeviceDesc="USB Storage Drive"

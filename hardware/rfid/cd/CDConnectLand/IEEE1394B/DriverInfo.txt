@@ -1,0 +1,7 @@
+  			DRIVER DESCRIPTION
+			==================
+
+(1) IEEE1394B -  IEEE1394B Driver for TI chipset
+
+    For Windows 98, 98SE, ME, 2000, XP                        		- Ver 1.2.0.2				
+

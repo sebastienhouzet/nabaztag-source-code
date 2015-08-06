@@ -1,0 +1,120 @@
+[Version]
+Signature="$CHICAGO$"
+Class=USB
+ClassGUID={36FC9E60-C465-11CF-8056-444553540000}
+provider=%MfgName%
+DriverVer=04/03/2003, 1.42
+;CatalogFile=UsbStorME.cat
+
+[ControlFlags]
+ExcludeFromSelect = *
+
+[Manufacturer]
+%MfgName%=USBCompliance
+
+[USBCompliance]
+%USB\VID_10B9&PID_5619.DeviceDesc%=USBSTOR_CBI       ,USB\VID_10B9&PID_5619
+%USB\VID_1189&PID_6000.DeviceDesc%=USBSTOR_CBI       ,USB\VID_1189&PID_6000
+%USB\VID_1189&PID_6001.DeviceDesc%=USBSTOR_CBI       ,USB\VID_1189&PID_6001
+%USB\VID_1189&PID_6002.DeviceDesc%=USBSTOR_CBI       ,USB\VID_1189&PID_6002
+%USB\VID_1189&PID_6003.DeviceDesc%=USBSTOR_CBI       ,USB\VID_1189&PID_6003
+%USB\VID_1189&PID_6004.DeviceDesc%=USBSTOR_CBI       ,USB\VID_1189&PID_6004
+%USB\VID_1189&PID_6005.DeviceDesc%=USBSTOR_CBI       ,USB\VID_1189&PID_6005
+%USB\VID_1189&PID_6006.DeviceDesc%=USBSTOR_CBI       ,USB\VID_1189&PID_6006
+%USB\VID_1189&PID_6007.DeviceDesc%=USBSTOR_CBI       ,USB\VID_1189&PID_6007
+
+[PreCopySection]
+HKR,,NoSetupUI,,1
+
+[DestinationDirs]
+DefaultDestDir = 10, system32\drivers
+
+[USBSTOR_CBI]
+CopyFiles=USBSTOR.CopyList, USBNTMAP.CopyList
+AddReg=USBSTOR.AddReg, USBSTOR_CBI.AddReg
+Include=layout.inf, layout1.inf, layout2.inf, usbstor.inf
+DriverVer=04/05/2000
+
+[USBSTOR_CB]
+CopyFiles=USBSTOR.CopyList, USBNTMAP.CopyList
+AddReg=USBSTOR.AddReg, USBSTOR_CB.AddReg
+DriverVer=04/05/2000
+[USBSTOR_BULK]
+CopyFiles=USBSTOR.CopyList, USBNTMAP.CopyList
+AddReg=USBSTOR.AddReg, USBSTOR_BULK.AddReg
+DriverVer=04/05/2000
+[USBSTOR_BULK_AUTH]
+CopyFiles=USBSTOR.CopyList, USBNTMAP.CopyList
+AddReg=USBSTOR.AddReg, USBSTOR_BULK.AddReg
+DriverVer=04/05/2000
+
+[USBSTOR_CBI.NT]
+CopyFiles=USBSTOR.CopyList
+AddReg=USBSTOR_CBI.AddReg
+DriverVer=04/05/2000
+[USBSTOR_CB.NT]
+CopyFiles=USBSTOR.CopyList
+AddReg=USBSTOR_CB.AddReg
+DriverVer=04/05/2000
+[USBSTOR_BULK.NT]
+CopyFiles=USBSTOR.CopyList
+AddReg=USBSTOR_BULK.AddReg
+DriverVer=04/05/2000
+[USBSTOR_BULK_AUTH.NT]
+CopyFiles=USBSTOR.CopyList
+AddReg=USBSTOR_BULK.AddReg
+DriverVer=04/05/2000
+
+[USBSTOR.AddReg]
+HKR,,DevLoader,,*NTKERN
+HKR,,NTMPDriver,,USBSTOR.SYS
+[USBSTOR_CBI.AddReg]
+HKR,,DriverFlags,0x00010001,0x00000002
+[USBSTOR_CB.AddReg]
+HKR,,DriverFlags,0x00010001,0x00000003
+[USBSTOR_BULK.AddReg]
+HKR,,DriverFlags,0x00010001,0x00000001
+
+[USBSTOR_CBI.HW]
+AddReg=USBSTOR.HW.AddReg
+[USBSTOR_CB.HW]
+AddReg=USBSTOR.HW.AddReg
+[USBSTOR_BULK.HW]
+AddReg=USBSTOR.HW.AddReg
+[USBSTOR_BULK_AUTH.HW]
+AddReg=USBSTOR.HW.AddReg, USBSTOR_AUTH.HW.AddReg
+[USBSTOR.HW.AddReg]
+HKR,,upperfilters,0,"USBNTMAP.SYS"
+HKR,,"LowerFilters",0x00010000,"usbu2a.sys"
+HKR,,"SampleFilterParam",0x00010001,512
+[USBSTOR_AUTH.HW.AddReg]
+HKR,,lowerfilters,0,"USBAUTH.SYS"
+
+[USBSTOR_CBI.NT.Services]
+Addservice = USBSTOR, 0x00000002, USBSTOR.AddService
+[USBSTOR_CB.NT.Services]
+Addservice = USBSTOR, 0x00000002, USBSTOR.AddService
+[USBSTOR_BULK.NT.Services]
+Addservice = USBSTOR, 0x00000002, USBSTOR.AddService
+
+[USBSTOR.AddService]
+DisplayName    = %USBSTOR.SvcDesc%
+ServiceType    = 1
+StartType      = 3
+ErrorControl   = 1
+ServiceBinary  = %12%\USBSTOR.SYS
+
+
+[Strings]
+MfgName="USB Compliance."
+USB\VID_10B9&PID_5619.DeviceDesc = "USB Optical Storage Device"
+USB\VID_1189&PID_6000.DeviceDesc = "USB Optical Storage Device"
+USB\VID_1189&PID_6001.DeviceDesc = "USB Optical Storage Device"
+USB\VID_1189&PID_6002.DeviceDesc = "USB Optical Storage Device"
+USB\VID_1189&PID_6003.DeviceDesc = "USB Optical Storage Device"
+USB\VID_1189&PID_6004.DeviceDesc = "USB Optical Storage Device"
+USB\VID_1189&PID_6005.DeviceDesc = "USB Optical Storage Device"
+USB\VID_1189&PID_6006.DeviceDesc = "USB Optical Storage Device"
+USB\VID_1189&PID_6007.DeviceDesc = "USB Optical Storage Device"
+USBSTOR.SvcDesc = "USB Mass Storage Driver"
+U2A_Driver_Disk="U2A Driver Disk"

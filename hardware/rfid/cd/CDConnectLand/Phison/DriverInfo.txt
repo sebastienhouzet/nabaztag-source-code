@@ -1,0 +1,9 @@
+  			DRIVER DESCRIPTION
+			==================
+
+(1) UP2003 - Drivers for Phison UP2003 USB 2.0 Pen Drive
+
+    WIN98 - Windows 98 & 98SE	                        		- Ver 1.20R010
+ 
+    PENMAIL - Email Software for Pen Drive
+

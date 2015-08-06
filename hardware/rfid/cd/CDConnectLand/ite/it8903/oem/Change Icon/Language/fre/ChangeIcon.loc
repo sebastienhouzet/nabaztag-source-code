@@ -1,0 +1,28 @@
+[CompanyInfo]
+Company_Name="ITE_Tech_Inc"
+Application_Name="Change Icon"
+TrayIconHint="Change Icon Application"
+LabelCopyright="Copyright (C) 1996-2004 ITE Tech. Inc. Tous droits réservés"
+IT8903_0_Name="Périphérique de stockage de masse"
+[UnitMain]
+RefreshNow="Actualiser l'icône maintenant"
+BootAutorun="Désactiver la modification d'icône"
+CustomizeIcon="Personnaliser l'icône"
+Hide="Masquer le programme"
+About="A propos de"
+Exit="Quitter"
+WAlreadyRunning=" est déjà en cours d'exécution!"
+Wwarning="Avertissement"
+[UnitFormAbout]
+Title_Caption="A propos de"
+LabelOSVersion="Version du système d'exploitation : "
+ButtonOK="OK"
+[UnitCustomizeIcon]
+Title_Caption="Personnaliser l'icône"
+LabelSource="Icône actuelle"
+LabelCustomize="Personnaliser l'icône"
+LabelHint="Remplacer par"
+ButtonBrowser="Navigateur"
+ButtonDefault="Défaut"
+ButtonOK="OK"
+ButtonReset="Annuler"

@@ -1,0 +1,98 @@
+;
+; mosuSrPt.INF
+; USB-to-Serial & USB-to-Parallel Windows98se Driver
+;
+
+[Version]
+Signature="$CHICAGO$"
+Class=Ports
+ClassGUID={4d36e978-e325-11ce-bfc1-08002be10318}
+Provider=%ProviderName%
+;CatalogFile=mosuSrPt.cat
+DriverVer=09/28/2004,1.8.2.0
+
+[SourceDisksNames]
+1=%DriversDisk%,,,
+
+[SourceDisksFiles]
+mosuSrPt.inf=1
+
+[DestinationDirs]
+DefaultDestDir=11
+
+; Install class "Ports"
+;----------------------------------------------------------
+[ClassInstall]
+AddReg=PortsClass.AddReg
+
+[PortsClass.AddReg]
+HKR,,,,%PortsClassName%
+
+[ControlFlags]
+ExcludeFromSelect=*
+
+[Manufacturer]
+%MfgName%=mosuSrPtHW
+
+[mosuSrPtHW]
+%MosSerPort.DeviceDesc%=mosuSrPt,MOSCHIP\USB_SERIAL_INTERFACE
+%MosParPort.DeviceDesc%=mosuPrPt,MOSCHIP\USB_PARALLEL_INTERFACE
+
+;---------------------------------------------------------------;
+; For Win98 ...
+;
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Serial Port Install Section
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+[mosuSrPt]
+AddReg=mosuSrPt.AddReg,mosuSrPt.W98.AddReg
+
+[mosuSrPt.AddReg]
+HKR,,PortSubClass,1,01
+
+[mosuSrPt.W98.AddReg]
+HKR,,DevLoader,,*vcomm
+HKR,,PortDriver,,MOSUSRPT.vxd
+HKR,,ConfigDialog,,serialui.dll
+HKR,,Enumerator,,MCSENUM.vxd
+HKR,,DCB,3,1C,00,00,00, 80,25,00,00, 11,33,00,00, 00,00, 0a,00, 0a,00, 08, 00, 00, 11, 13, 00, 00, 00
+HKR,,DisablePowerManagement,1,01,00,00,00
+HKR,,PortSubClass,1,01
+;;HKR,,EnumPropPages,,"serialui.dll,EnumPropPages"
+HKR,,EnumPropPages,,MOSUSER.dll
+HKR,,Icon,,102
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Parallel Port Install Section
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+[mosuPrPt]
+AddReg=mosuPrPt.AddReg,mosuPrPt.W98.AddReg
+
+[mosuPrPt.AddReg]
+HKR,,PortSubClass,1,00
+
+[mosuPrPt.W98.AddReg]
+HKR,,DevLoader,,*vcomm
+HKR,,PortDriver,,mosuPrPt.vxd
+HKR,,PortSubClass,1,00
+HKR,,ECPDevice,1,00
+;;HKR,,EnumPropPages,,"serialui.dll,EnumPropPages"
+HKR,,EnumPropPages,,MOSUPAR.dll
+HKR,,Icon,,102
+
+
+;---------------------------------------------------------------;
+
+[Strings]
+ProviderName="MosChip Semiconductor Technology"
+MfgName="MosChip Semiconductor Technology"
+PortsClassName = "Ports (COM & LPT)"
+DriversDisk="USB-to-Serial Drivers Disk"
+;USB\VID_9710&PID_7720.DeviceDesc="USB-to-Serial Port Driver"
+MosSerPort.DeviceDesc="USB-to-Serial Port Driver"
+MosParPort.DeviceDesc="USB-to-Parallel Port Driver"
+USB\VID_9710&PID_7720.FriendlyName="USB-to-Serial FriendlyName"

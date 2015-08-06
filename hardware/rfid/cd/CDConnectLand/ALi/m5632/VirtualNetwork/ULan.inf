@@ -1,0 +1,231 @@
+;Copyright (c) 2003 PROVIDER Corporation
+; ULan USB 2.0 Virtual Ethernet Adapter
+[Version]
+Signature  = "$CHICAGO$"
+Class      = Net
+ClassGUID  = {4D36E972-E325-11CE-BFC1-08002BE10318}
+Compatible = 1
+DriverVer  = 06/23/2003,1.2.0.19
+Provider   = %PROVIDER%
+
+[Manufacturer]
+%MANUFACTURER% = Corp
+
+[Corp]
+%INTERMEDIATEDEVICE.DESCRIPTION% = Corp.Install, USB\VID_0402&PID_5632
+
+;****************************************************************************
+; Source information
+;****************************************************************************
+[SourceDisksNames]
+1 = %INTERMEDIATEDEVICE.DESCRIPTION%,,,
+
+[SourceDisksFiles]
+VNic.sys   = 1,
+M5633.bin   = 1,
+
+[VNic.CopyFiles]
+VNic.sys
+
+[VNic.CopyBinFiles]
+M5633.bin
+
+[VNic.CopyFiles.NT]
+VNic.sys
+M5633.bin
+
+;[VNic.CopyFiles.inf]
+;ULan.inf
+
+;****************************************************************************
+; Win95/98 Install
+;****************************************************************************
+[Corp.Install]
+Characteristics = 0x04	;NCF_PHYSICAL
+BusType = 15
+CopyFiles = VNic.CopyFiles, VNic.CopyBinFiles ;VNic.CopyFiles.inf
+AddReg = VNic.AddReg.DevID, VNic.AddReg.Ndi, VNic.AddReg.Ndi.Param
+
+[VNic.AddReg.DevID]
+HKR,  Ndi,     DeviceID ,    , "USB\VID_0402&PID_5632"
+
+[VNic.AddReg.Ndi]
+HKR, , DevLoader, , "*ndis"
+HKR, , DeviceVxDs, , "VNic.sys"
+
+;NDIS information
+HKR, NDIS, LogDriverName, , "VNic"
+HKR, NDIS, MajorNdisVersion, 1 , 03
+HKR, NDIS, MinorNdisVersion, 1 , 0a
+
+;Interface definitions
+HKR, Ndi\Interfaces, DefUpper, , "ndis3"
+HKR, Ndi\Interfaces, DefLower, , "nolower"
+HKR, Ndi\Interfaces, UpperRange, , "ndis3"
+HKR, Ndi\Interfaces, LowerRange, , "nolower"
+
+HKR, Ndi\Compatibility, RequireAll,0, "MSTCP,NETBEUI" 
+;HKR, Ndi\Compatibility, RequireAll,0, "MSTCP" 
+;Install sections
+;HKR, Ndi\Install, , , "Corp.Install"
+HKR, ,                 MACADDRESS1,   0, 0
+HKR, ,                 MACADDRESS2,   0, 0
+HKR, ,                 MACADDRESS3,   0, 0
+HKR, ,                 MACADDRESS4,   0, 0
+HKR, ,                 MACADDRESS5,   0, 0
+HKR, ,                 MACADDRESS6,   0, 0
+;****************************************************************************
+; Win2000 Install
+;****************************************************************************
+[Corp.Install.NT]
+Characteristics = 0x81	; NCF_VIRTUAL + NCF_HAS_UI
+CopyFiles = VNic.CopyFiles.NT
+AddReg = VNic.AddReg.Ndi.NT, VNic.AddReg.Ndi.Param.NT
+
+[Corp.Install.NT.Services]
+AddService = VNic,2,VNic.Service,
+
+[VNic.Service]
+DisplayName     = %USBDEVICE.DESCRIPTION%
+ServiceType     = 1 ;%SERVICE_KERNEL_DRIVER%
+StartType       = 3 ;%SERVICE_DEMAND_START%
+ErrorControl    = 1 ;%SERVICE_ERROR_NORMAL%
+ServiceBinary   = %12%\VNic.sys
+LoadOrderGroup  = NDIS
+
+[VNic.AddReg.Ndi.NT]
+HKR, Ndi,              Service,    	0, "VNic"
+HKR, Ndi\Interfaces,   UpperRange, 	0, "ndis5"
+HKR, Ndi\Interfaces,   LowerRange, 	0, "nolower"
+
+HKR, ,                 MACADDRESS1,   0, 0
+HKR, ,                 MACADDRESS2,   0, 0
+HKR, ,                 MACADDRESS3,   0, 0
+HKR, ,                 MACADDRESS4,   0, 0
+HKR, ,                 MACADDRESS5,   0, 0
+HKR, ,                 MACADDRESS6,   0, 0
+;HKR, ,                 DevLoader, ,    *ntkern
+;HKR, ,                 NTMPDriver, ,   VNic.sys
+
+;****************************************************************************
+; Add Parameter Registy
+;****************************************************************************
+[VNic.AddReg.Ndi.Param]
+HKR, Ndi\params\DeviceMode,	ParamDesc,	0,	%ULANREG.DEVICEMODE%
+HKR, Ndi\params\DeviceMode,	Type,		0,	"enum"
+HKR, Ndi\params\DeviceMode,	Default,	0,	"0"
+HKR, Ndi\params\DeviceMode,	Optional,	0,	"0"
+HKR, Ndi\params\DeviceMode\enum,	0,	0,	%ULANREG.HIGHSPEED%
+HKR, Ndi\params\DeviceMode\enum,	1,	0,	%ULANREG.COMPATIBLE%
+
+HKR, Ndi\params\FrameSize,	ParamDesc,	0,	%ULANREG.FRAMESIZE%
+HKR, Ndi\params\FrameSize,	Type,		0,	"enum"
+HKR, Ndi\params\FrameSize,	Default,	1,	"1"
+HKR, Ndi\params\FrameSize,	Optional,	0,	"0"
+HKR, Ndi\params\FrameSize\enum,		0,	0,	%ULANREG.TURBO%
+HKR, Ndi\params\FrameSize\enum,		1,	0,	%ULANREG.STANDARD%
+
+
+[VNic.AddReg.Ndi.Param.NT]
+HKR, Ndi\params\DeviceMode,	ParamDesc,	0,	%ULANREG.DEVICEMODE%
+HKR, Ndi\params\DeviceMode,	Type,		0,	"enum"
+HKR, Ndi\params\DeviceMode,	Default,	0,	"0"
+HKR, Ndi\params\DeviceMode,	Optional,	0,	"0"
+HKR, Ndi\params\DeviceMode\enum,	0,	0,	%ULANREG.HIGHSPEED%
+HKR, Ndi\params\DeviceMode\enum,	1,	0,	%ULANREG.COMPATIBLE%
+
+HKR, Ndi\params\FrameSize,	ParamDesc,	0,	%ULANREG.FRAMESIZE%
+HKR, Ndi\params\FrameSize,	Type,		0,	"enum"
+HKR, Ndi\params\FrameSize,	Default,	0,	"0"
+HKR, Ndi\params\FrameSize,	Optional,	0,	"0"
+HKR, Ndi\params\FrameSize\enum,		0,	0,	%ULANREG.TURBO%
+HKR, Ndi\params\FrameSize\enum,		1,	0,	%ULANREG.STANDARD%
+
+;****************************************************************************
+; Destination information
+;****************************************************************************
+[DestinationDirs]
+DefaultDestDir         =  12
+VNic.CopyFiles	       =  11
+VNic.CopyFiles.NT      =  12
+VNic.CopyBinFiles      =  25,System32\Drivers
+;VNic.CopyFiles.inf      =  17    ; Inf Directory
+;VNic.CopyFiles.inf.NT   =  17    ; Inf Directory
+
+
+;****************************************************************************
+; String definition for multilanguage
+;****************************************************************************
+;English (default)
+[Strings]
+PROVIDER="PROVIDER"
+MANUFACTURER="MANUFACTURER"
+INTERMEDIATEDEVICE.DESCRIPTION="USB Virtual Network Adapter"
+USBDEVICE.DESCRIPTION="ULan Network Driver Module"
+
+ULANREG.DEVICEMODE="Device Mode"
+ULANREG.HIGHSPEED="High Speed Mode(If Possible)"
+ULANREG.COMPATIBLE="Compatible Mode"
+ULANREG.FRAMESIZE="Frame Size Mode"
+ULANREG.TURBO="Turbo Mode"
+ULANREG.STANDARD="Standard Mode"
+
+;---------------------------------------------------------------------------
+;Simplified Chinese String
+[Strings.0804]
+PROVIDER="PROVIDER"
+MANUFACTURER="MANUFACTURER"
+INTERMEDIATEDEVICE.DESCRIPTION="USB Virtual Network Adapter"
+USBDEVICE.DESCRIPTION="虚拟USB网络驱动程序"
+
+ULANREG.DEVICEMODE="设备模式"
+ULANREG.HIGHSPEED="高速模式(如果可能)"
+ULANREG.COMPATIBLE="兼容模式"
+ULANREG.FRAMESIZE="网络帧模式"
+ULANREG.TURBO="快速模式"
+ULANREG.STANDARD="标准模式"
+
+;---------------------------------------------------------------------------
+;Traditional Chinese String
+[Strings.0404]
+PROVIDER="PROVIDER"
+MANUFACTURER="MANUFACTURER"
+INTERMEDIATEDEVICE.DESCRIPTION="USB Virtual Network Adapter"
+USBDEVICE.DESCRIPTION="店览USB呼蹈臱笆祘Α"
+
+ULANREG.DEVICEMODE="砞称家Α"
+ULANREG.HIGHSPEED="蔼硉家Α"
+ULANREG.COMPATIBLE="甧家Α"
+ULANREG.FRAMESIZE="Frame家Α"
+ULANREG.TURBO="е硉家Α"
+ULANREG.STANDARD="夹非家Α"
+
+;---------------------------------------------------------------------------
+;Japanese String
+[Strings.0411]
+PROVIDER="PROVIDER"
+MANUFACTURER="MANUFACTURER"
+INTERMEDIATEDEVICE.DESCRIPTION="USB Virtual Network Adapter"
+USBDEVICE.DESCRIPTION="USB Virtual Network Driver"
+
+ULANREG.DEVICEMODE="僨僶僀僗儌乕僪"
+ULANREG.HIGHSPEED="僴僀僗僺乕僪儌乕僪"
+ULANREG.COMPATIBLE="僐儞僷僢僠僽儖儌乕僪"
+ULANREG.FRAMESIZE="夋柺僒僀僘儌乕僪"
+ULANREG.TURBO="僞乕儃儌乕僪"
+ULANREG.STANDARD="昗弨儌乕僪"
+
+;---------------------------------------------------------------------------
+;German String
+[Strings.0407]
+PROVIDER="PROVIDER"
+MANUFACTURER="MANUFACTURER"
+INTERMEDIATEDEVICE.DESCRIPTION="USB Virtual Network Adapter"
+USBDEVICE.DESCRIPTION="USB Virtual Network Driver"
+
+ULANREG.DEVICEMODE="Ger鋞emodus"
+ULANREG.HIGHSPEED="Hochgeschwindigkeits modus"
+ULANREG.COMPATIBLE="Kompatibler Modus"
+ULANREG.FRAMESIZE="Modus Rahmengr鲞e"
+ULANREG.TURBO="Turbo-Modus"
+ULANREG.STANDARD="Standard-Modus"

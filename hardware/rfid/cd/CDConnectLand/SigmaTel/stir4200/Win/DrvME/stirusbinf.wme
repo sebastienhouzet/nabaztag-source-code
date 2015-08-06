@@ -1,0 +1,162 @@
+; Stirusb.inf
+; Copyright 2000, SigmaTel, Inc.
+
+[Version]
+Signature=$CHICAGO$
+Class=Net
+ClassGUID={4D36E972-E325-11CE-BFC1-08002BE10318}
+Provider=%ST%
+DriverVer = 05/10/2002,1.27.0.0 
+CatalogFile = stirusb.cat
+
+[Manufacturer]
+;
+;  Specify a name and devices section for each supported manufacturer that
+;  makes products of this class.
+;
+%ST%=ST
+
+[ControlFlags]
+ExcludeFromSelect = USB\VID_066F&PID_4200
+
+[ST]
+;
+;  This section describes the devices of this class made by a particular
+;  manufacturer.
+;  The first descriptor, delimited by '%', is a symbolic string whose actual
+;  value is given in the [Strings] section below.
+;
+%USB\VID_066F&PID_4200.DeviceDesc%=STIrUsb.ndi,USB\VID_066F&PID_4200
+
+[STIrUsb.ndi]
+;
+;  This section describes how to install a particular device.
+;  It names other sections which detail the registry changes
+;  that need to be made and the files that need to be copied.
+;
+DeviceID=USB\VID_066F&PID_4200
+CopyFiles=STIrUsb.CopyFiles.sys 
+AddReg=STIrUsb.ndi.AddReg, STIrUsb.ndi.Param
+;MaxInstance=1
+
+[STIrUsb.ndi.AddReg]
+;
+;  This section describes additions to the Windows registry.
+;  See the Windows 95 Resource kit and be sure of what you're
+;  doing before making changes.  You can use the regedit.exe tool that
+;  comes with Windows 95/NT to browse the registry.
+;
+HKR,,DevLoader,,*ndis,*ntkern,*ndis
+HKR,,DeviceVxDs,,stirusb.sys
+HKR,,EnumPropPages,,"netdi.dll,EnumPropPages"
+
+;
+; NDIS Info
+;
+HKR,NDIS,LogDriverName,,"stirusb"
+HKR,NDIS,MajorNdisVersion,1,05
+HKR,NDIS,MinorNdisVersion,1,00
+; Interfaces
+HKR,NDI\Interfaces,DefUpper,0,%UpperInterface%
+HKR,NDI\Interfaces,UpperRange,0,%UpperInterface%
+HKR,Ndi,NetType,,1
+HKR,Ndi,DeviceID,,"STIrUsb"
+HKR,,CardType,,"PNP"
+
+;
+; NDI Registry Entry
+;
+HKR,Ndi,MaxInstance,,0  ;prevent multiple bindings
+HKR,Ndi,NdiInstaller,,"ir_ndi.dll,IRWDM_NdiProc"
+HKR,Ndi\Compatibility,RequireAll,,"IRDA"
+HKR,Ndi,AdapterType,,"IrDA Infrared Miniport"
+HKR,,DriverDesc,0,%STIrUsb.DeviceDesc%
+HKR,NDI,HelpText,0,%STIrUsb.HELP%
+
+[STIrUsb.ndi.Param]
+;
+;    Receive Mode.
+;    0 = Slow - RXSLOW only (4115)
+;    1 = SlowFast - both lines (HP style)
+;    2 = Fast - !RXSLOW
+;
+HKR,,ReceiveMode,0,"2"
+
+;
+;    Transceiver Type.
+;    Sets default Dpll and Sensitivity values.
+;    HP setting also forces "Slow/Fast" ReceiveMode.
+;
+HKR,Ndi\params\TransceiverType,ParamDesc,,%strRXSEL%
+HKR,Ndi\params\TransceiverType,default,,"4"
+HKR,Ndi\params\TransceiverType,type,,"enum"
+HKR,Ndi\params\TransceiverType\enum,"0",,"SigmaTel 4012"
+HKR,Ndi\params\TransceiverType\enum,"1",,"SigmaTel 4000"
+HKR,Ndi\params\TransceiverType\enum,"2",,"Vishay 6101E"
+HKR,Ndi\params\TransceiverType\enum,"3",,"Vishay 6102F"
+HKR,Ndi\params\TransceiverType\enum,"4",,"Infineon [Default]"
+HKR,Ndi\params\TransceiverType\enum,"5",,"HP 1100"
+
+;
+;    IrDA Minimum Turnaround Time (value in microseconds)
+;
+HKR,Ndi\params\MinTurnTime,ParamDesc,,%strIRDATURNTIME%
+HKR,Ndi\params\MinTurnTime,default,,"1000"
+HKR,Ndi\params\MinTurnTime,type,,"enum"
+HKR,Ndi\params\MinTurnTime\enum,"500",," 0.5 mS"
+HKR,Ndi\params\MinTurnTime\enum,"1000",," 1.0 mS [Default]"
+HKR,Ndi\params\MinTurnTime\enum,"5000",," 5.0 mS"
+HKR,Ndi\params\MinTurnTime\enum,"10000",,"10.0 mS"
+
+;
+;    IrDA Speed enables
+;
+;
+;       Note:  Miniport will always enable 9600,
+;               no matter what this key says
+;
+HKR,Ndi\params\SpeedEnable,ParamDesc,,%strSPEEDENABLE%
+HKR,Ndi\params\SpeedEnable,type,,"enum"
+HKR,Ndi\params\SpeedEnable,default,,"4000000"
+HKR,Ndi\params\SpeedEnable\enum,"2400",,   "   2400"
+HKR,Ndi\params\SpeedEnable\enum,"9600",,   "   9600"
+HKR,Ndi\params\SpeedEnable\enum,"19200",,  "  19200"
+HKR,Ndi\params\SpeedEnable\enum,"38400",,  "  38400"
+HKR,Ndi\params\SpeedEnable\enum,"57600",,  "  57600"
+HKR,Ndi\params\SpeedEnable\enum,"115200",, " 115200" 
+HKR,Ndi\params\SpeedEnable\enum,"4000000",,"4000000 [Default]"
+
+[STIrUsb.CopyFiles.sys]
+stirusb.sys
+
+[DestinationDirs]
+DefaultDestDir=11
+STIrUsb.CopyFiles.sys=11
+
+[SourceDisksNames]
+1 = %strDRIVERDISK%,,,%strINSTALLPATH%
+
+[SourceDisksFiles]
+stirusb.sys=1
+stirusb.cat=1
+
+[Strings]
+;
+;  This section defines symbolic string constants for use in the rest
+;  of the .inf script.  You should create and use symbols for all
+;  translatable strings in order to make localization easier.
+;  Also, spaces within strings elsewhere in the script confuse infedit.exe;
+;  so use symbolic constants for any multi-word strings.
+;
+STIrUsb.HELP="The USB-IrDA is a fast IrDA infrared port. It can be used to establish wireless serial and network links to other computers."
+UpperInterface="ndisirda"
+ST="SigmaTel, Inc."
+USB\VID_066F&PID_4200.DeviceDesc = "SigmaTel USB-IrDA Adapter"
+
+strRXSEL="Infrared Transceiver Type"
+strIRDATURNTIME="Min. Turn-Around Time"
+strSPEEDENABLE="Speed Enable"
+strRXWINDOW="Receive Window"
+
+strDRIVERDISK="Sigmatel Install"
+strINSTALLPATH="\Windows\Inf"

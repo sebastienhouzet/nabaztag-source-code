@@ -1,0 +1,79 @@
+; Usblink.Inf - install information file
+
+[Version]
+Signature="$Chicago$"
+Class=USB
+ClassGUID={36FC9E60-C465-11CF-8056-444553540000}
+Provider=%VENDOR%
+DriverVer=06/23/2003,1.2.0.19
+
+[Manufacturer]
+%VENDOR% = SENDONG
+
+[SENDONG]
+%Usblink.a%=Usblink.Install,USB\VID_0402&PID_5632
+;%Usblink.b%=Usblink.Install,USB\VID_0402&PID_5632
+
+[DestinationDirs]
+Usblink.Files.Driver=10,System32\Drivers
+Usblink.Files.Driver.NTx86=10,System32\Drivers
+
+[SourceDisksNames]
+1="Usblink build directory",,,
+
+[SourceDisksFiles]
+ulink.sys=1,
+;M5633.bin=1
+[SourceDisksFiles.x86]
+ulink.sys=1,
+;M5633.bin=1
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Windows 98
+
+[Usblink.Install]
+CopyFiles=Usblink.Files.Driver
+AddReg=Usblink.AddReg
+
+[Usblink.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,ulink.sys
+
+[Usblink.Files.Driver]
+ulink.sys
+M5633.bin
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Windows 2000
+
+[Usblink.Install.NTx86]
+CopyFiles=Usblink.Files.Driver.NTx86
+
+[Usblink.Files.Driver.NTx86]
+ulink.sys,,,%COPYFLG_NOSKIP%
+M5633.bin,,,%COPYFLG_NOSKIP%
+
+[Usblink.Install.NTx86.Services]
+AddService = Usblink, %SPSVCINST_ASSOCSERVICE%, Usblink.Service
+
+[Usblink.Service]
+DisplayName    = %Usblink.ServiceName%
+ServiceType    = %SERVICE_KERNEL_DRIVER%
+StartType      = %SERVICE_DEMAND_START%
+ErrorControl   = %SERVICE_ERROR_NORMAL%
+ServiceBinary  = %10%\System32\Drivers\ulink.sys
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Strings
+
+[Strings]
+VENDOR="Provider"
+Usblink.a="USB Super Link Adapter"
+;Usblink.b="USB Super Link Adapter"
+Usblink.ServiceName="Usblink Driver"
+
+SPSVCINST_ASSOCSERVICE=0x00000002	; Driver service is associated with device being installed
+COPYFLG_NOSKIP=2	; Do not allow user to skip file
+SERVICE_KERNEL_DRIVER=1
+;SERVICE_AUTO_START=2
+SERVICE_DEMAND_START=3
+SERVICE_ERROR_NORMAL=1

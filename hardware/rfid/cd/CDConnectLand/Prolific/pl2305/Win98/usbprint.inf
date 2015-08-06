@@ -1,0 +1,46 @@
+
+
+[Version]
+Signature="$CHICAGO$"
+Class=USB
+ClassGUID={36FC9E60-C465-11CF-8056-444553540000}
+Provider=%MSFT%
+
+[ControlFlags]
+ExcludeFromSelect=*
+
+[DestinationDirs]
+DefaultDestDir=10,system32\drivers
+USBMON_Inst.CopyFiles=11
+
+[Manufacturer]
+%MSFT%=Prolific
+
+[Prolific]
+%USBPRINT.DeviceDesc% = USBPRINT_Inst,USB\VID_067B&PID_2305
+
+[USBPRINT_Inst]
+Copyfiles = USBPRINT_Inst.CopyFiles,USBMON_Inst.CopyFiles
+AddReg = USBPRINT.AddReg
+
+[USBPRINT_Inst.CopyFiles]
+usbprint.sys,,,16
+
+[USBMON_Inst.CopyFiles]
+usbmon.dll,,,16
+
+[USBPRINT.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,"usbprint.sys"
+HKLM,System\CurrentControlSet\Control\Print\Monitors\usbmon,"Driver",0,"usbmon.dll"
+
+[SourceDisksNames]
+1="USB disk",,,""
+
+[SourceDisksFiles]
+usbprint.sys=1
+usbmon.dll = 1
+
+[strings]
+MSFT="Prolific"
+USBPRINT.DeviceDesc="Prolific USB-Parallel Bridge"

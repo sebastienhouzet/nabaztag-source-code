@@ -1,0 +1,379 @@
+;
+; Installation script for MCS7780 (USB-IrDA Adapter)
+; Target OS : Windows 2000, Windows XP
+;
+
+[Version]
+;LayOutFile=layout.inf
+Signature = "$Windows NT$"
+Class = Infrared
+Provider = %ProviderName%
+ClassGUID = {6bdd1fc5-810f-11d0-BEC7-08002BE2092F}
+DriverVer = 08/16/2004,1.3.0.0
+CatalogFile=MosIrUsb.cat
+
+[Manufacturer]
+%MfgName%=MosIrDeviceList
+
+[ControlFlags]
+ExcludeFromSelect     = USB\VID_9710&PID_7780
+
+[MosIrDeviceList]
+%DeviceDesc%=MosIrUsb.Dev,USB\VID_9710&PID_7780
+
+[DestinationDirs]
+MosIrUsb.CopyFiles = 12
+DefaultDestDir = 12
+
+[MosIrUsb.Dev.NT]
+CopyFiles=MosIrUsb.CopyFiles
+AddReg=MosIrUsb.AddReg, MosIrUsb.Params.AddReg, Uninstall.AddReg
+BusType=15
+Characteristics = 0x84; NCF_PHYSICAL, NCF_HAS_UI
+
+[MosIrUsb.Dev.NT.Services]
+AddService = MosIrUsb, 0x00000002, MosIrUsb.AddService, common.EventLog
+
+[MosIrUsb.AddService]
+DisplayName    = %MosIrUsb.SvcDesc%
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_DEMAND_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\MosIrUsb.sys
+LoadOrderGroup = NDIS
+
+[MosIrUsb.AddReg]
+HKR,  Ndi,            HelpText,     0,      %MosIrUsb.Help%
+HKR,  Ndi,            Service,      0,      "MosIrUsb"
+HKR,  Ndi\Interfaces, UpperRange,   0,      "ndisirda"
+HKR,  Ndi\Interfaces, LowerRange,   0,      "nolower"
+HKR,  Ndi,            RequiredAll,  0,      "MS_IrDA"
+
+[MosIrUsb.Params.AddReg]
+HKR,Ndi\params\TransceiverType,ParamDesc,,%strRXSEL%
+HKR,Ndi\params\TransceiverType,default,,"0"
+HKR,Ndi\params\TransceiverType,type,,"enum"
+HKR,Ndi\params\TransceiverType\enum,"0",,"Vishay TFD [Default]"
+HKR,Ndi\params\TransceiverType\enum,"1",,"Sharp GP2W100YP"
+HKR,Ndi\params\TransceiverType\enum,"2",,"Agilent 3602/3600"
+;HKR,Ndi\params\TransceiverType\enum,"3",,"Infineon"
+
+;
+;    IrDA Minimum Turnaround Time (value in microseconds)
+;
+HKR,Ndi\params\MinTurnTime,ParamDesc,,%strIRDATURNTIME%
+HKR,Ndi\params\MinTurnTime,default,,"1000"
+HKR,Ndi\params\MinTurnTime,type,,"enum"
+HKR,Ndi\params\MinTurnTime\enum,"500",," 0.5 mS"
+HKR,Ndi\params\MinTurnTime\enum,"1000",," 1.0 mS [Default]"
+HKR,Ndi\params\MinTurnTime\enum,"5000",," 5.0 mS"
+HKR,Ndi\params\MinTurnTime\enum,"10000",,"10.0 mS"
+
+;
+;    IrDA Speed enables
+;
+;
+;       Note:  Miniport will always enable 9600,
+;               no matter what this key says
+;
+HKR,Ndi\params\SpeedEnable,ParamDesc,,%strSPEEDENABLE%
+HKR,Ndi\params\SpeedEnable,type,,"enum"
+HKR,Ndi\params\SpeedEnable,default,,"4000000"
+HKR,Ndi\params\SpeedEnable\enum,"2400",,   "   2400"
+HKR,Ndi\params\SpeedEnable\enum,"9600",,   "   9600"
+HKR,Ndi\params\SpeedEnable\enum,"19200",,  "  19200"
+HKR,Ndi\params\SpeedEnable\enum,"38400",,  "  38400"
+HKR,Ndi\params\SpeedEnable\enum,"57600",,  "  57600"
+HKR,Ndi\params\SpeedEnable\enum,"115200",, " 115200" 
+HKR,Ndi\params\SpeedEnable\enum,"576000",, " 576000"
+HKR,Ndi\params\SpeedEnable\enum,"1152000",,"1152000" 
+HKR,Ndi\params\SpeedEnable\enum,"4000000",,"4000000 [Default]"
+
+;
+;    Specifies Write Depth to be used
+; 
+
+HKR,Ndi\params\WriteDepth,ParamDesc,,%strWRITEDEPTH%
+HKR,Ndi\params\WriteDepth,type,,"enum"
+HKR,Ndi\params\WriteDepth,default,,"20"
+HKR,Ndi\params\WriteDepth\enum,"01",,  "01"
+HKR,Ndi\params\WriteDepth\enum,"02",,  "02"
+HKR,Ndi\params\WriteDepth\enum,"03",,  "03"
+HKR,Ndi\params\WriteDepth\enum,"04",,  "04"
+HKR,Ndi\params\WriteDepth\enum,"05",,  "05" 
+HKR,Ndi\params\WriteDepth\enum,"06",,  "06"
+HKR,Ndi\params\WriteDepth\enum,"07",,  "07"
+HKR,Ndi\params\WriteDepth\enum,"08",,  "08"
+HKR,Ndi\params\WriteDepth\enum,"09",,  "09"
+HKR,Ndi\params\WriteDepth\enum,"10",,  "10"
+HKR,Ndi\params\WriteDepth\enum,"11",,  "11"
+HKR,Ndi\params\WriteDepth\enum,"12",,  "12"
+HKR,Ndi\params\WriteDepth\enum,"13",,  "13"
+HKR,Ndi\params\WriteDepth\enum,"14",,  "14"
+HKR,Ndi\params\WriteDepth\enum,"15",,  "15"
+HKR,Ndi\params\WriteDepth\enum,"16",,  "16"
+HKR,Ndi\params\WriteDepth\enum,"17",,  "17"
+HKR,Ndi\params\WriteDepth\enum,"18",,  "18"
+HKR,Ndi\params\WriteDepth\enum,"19",,  "19"
+HKR,Ndi\params\WriteDepth\enum,"20",,  "20 [Default]"
+
+
+;
+;    Specifies Read Depth to be used
+; 
+
+
+HKR,Ndi\params\ReadDepth,ParamDesc,,%strREADDEPTH%
+HKR,Ndi\params\ReadDepth,type,,"enum"
+HKR,Ndi\params\ReadDepth,default,,"20"
+HKR,Ndi\params\ReadDepth\enum,"01",,  "01"
+HKR,Ndi\params\ReadDepth\enum,"02",,  "02"
+HKR,Ndi\params\ReadDepth\enum,"03",,  "03"
+HKR,Ndi\params\ReadDepth\enum,"04",,  "04"
+HKR,Ndi\params\ReadDepth\enum,"05",,  "05"  
+HKR,Ndi\params\ReadDepth\enum,"06",,  "06"
+HKR,Ndi\params\ReadDepth\enum,"07",,  "07"
+HKR,Ndi\params\ReadDepth\enum,"08",,  "08"
+HKR,Ndi\params\ReadDepth\enum,"09",,  "09"
+HKR,Ndi\params\ReadDepth\enum,"10",,  "10"
+HKR,Ndi\params\ReadDepth\enum,"11",,  "11"
+HKR,Ndi\params\ReadDepth\enum,"12",,  "12"
+HKR,Ndi\params\ReadDepth\enum,"13",,  "13"
+HKR,Ndi\params\ReadDepth\enum,"14",,  "14"
+HKR,Ndi\params\ReadDepth\enum,"15",,  "15"
+HKR,Ndi\params\ReadDepth\enum,"16",,  "16"
+HKR,Ndi\params\ReadDepth\enum,"17",,  "17"
+HKR,Ndi\params\ReadDepth\enum,"18",,  "18"
+HKR,Ndi\params\ReadDepth\enum,"19",,  "19"
+HKR,Ndi\params\ReadDepth\enum,"20",,  "20 [Default]"
+
+
+;
+;    Specifies Read Threshold to be used
+; 
+
+
+HKR,Ndi\params\ReadThreshold,ParamDesc,,%strREADTHRESHOLD%
+HKR,Ndi\params\ReadThreshold,type,,"enum"
+HKR,Ndi\params\ReadThreshold,default,,"05"
+HKR,Ndi\params\ReadThreshold\enum,"00",,  "00"
+HKR,Ndi\params\ReadThreshold\enum,"01",,  "01"
+HKR,Ndi\params\ReadThreshold\enum,"02",,  "02"
+HKR,Ndi\params\ReadThreshold\enum,"03",,  "03"
+HKR,Ndi\params\ReadThreshold\enum,"04",,  "04"
+HKR,Ndi\params\ReadThreshold\enum,"05",,  "05 [Default]" 
+HKR,Ndi\params\ReadThreshold\enum,"06",,  "06"
+HKR,Ndi\params\ReadThreshold\enum,"07",,  "07"
+HKR,Ndi\params\ReadThreshold\enum,"08",,  "08"
+HKR,Ndi\params\ReadThreshold\enum,"09",,  "09"
+HKR,Ndi\params\ReadThreshold\enum,"10",,  "10"
+HKR,Ndi\params\ReadThreshold\enum,"11",,  "11"
+HKR,Ndi\params\ReadThreshold\enum,"12",,  "12"
+HKR,Ndi\params\ReadThreshold\enum,"13",,  "13"
+HKR,Ndi\params\ReadThreshold\enum,"14",,  "14"
+HKR,Ndi\params\ReadThreshold\enum,"15",,  "15"
+HKR,Ndi\params\ReadThreshold\enum,"16",,  "16"
+HKR,Ndi\params\ReadThreshold\enum,"17",,  "17"
+HKR,Ndi\params\ReadThreshold\enum,"18",,  "18"
+HKR,Ndi\params\ReadThreshold\enum,"19",,  "19"
+
+;
+;   The maximum number of outgoing frames that the miniport driver's 
+;	NIC can handle at one time( i.e SendWindowSize )
+; 
+
+HKR,Ndi\params\SendWindowSize,ParamDesc,,%strSENDWINDOWSIZE%
+HKR,Ndi\params\SendWindowSize,type,,"enum"
+HKR,Ndi\params\SendWindowSize,default,,"01"
+HKR,Ndi\params\SendWindowSize\enum,"01",,  "01 [Default]"
+HKR,Ndi\params\SendWindowSize\enum,"02",,  "02"
+HKR,Ndi\params\SendWindowSize\enum,"03",,  "03"
+HKR,Ndi\params\SendWindowSize\enum,"04",,  "04"
+HKR,Ndi\params\SendWindowSize\enum,"05",,  "05"
+HKR,Ndi\params\SendWindowSize\enum,"06",,  "06"
+HKR,Ndi\params\SendWindowSize\enum,"07",,  "07"
+
+;
+;   The maximum number of incoming frames that the miniport driver's 
+;	NIC can handle at one time( i.e ReceiveWindowSize )
+; 
+
+
+HKR,Ndi\params\ReceiveWindowSize,ParamDesc,,%strRECEIVEWINDOWSIZE%
+HKR,Ndi\params\ReceiveWindowSize,type,,"enum"
+HKR,Ndi\params\ReceiveWindowSize,default,,"04"
+HKR,Ndi\params\ReceiveWindowSize\enum,"01",,  "01"
+HKR,Ndi\params\ReceiveWindowSize\enum,"02",,  "02"
+HKR,Ndi\params\ReceiveWindowSize\enum,"03",,  "03"
+HKR,Ndi\params\ReceiveWindowSize\enum,"04",,  "04 [Default]" 
+HKR,Ndi\params\ReceiveWindowSize\enum,"05",,  "05"
+HKR,Ndi\params\ReceiveWindowSize\enum,"06",,  "06"
+HKR,Ndi\params\ReceiveWindowSize\enum,"07",,  "07"
+
+;
+;    Turbo Mode On/Off   
+; 
+
+HKR,Ndi\params\TurboMode,ParamDesc,,%strTURBOMODE%
+HKR,Ndi\params\TurboMode,type,,"enum"
+HKR,Ndi\params\TurboMode,default,,"1"
+HKR,Ndi\params\TurboMode\enum,"0",,  "Off "
+HKR,Ndi\params\TurboMode\enum,"1",,  "On [Default]"
+
+;
+;    SIR Tweak Enable/Disable   
+; 
+
+HKR,Ndi\params\SIRTweak,ParamDesc,,%strSIRTWEAK%
+HKR,Ndi\params\SIRTweak,type,,"enum"
+HKR,Ndi\params\SIRTweak,default,,"1"
+HKR,Ndi\params\SIRTweak\enum,"0",,  "Disable "
+HKR,Ndi\params\SIRTweak\enum,"1",,  "Enable [Default] "
+
+;
+;    Power Down Enable/Disable   
+; 
+
+HKR,Ndi\params\PowerDown,ParamDesc,,%strPOWERDOWN%
+HKR,Ndi\params\PowerDown,type,,"enum"
+HKR,Ndi\params\PowerDown,default,,"0"
+HKR,Ndi\params\PowerDown\enum,"0",,  "Disable [Default]"
+HKR,Ndi\params\PowerDown\enum,"1",,  "Enable "
+
+;
+;    The Receive Mode Fast/Slow
+; 
+
+HKR,Ndi\params\ReceiveMode,ParamDesc,,%strRECEIVEMODE%
+HKR,Ndi\params\ReceiveMode,type,,"enum"
+HKR,Ndi\params\ReceiveMode,default,,"1"
+HKR,Ndi\params\ReceiveMode\enum,"0",,  "Slow"
+HKR,Ndi\params\ReceiveMode\enum,"1",,  "Fast [Default]"
+
+;
+;    The Receive Sensitivity
+; 
+
+HKR,Ndi\params\ReceiveSensitivity,ParamDesc,,%strRECEIVESENSITIVITY%
+HKR,Ndi\params\ReceiveSensitivity,type,,"enum"
+HKR,Ndi\params\ReceiveSensitivity,default,,"5"
+HKR,Ndi\params\ReceiveSensitivity\enum,"0",,  "Disable"
+HKR,Ndi\params\ReceiveSensitivity\enum,"5",,  "Enable [Default]"
+
+;
+;    SIR Turbo Mode On/Off   
+; 
+
+HKR,Ndi\params\SirTurbo,ParamDesc,,%strSIRTURBO%
+HKR,Ndi\params\SirTurbo,type,,"enum"
+HKR,Ndi\params\SirTurbo,default,,"0"
+HKR,Ndi\params\SirTurbo\enum,"0",,  "Off [Default]"
+HKR,Ndi\params\SirTurbo\enum,"1",,  "On"
+
+;
+;    The ExtendedMode feature Enable/Disable
+; 
+
+HKR,Ndi\params\ExtendedMode,ParamDesc,,%strEXTENDEDMODE%
+HKR,Ndi\params\ExtendedMode,type,,"enum"
+HKR,Ndi\params\ExtendedMode,default,,"1"
+HKR,Ndi\params\ExtendedMode\enum,"0",,  "Off"
+HKR,Ndi\params\ExtendedMode\enum,"1",,  "On [Default]"
+
+;
+;    Debug Print Level Selection
+; 
+
+HKR,Ndi\params\DebugLevel,ParamDesc,,%strDEBUGLEVEL%
+HKR,Ndi\params\DebugLevel,type,,"enum"
+HKR,Ndi\params\DebugLevel,default,,"0"
+HKR,Ndi\params\DebugLevel\enum,"0",,  "None [Default]"
+HKR,Ndi\params\DebugLevel\enum,"1",,  "Errors "
+HKR,Ndi\params\DebugLevel\enum,"2",,  "Warnings "
+HKR,Ndi\params\DebugLevel\enum,"4",,  "Trace "
+
+;
+;    ExtraBOFs Required
+; 
+
+HKR,Ndi\params\ExtraBOFs,ParamDesc,,%strEXTRABOFS%
+HKR,Ndi\params\ExtraBOFs,type,,"enum"
+HKR,Ndi\params\ExtraBOFs,default,,"0"
+HKR,Ndi\params\ExtraBOFs\enum,"0",,  "00 [Default]"
+HKR,Ndi\params\ExtraBOFs\enum,"1",,  "01 "
+HKR,Ndi\params\ExtraBOFs\enum,"2",,  "02 "
+HKR,Ndi\params\ExtraBOFs\enum,"3",,  "03 "
+HKR,Ndi\params\ExtraBOFs\enum,"6",,  "06 "
+HKR,Ndi\params\ExtraBOFs\enum,"12",,  "12 "
+HKR,Ndi\params\ExtraBOFs\enum,"24",,  "24 "
+HKR,Ndi\params\ExtraBOFs\enum,"48",,  "48 "
+
+;
+;    Specifies the Time to wait(in micro secs) before transmission
+; 
+
+
+HKR,Ndi\params\TimeToWait,ParamDesc,,%strTIMETOWAIT%
+HKR,Ndi\params\TimeToWait,type,,"enum"
+HKR,Ndi\params\TimeToWait,default,,"700"
+HKR,Ndi\params\TimeToWait\enum,"0",,   "0"
+HKR,Ndi\params\TimeToWait\enum,"10",,   "010"
+HKR,Ndi\params\TimeToWait\enum,"20",,   "020"
+HKR,Ndi\params\TimeToWait\enum,"50",,   "050"
+HKR,Ndi\params\TimeToWait\enum,"100",,  "100"
+HKR,Ndi\params\TimeToWait\enum,"250",,  "250"
+HKR,Ndi\params\TimeToWait\enum,"500",,  "500" 
+HKR,Ndi\params\TimeToWait\enum,"600",,  "600"
+HKR,Ndi\params\TimeToWait\enum,"700",,  "700 [Default]"
+HKR,Ndi\params\TimeToWait\enum,"800",,  "800"
+HKR,Ndi\params\TimeToWait\enum,"900",,  "900"
+
+[common.EventLog]
+AddReg = common.AddEventLog.reg
+
+[common.AddEventLog.reg]
+HKR, , EventMessageFile, 0x00020000, "%%SystemRoot%%\System32\netevent.dll"
+HKR, , TypesSupported,   0x00010001, 7
+
+[MosIrUsb.CopyFiles]
+MosIrUsb.sys
+
+[SourceDisksFiles]
+MosIrUsb.sys=1
+
+[SourceDisksNames]
+1 = %strDRIVERDISK%,,,
+
+[Uninstall.AddReg]
+;HKLM,SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\%USB\VID_9710&PID_7780.DeviceDesc%,DisplayName,0,%DeviceDesc%
+;HKLM,SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\%USB\VID_9710&PID_7780.DeviceDesc%,UninstallString,0,MosIrUnInst.exe
+
+;---------------------------------------------------------------;
+
+[Strings]
+ProviderName="MosChip Semiconductor Technology"
+MfgName="MosChip Semiconductor Technology"
+DeviceDesc="USB-Infrared Adapter"
+USB\VID_9710&PID_7780.DeviceDesc="USB-Infrared Adapter"
+MosIrUsb.SvcDesc="MosIrUsb.sys"
+MosIrUsb.Help   = "The USB-IrDA is a fast IrDA infrared port. It can be used to establish wireless serial and network links to other computers."
+
+strRXSEL="Infrared Transceiver Type"
+strIRDATURNTIME="Min. Turn-Around Time"
+strSPEEDENABLE="Speed Enable"
+strREADDEPTH="ReadDepth"
+strWRITEDEPTH="WriteDepth"
+strREADTHRESHOLD="ReadThreshold"
+strSENDWINDOWSIZE = "Send Window Size"
+strRECEIVEWINDOWSIZE = "Receive Window Size"
+strTURBOMODE="Turbo Mode"
+strSIRTWEAK="SIRTweak"
+strPOWERDOWN="PowerDown"
+strRECEIVEMODE="ReceiveMode"
+strRECEIVESENSITIVITY="Receive Sensitivity"
+strSIRTURBO="SIR Turbo"
+strEXTENDEDMODE="Extended Mode"
+strDEBUGLEVEL="DebugLevel"
+strEXTRABOFS="Extra BOFs"
+strTIMETOWAIT="Time To Wait"
+strDRIVERDISK="USB-IrDA Device Installation Disc"

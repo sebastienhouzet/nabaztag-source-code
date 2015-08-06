@@ -1,0 +1,26 @@
+  			DRIVER DESCRIPTION
+			==================
+
+(1) M5621 -  Driver for ALi M5621 USB 2.0 to IDE chipset
+
+    Win98 - Windows 98 Driver				      - Ver 1.42
+
+
+(2) M5632 -  Software + Driver for ALI M5632 USB 2.0 Data Link chipset
+
+    For Windows 98SE, ME, 2000, XP (Multi-Languages)	      - Ver 1.20S
+
+
+(3) M5634 -  Driver for ALI M5634 USB 2.0 Pen Drive chipset
+
+    Win98 -  Windows 98 Driver				      - Ver 1.18
+
+
+(4) M5635 -  Driver for ALI M5635 USB 2.0 Multi Card Reader
+
+    Win_Drv - For Windows 98SE, ME, 2000, XP                  - Ver 1.50F
+
+
+(5) M5642 -  Driver for ALi M5642 USB 2.0 to IDE Chipset (2.5" HDD Only)
+
+    Win98 -  Windows 98 Driver                                - Ver 1.00

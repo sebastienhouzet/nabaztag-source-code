@@ -1,0 +1,49 @@
+;
+;  This file is the USB mini driver of USB to Parallel port
+;  Driver Name : usbprint.sys
+;  Inf    Name : upl0905.inf
+;  Copyright (c) Prolific  2001
+;
+
+
+[Version]
+Signature="$CHICAGO$"
+Class=USB
+Provider=%ProlificMfg%
+
+[DestinationDirs]
+ParPplINF = 17
+DefaultDestDir=11
+
+[Manufacturer]
+%ProlificMfg%=Prolific
+
+[Prolific]
+%USB\VID_067B&PID_2305.DeviceDesc%=U2PAR, USB\VID_067B&PID_2305
+
+[U2PAR]
+AddReg=U2PAR.AddReg
+CopyFiles=ParPplINF,Drivers
+
+[U2PAR.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,usbprint.sys
+
+[Drivers]
+usbprint.sys
+usbmon.dll
+
+[ParPplINF]
+ppl0905.inf
+
+[SourceDisksNames]
+1=%DISK1%,,
+
+[SourceDiskFiles]
+usbprint.sys=1
+usbmon.dll=1
+
+[Strings]
+ProlificMfg="Prolific Technology Inc."
+USB\VID_067B&PID_2305.DeviceDesc="Prolific USB-Parallel Bridge"
+DISK1="(MS):Bridge Install Disk1 for Windows 98"

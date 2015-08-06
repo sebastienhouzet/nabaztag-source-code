@@ -1,0 +1,38 @@
+;MosUsbCe Inf file
+
+[Version]
+Signature = "$Windows NT$"
+Provider = "MosChip SemiConductor"
+CESignature = "$Windows CE$"
+
+[CEStrings]
+AppName="USer03Ce"
+InstallDir=%CE2%
+
+[Strings]   
+reg_path=\Drivers\USB\LoadClients\38672_30467\255_0_255\Default\Mos03UsbSerialClass
+reg_path1= \Drivers\USB\ClientDrivers\Mos03UsbSerialClass
+
+
+[DefaultInstall]
+CopyFiles = CopyFilesSection
+AddReg = RegSettings
+
+[CopyFilesSection]
+USer03Ce.dll,,,0x00000001
+
+[RegSettings]
+HKLM,%reg_path%,Dll,0x00000000,USer03Ce.Dll
+HKLM,%reg_path1%,Dll,0x00000000,USer03Ce.Dll
+
+[SourceDisksFiles]
+USer03Ce.Dll = 1
+
+[SourceDisksNames]
+1 = ,"Common files",,C:\drvdsk
+
+[DestinationDirs]
+DefaultDestDir=0,%InstallDir%
+
+
+

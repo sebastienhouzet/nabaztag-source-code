@@ -1,0 +1,318 @@
+######################################################################
+#
+#      MosChip USB Compound Device driver installation notes
+#
+######################################################################
+
+
+======================================
+1. Windows2000/XP Driver Installation
+======================================
+
+This document will present the steps needed to install or update the Drivers 
+for MosChip USB Compound Device products.
+
+For this example, the MCS7715 was used as the test case.
+This device offers One Serial Port, and one IEEE-1284 style Parallel Port.
+
+1. Download the appropriate Drivers from the Web-Site.
+-------------------------------------------------------
+
+    a. http://www.moschip.com
+	i) Click the "Products" button.
+	ii) Click the "USB" button.
+	iii) In the row for the product you wish to install, click 
+              "Drivers, Release Notes and Installation Guides".
+	iv) Click the icon under the Operating System you are using.
+
+    b. Allow the ".zip" file to be downloaded to your local computer.
+
+    c. Unzip the Driver files to a directory on your Hard Disk.
+
+    d. Check the new folder with the Driver files for a "Readme" file that 
+       may have additional or special installation instructions. Use those 
+       instructions in addition to, or instead of, these instructions if 
+       present.
+
+
+2. Installing Drivers for the first time.
+------------------------------------------
+
+    a. Turn the computer ON.
+
+    b. Run the Setup.EXE program. This program is usually 
+       located in the Installation disk supplied with this product.
+
+    c. Setup dialog will display 'Press "Install" button to Install the 
+       drives for Moschip USB Serial/Parallel compound device. For cancelling 
+       the installation press "Exit" button.'.
+
+    d. Press "Install" to start the installation.
+
+    e. Now the installer will display a message "Installation is in
+       Progress... Please Wait!"
+
+    f. Then the installer should display 
+       "Installation completed. Press "Exit" to terminate the application. 
+       No need to restart the machine. Unplug and Replug the device if it is 
+       currently connected.  
+	
+    g. Click Exit to close the installer. Plug-in the USB compound device to the 
+       one of the USB port.
+
+    h. Windows should detect the new USB device, and automatically install 
+       the drivers for the new hardware connected.
+    
+    i. When the Windows desktop is displayed, the Driver installation is complete.
+
+Notes:
+------
+    While installing Drivers on Windows 2000 and Windows XP, it is to be noted that 
+	user should click "Next" directly, when the system O.S. reminds user that 
+	the provided drivers doesn't have a digital signature.
+
+
+3. Updating / Reinstalling Drivers:
+------------------------------------------
+
+    a. Turn the computer ON.
+
+    b. Run the Setup.EXE program. This program is usually 
+       located in the Installation disk supplied with this product.
+
+    c. Setup dialog will display 'Press "Install" button to Install the 
+       drives for Moschip USB Serial/Parallel compound device. For cancelling 
+       the installation press "Exit" button.'.
+
+    d. Press "Install" to start the installation.
+
+    e. Now the installer will display a message "Installation is in
+       Progress... Please Wait!"
+
+    f. Then the installer should display 
+       " Driver for this device is already installed in this system! To update/reinstall 
+       press OK! To abort installation press cancel!". Press OK to Update the drivers.
+
+    g. Then the Installer should display "Moschip USB to Serial/Parallel Adapter 
+	   Drivers Installed. Press "Reboot Now" for installation to take effect. Else press 
+       "Reboot Later"."
+
+    g. Click "Reboot" for the changes to take effect.
+
+    h. After the machine is starts back, connect the Moschip USB Serial/Parallel 
+       compound device.
+
+    i. Windows should detect the new USB device, and automatically install 
+       the drivers for the new hardware connected.
+    
+    j. When the Windows desktop is displayed, the Driver updation is complete.
+
+
+Notes:
+------
+    While installing Drivers on Windows 2000 and Windows XP,
+    it is to be noted that user should click "Next" 
+    directly, when the system O.S. reminds user that the provided drivers doesn't 
+    have a digital signature.
+
+
+4. Check Driver Installation.
+------------------------------
+
+    a. Open the Windows Device Manager
+	i) Right-Click the "My Computer" icon on the Desktop.
+	ii) Select "Properties" from the drop-down menu.
+	iii) Click the "Hardware" tab.
+	iv) Click the "Device Manager" button to show the current Hardware list.
+
+    b. Confirm that the New Hardware has been included
+	i) MosChip USB Compound Device is in the Universal Serial Bus Controllers. 
+	ii) " MosChip USB SerialPort (COMn)"  in Ports (LPT & COM) categery 
+	ii) " MosChip USB ParallelPort (LPTn)"  in  Ports (LPT & COM) categery 
+	iii) In our case, one  Serial Port and one Parallel Ports were added.
+
+
+5. Removing Previously Installed Drivers
+-----------------------------------------
+
+Sometimes it will be desirable or even necessary to remove the previously installed 
+drivers, so that a new, clean installation can be performed. Drivers can get 
+corrupted when being written to their installation medium (CD-ROM etc.). If this 
+happens, the drivers may not install properly.Even if the installation proceeds 
+without errors, the drivers may not work. Sometimes older outdated drivers are 
+shipped with a product. Newer machines may require newer updated drivers, but the 
+older drivers prevent them from being installed. The easiest way to remove old 
+drivers is to use the MosUPortUninst.EXE program (located in WINNT\System32 
+directory or in the Installation disk supplied with the product). 
+
+
+Using MosUPortUninst.EXE to remove old Drivers
+
+    a. Unplug the USB Compound device. 
+
+    b. Open Start->Settings->ControlPanel->Add/Remove Programs.
+
+    c. Select "MosChip USB Compound Device" click change/remove. 	    
+
+    d. At the next dialog, Click "OK" button. 
+
+    e. Then click "RebootNow" button to reboot the system. 
+
+
+
+======================================
+2. Windows98SE/ME Driver Installation
+======================================
+
+This section will present the steps needed to install or update the Drivers 
+for MosChip USB Compound Device products.
+
+For this example, the MCS7715 was used as the test case.
+This device offers One Serial Port, and one IEEE-1284 style Parallel Port.
+
+
+1. Download the appropriate Drivers from the Web-Site.
+-------------------------------------------------------
+
+    a. http://www.moschip.com
+	i) Click the "Products" button.
+	ii) Click the "USB" button.
+	iii) In the row for the product you wish to install, click 
+              "Drivers, Release Notes and Installation Guides".
+	iv) Click the icon under the Operating System you are using.
+
+    b. Allow the ".zip" file to be downloaded to your local computer.
+
+    c. Unzip the Driver files to a directory on your Hard Disk.
+
+    d. Check the new folder with the Driver files for a "Readme" file that 
+       may have additional or special installation instructions. Use those 
+       instructions in addition to, or instead of, these instructions if 
+       present.
+
+
+2. Installing Drivers for the first time.
+------------------------------------------
+    a. Turn the computer ON.
+
+    b. Run the Setup.EXE program. This program is usually 
+       located in the Installation disk supplied with this product.
+
+    c. Setup dialog will display 'Press "Install" button to Install the 
+       drives for Moschip USB Serial/Parallel compound device. For cancelling 
+       the installation press "Exit" button.'.
+
+    d. Press "Install" to start the installation.
+
+    e. Now the installer will display a message "Installation is in
+       Progress... Please Wait!"
+
+    f. Then the installer should display "Moschip USB to Serial/Parallel Adapter 
+	   Drivers Installed. Press "Reboot Now" for installation to take effect. 
+	   Else press "Reboot Later"."
+
+    g. Click "Reboot" for the changes to take effect.
+	
+    h. After the machine is starts back, connect the Moschip USB Serial/Parallel 
+       compound device.
+
+    i. Windows should detect the new USB device, and automatically install 
+       the drivers for the new hardware connected.
+    
+    j. When the Windows desktop is displayed, the Driver updation is complete.
+
+	k. A shortcut for MosUsbPrintConfig.exe should be placed on the desktop.
+
+
+3. Updating / Reinstalling Drivers:
+------------------------------------------
+
+    a. Turn the computer ON.
+
+    b. Run the Setup.EXE program. This program is usually 
+       located in the Installation disk supplied with this product.
+
+    c. Setup dialog will display 'Press "Install" button to Install the 
+       drives for Moschip USB Serial/Parallel compound device. For cancelling 
+       the installation press "Exit" button.'.
+
+    d. Press "Install" to start the installation.
+
+    e. Now the installer will display a message "Installation is in
+       Progress... Please Wait!"
+
+    f. Then the installer should display 
+       " Driver for this device is already installed in this system! To update/reinstall 
+       press OK! To abort installation press cancel!". Press OK to Update the drivers.
+
+    g. Then the Installer should display "Moschip USB to Serial/Parallel Adapter 
+	   Drivers Installed. Press "Reboot Now" for installation to take effect. Else press 
+       "Reboot Later"."
+
+    g. Click "Reboot" for the changes to take effect.
+
+    h. After the machine is starts back, connect the Moschip USB Serial/Parallel 
+       compound device.
+
+    i. Windows should detect the new USB device, and automatically install 
+       the drivers for the new hardware connected.
+    
+    j. When the Windows desktop is displayed, the Driver updation is complete.
+
+	k. A shortcut for MosUsbPrintConfig.exe should be placed on the desktop.
+
+
+
+4. Check Driver Installation.
+------------------------------
+
+    a. Open the Windows Device Manager
+	i) Right-Click the "My Computer" icon on the Desktop.
+	ii) Select "Properties" from the drop-down menu.
+	iv) Click the Device Manager tab to show the current Hardware list.
+
+    b. Confirm that the New Hardware has been included
+	i) "MosChip USB Compound Device" is in the Universal Serial Bus Controllers. 
+	ii) "MosChip USB Serial COMn"  in Ports (LPT & COM) categery 
+	ii) "MosChip USB Parallel LPTn"  in  Ports (LPT & COM) categery 
+	iii) In our case, one  Serial Port and one Parallel Ports were added.
+
+
+Note:
+-----
+Please refer to Parallel Port Printer Installation.txt for instructions on 
+how to install MCS77XX Parallel Port adapter and then Printer driver and 
+in case there is still a problem printing, run MosUsbPrintConfig.exe.
+
+
+5. Removing Previously Installed Drivers
+-----------------------------------------
+
+Sometimes it will be desirable or even necessary to remove the previously installed 
+drivers, so that a new, clean installation can be performed. Drivers can get 
+corrupted when being written to their installation medium (CD-ROM etc.). If this 
+happens, the drivers may not install properly.Even if the installation proceeds 
+without errors, the drivers may not work. Sometimes older outdated drivers are 
+shipped with a product. Newer machines may require newer updated drivers, but the 
+older drivers prevent them from being installed. The easiest way to remove old 
+drivers is to use the MosUnst.EXE program (located in WINDOWS\System 
+directory or in the Installation disk supplied with the product). 
+
+
+Using MosUnst.EXE to remove old Drivers
+
+    a. Unplug the USB Compound device. 
+
+    b. Open Start->Settings->ControlPanel->Add/Remove Programs.
+
+    c. Select "MosChip USB Compound Device" click Add/remove. 	    
+
+    d. At the next dialog, Click "OK" button. 
+
+    e. Then click "RebootNow" button to reboot the system. 
+
+
+
+###############################
+END OF THE INSTALLATION NOTES
+###############################

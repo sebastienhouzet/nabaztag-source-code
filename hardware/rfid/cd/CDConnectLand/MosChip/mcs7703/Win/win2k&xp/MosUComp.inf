@@ -1,0 +1,104 @@
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; USB Compound Device Driver
+;; installation script for Windows 2000
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+[Version]
+Signature=$Windows NT$
+Class=USB
+ClassGuid={36FC9E60-C465-11CF-8056-444553540000}
+Provider=%ProviderName%
+DriverVer=09/28/2004,1.8.2.0
+
+[Manufacturer]
+%MfgName%=MosUsbCompDeviceList
+
+[SourceDisksNames]
+1=%DiskName%,,0
+
+[SourceDisksFiles]
+mosuport.sys=1
+;DbgMsg.sys=1
+mosuport.inf=1
+MosUsbSerial.exe=1
+monitor.exe=1
+dbgmsgcfg.dll=1
+;msvcp60.dll=1
+MosUSBSerPropPage.dll=1
+MosUSBParallel.exe=1
+MosUSBParPropPage.dll=1
+MosUnst.exe=2
+
+[SourceDisksNames]
+2="Install disk",,,..\
+
+[DestinationDirs]
+DefaultDestDir=11        ;LDID_SYS
+MosUsbComp.NT.CopyFiles=12        ;DIRID_DRIVERS
+Inf.Copy=17
+Uninstall.Copy=11
+
+[MosUsbCompDeviceList]
+%MosUsbComp.DevName%=MosUsbComp,USB\VID_9710&PID_7705
+%MosUsbComp.DevName%=MosUsbComp,USB\VID_9710&PID_7710
+%MosUsbComp.DevName%=MosUsbComp,USB\VID_9710&PID_7715
+%MosUsbComp.DevName%=MosUsbComp,USB\VID_9710&PID_7720
+%MosUsbComp.DevName%=MosUsbComp,USB\VID_9710&PID_7717&Rev_0100
+%MosUsbComp.DevName%=MosUsbComp,USB\VID_9710&PID_7719
+%MosUsbComp.DevName%=MosUsbComp,USB\VID_9710&PID_7703
+
+[MosUsbComp.NT]
+AddReg=MosUsbComp.NT.AddReg,Uninstall.AddReg
+CopyFiles=MosUsbComp.NT.CopyFiles,Uninstall.Copy,Inf.Copy
+;SyssetupPnPFlags = 1
+
+[MosUsbComp.NT.CopyFiles]
+mosuport.sys
+;DbgMsg.sys
+
+[Inf.Copy]
+;mosuport.inf
+
+[MosUsbComp.NT.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,mosuport.sys
+
+[MosUsbComp.NT.Services]
+AddService=mosuport,2,MosUsbComp.NT.AddService
+
+[MosUsbComp.NT.AddService]
+DisplayName    = %mosuport.ServiceName%
+ServiceType    = 1           ; SERVICE_KERNEL_DRIVER
+StartType      = 3           ; SERVICE_DEMAND_START
+ErrorControl   = 0           ; SERVICE_ERROR_IGNORE
+ServiceBinary  = %12%\mosuport.sys
+LoadOrderGroup = Base
+
+[Uninstall.Copy]
+MosUnst.exe
+MosUsbSerial.exe
+monitor.exe
+MosUSBParallel.exe
+dbgmsgcfg.dll
+;msvcp60.dll
+MosUSBSerPropPage.dll
+MosUSBParPropPage.dll
+
+
+[Uninstall.AddReg]
+HKLM,SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\%MosUsbComp.DevName%,DisplayName,0,%MosUsbComp.DevName%
+HKLM,SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\%MosUsbComp.DevName%,UninstallString,0,MosUnst.exe
+
+[Strings]
+ProviderName="MosChip Semiconductor Technology"
+MfgName="MosChip Semiconductor Technology"
+DiskName="USB Compound Device Installation Disc"
+MosUsbComp.DevName="USB Compound Device"
+mosuport.ServiceName="USB Serial/Parallel Ports"
+
+;-----------------------------------
+; END OF FILE
+;-----------------------------------
+

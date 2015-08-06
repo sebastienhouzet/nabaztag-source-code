@@ -1,0 +1,139 @@
+; Copyright (c) 1993-2001 Moschip Semiconductors
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;;
+;;  FILE : OneUPort.inf
+;;  OS SUPPORTED : WIN2000/XP 
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+[version]
+Signature="$WINDOWS NT$"
+Class=Ports
+ClassGuid={4D36E978-E325-11CE-BFC1-08002BE10318}
+Provider=%ProviderName%
+DriverVer=01/17/2005,1.9.1.0
+CatalogFile=OneUport.cat
+
+[DestinationDirs]
+DefaultDestDir  = 11        ;LDID_SYS
+ComPort.NT.CopyFiles=12
+
+[SourceDisksFiles]
+oneuport.sys=1
+
+[SourceDisksNames]
+1=%DiskName%,"",,
+
+
+[ControlFlags]
+
+
+;===============================
+; Driver Installation
+;===============================
+[Manufacturer]
+%MfgName%=OneUsbPortsList
+
+;
+; Manufacturer Name Section
+;
+[OneUsbPortsList]
+%OneUsbPort.ComPortName%=ComPort.NT,MOSCHIP\USB_SERIAL_INTERFACE
+;%OneUsbPort.LptPortName%=LptPort.NT,MOSCHIP\USB_PARALLEL_INTERFACE
+
+
+
+;----------------------------------------
+; COM Port Install
+;----------------------------------------
+[ComPort.NT]
+AddReg=ComPort.NT.AddReg
+CopyFiles=ComPort.NT.CopyFiles
+
+[ComPort.NT.AddReg]
+HKR,,EnumPropPages32,,"OneUSBSerPropPage.dll,OneUSBSerPropPageProvider"
+HKR,,PortSubClass,1,01
+
+[ComPort.NT.CopyFiles]
+oneuport.sys
+
+[ComPort.NT.HW]
+AddReg=ComPort.NT.HW.AddReg
+
+[ComPort.NT.HW.AddReg]
+HKR,,"UpperFilters",0x00010000,"serenum"
+
+[ComPort.NT.Services]
+AddService=OneUPort,2,ComPort.NT.AddService
+AddService= Serenum,,Serenum_Service_Inst
+
+[ComPort.NT.AddService]
+DisplayName    = %OneUPort.ServiceName%
+ServiceType    = 1           ; SERVICE_KERNEL_DRIVER
+StartType      = 3           ; SERVICE_DEMAND_START
+ErrorControl   = 0           ; SERVICE_ERROR_IGNORE
+ServiceBinary  = %12%\OneUPort.sys
+LoadOrderGroup = Base
+AddReg=ComPort.NT.Services.AddReg
+
+
+; -------------- Serenum Driver install section
+[Serenum_Service_Inst]
+DisplayName    = %Serenum.SVCDESC%
+ServiceType    = 1               ; SERVICE_KERNEL_DRIVER
+StartType      = 3               ; SERVICE_DEMAND_START
+ErrorControl   = 1               ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\serenum.sys
+LoadOrderGroup = PNP Filter
+
+[ComPort.NT.Services.AddReg]
+;RegMaxTxPacketSize is valid 32 - 512K
+HKR,Parameters, "RegMaxTxPacketSize", 0x10001, 512
+
+;RegMaxTxPacketSize is valid 64 - 512K
+HKR,Parameters, "RegMaxRxPacketSize", 0x10001, 1024
+
+;RegUsbReadMaxPolls is valid 1 - 10
+HKR,Parameters, "RegUsbReadMaxPolls", 0x10001, 1
+
+;RegUsbStatusMaxPolls is valid 1 - 10
+HKR,Parameters, "RegUsbStatusMaxPolls", 0x10001, 1
+
+;RegEnableHwFlowControl is valid 0 - 1
+HKR,Parameters, "RegEnableHwFlowControl", 0x10001, 0
+
+;DebugLevel is valid 0 - 3
+HKR,Parameters, "DebugLevel", 0x10001, 0
+
+;OneShot Specific
+HKR,Parameters, "DeviceControlReg0", 0x10001, 01
+HKR,Parameters, "DeviceControlReg1", 0x10001, 05
+HKR,Parameters, "DeviceControlReg2", 0x10001, 36
+HKR,Parameters, "ClockStartReg", 0x10001, 0
+HKR,Parameters, "ClockMultiReg", 0x10001, 0
+HKR,Parameters, "MaskBaudsLowToHigh", 0x10001, 0
+HKR,Parameters, "WriteDCR", 0x10001, 1
+HKR,Parameters, "ControlReg", 0x10001, 0
+
+
+;----------------------------------------------
+; User readable strings
+;----------------------------------------------
+[Strings]
+ProviderName="MosChip Semiconductor Technology"
+MfgName="MosChip Semiconductor Technology"
+DiskName="USB Compound OneShot Device Installation Disc"
+OneUsbComp.DevName="MosChip 7703-USB2Serial Converter"
+OneUPort.ServiceName="MosChip 7703-USB2Serial Port"
+PortsClassName = "Ports (COM & LPT)"
+OneUsbPort.ComPortName="MosChip 7703-USB2Serial Port"
+;OneUsbPort.LptPortName="USB Parallel Port"
+Serenum.SVCDESC = "Serenum Filter Driver"
+ComService="oneuport"
+
+;-----------------------
+; END OF FILE
+;-----------------------
+

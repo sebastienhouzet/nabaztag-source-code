@@ -1,0 +1,507 @@
+V 403
+D \WINCE500\PBWorkspaces\7717_Platform\Test_LPT\ 542005
+ F StdAfx.h 40044 0 1C4C6E7FBF37D00
+  I windows.h 0 
+  I stdio.h 0 
+ F StdAfx.cpp 41 0 1C4C6E7FBF37D00
+  I stdafx.h 1 
+ F Test_LPT.cpp 42041 0 1C4CAF135195C00
+  I stdafx.h 1 
+ F obj\ 0 10 0
+
+D \WINCE500\PBWorkspaces\7717_Platform\Test_LPT\obj\x86\debug\ 0
+
+D \WINCE500\PBWorkspaces\7717_Platform\Test_LPT\obj\x86\retail\ 3000
+
+D \WINCE500\PBWorkspaces\MyPlatform\Test_LPT\ 0
+
+D \WINCE500\PBWorkspaces\MyPlatform\Test_LPT\obj\x86\debug\ 0
+
+D \WINCE500\public\common\sdk\inc\ a080
+ F af_irda.h 44 0 1C45F34D59D2400
+  I winsock.h 0 
+ F afdfunc.h 44 0 1C45F34D59D2400
+  I ras.h 1 
+  I tapi.h 1 
+  I mafdfunc.h 0 
+ F armintr.h 44 0 1C45F34D59D2400
+ F armmacros.s 9 0 1C45F34D59D2400
+ F assert.h 44 0 1C45F34D59D2400
+  I windef.h 0 
+  I types.h 0 
+  I winbase.h 0 
+ F authhlp.h 44 0 1C45F34D59D2400
+  I windows.h 0 
+  I sspi.h 0 
+  I tchar.h 0 
+ F avifmt.h 44 0 1C45F34D59D2400
+ F basetsd.h 44 0 1C45F34D59D2400
+ F basetyps.h 44 0 1C45F34D59D2400
+ F bldver.h 44 0 1C45F34D59D2400
+ F bt_api.h 44 0 1C45F34D59D2400
+  I ws2bth.h 0 
+  I winioctl.h 0 
+ F bt_sdp.h 44 0 1C45F34D59D2400
+ F bthapi.h 44 0 1C45F34D59D2400
+  I rpc.h 1 
+  I rpcndr.h 1 
+  I windows.h 1 
+  I ole2.h 1 
+  I oaidl.h 1 
+  I ocidl.h 1 
+ F bthapi.idl 20081 0 1C45F34D59D2400
+  I oaidl.idl 1 
+  I ocidl.idl 1 
+  I bthsdpdef.h 1 
+  I PSHPACK1.H 0 
+  I POPPACK.H 0 
+ F celog.h 44 0 1C45F34D59D2400
+ F cesddl.h 44 0 1C45F34D59D2400
+ F cguid.h 44 0 1C45F34D59D2400
+ F cmnintrin.h 44 0 1C45F34D59D2400
+ F coguid.h 44 0 1C45F34D59D2400
+ F commctrl.h 44 0 1C45F34D59D2400
+  I pshpack1.h 0 
+  I prsht.h 0 
+  I poppack.h 0 
+  I pcommctr.h 0 
+ F commdlg.h 44 0 1C45F34D59D2400
+  I pshpack1.h 0 
+  I mcommdlg.h 0 
+  I poppack.h 0 
+ F cred.h 44 0 1C45F34D59D2400
+ F creg.hxx 44 0 1C45F34D59D2400
+  I windows.h 0 
+  I svsutil.hxx 1 
+ F ctype.h 44 0 1C45F34D59D2400
+  I stdlib.h 1 
+ F d3dm.h 44 0 1C45F34D59D2400
+  I windows.h 0 
+  I d3dmtypes.h 1 
+  I d3dmcaps.h 1 
+ F d3dmcaps.h 44 0 1C45F34D59D2400
+ F d3dmtypes.h 44 0 1C45F34D59D2400
+ F dbgapi.h 44 0 1C45F34D59D2400
+ F dbt.h 44 0 1C45F34D59D2400
+ F dccole.h 44 0 1C45F34D59D2400
+ F ddraw.h 44 0 1C45F34D59D2400
+  I objbase.h 0 
+ F devmgmt.h 44 0 1C45F34D59D2400
+ F dsgetdc.h 44 0 1C45F34D59D2400
+  I lmcons.h 0 
+ F dsound.h 44 0 1C45F34D59D2400
+  I objbase.h 0 
+  I pshpack1.h 1 
+  I poppack.h 1 
+ F dsrole.h 44 0 1C45F34D59D2400
+ F dvp.h 44 0 1C45F34D59D2400
+  I objbase.h 0 
+ F emmintrin.h 44 0 1C45F34D59D2400
+  I xmmintrin.h 0 
+  I emm_func.h 1 
+ F errorrep.h 44 0 1C45F34D59D2400
+ F eventlogmsgs.h 44 0 1C45F34D59D2400
+ F excpt.h 44 0 1C45F34D59D2400
+ F fatutil.h 44 0 1C45F34D59D2400
+  I windows.h 0 
+  I diskio.h 0 
+ F float.h 44 0 1C45F34D59D2400
+  I stdlib.h 1 
+ F fsdmgr.h 44 0 1C45F34D59D2400
+  I extfile.h 0 
+  I diskio.h 0 
+  I lockmgr.h 0 
+ F fsioctl.h 44 0 1C45F34D59D2400
+  I winioctl.h 0 
+ F fwapi.h 44 0 1C45F34D59D2400
+  I winsock2.h 0 
+  I ws2tcpip.h 0 
+ F guiddef.h 44 0 1C45F34D59D2400
+  I string.h 0 
+ F icmpapi.h 44 0 1C45F34D59D2400
+  I ipexport.h 1 
+ F imm.h 44 0 1C45F34D59D2400
+  I pimm.h 0 
+ F initguid.h 44 0 1C45F34D59D2400
+ F ipexport.h 44 0 1C45F34D59D2400
+ F iphlpapi.h 44 0 1C45F34D59D2400
+  I iprtrmib.h 0 
+  I ipexport.h 0 
+  I iptypes.h 0 
+ F ipifcons.h 44 0 1C45F34D59D2400
+ F iprtrmib.h 44 0 1C45F34D59D2400
+  I mprapi.h 0 
+  I ipifcons.h 0 
+ F iptypes.h 44 0 1C45F34D59D2400
+  I time.h 0 
+ F iso646.h 44 0 1C45F34D59D2400
+ F keybd.h 44 0 1C45F34D59D2400
+ F kfuncs.h 44 0 1C45F34D59D2400
+  I psyscall.h 0 
+  I pkfuncs.h 0 
+  I mkfuncs.h 0 
+ F kxarm.h 44 0 1C45F34D59D2400
+ F kxmips.h 44 0 1C45F34D59D2400
+ F kxshx.h 44 0 1C45F34D59D2400
+ F lap.h 44 0 1C45F34D59D2400
+  I windows.h 0 
+  I lass.h 0 
+ F lass.h 44 0 1C45F34D59D2400
+ F lass_ae.h 44 0 1C45F34D59D2400
+ F lid.h 44 0 1C45F34D59D2400
+ F limits.h 44 0 1C45F34D59D2400
+  I stdlib.h 1 
+ F linklist.h 44 0 1C45F34D59D2400
+ F lmcons.h 44 0 1C45F34D59D2400
+ F lmemdebug.h 44 0 1C45F34D59D2400
+ F lmerr.h 44 0 1C45F34D59D2400
+  I winerror.h 0 
+ F locale.h 44 0 1C45F34D59D2400
+ F lockmgr.h 44 0 1C45F34D59D2400
+  I windows.h 0 
+  I lockmgrtypes.h 1 
+ F lockmgrhelp.h 44 0 1C45F34D59D2400
+  I windows.h 0 
+  I lockmgrtypes.h 0 
+ F lockmgrtypes.h 44 0 1C45F34D59D2400
+  I windows.h 0 
+ F malloc.h 44 0 1C45F34D59D2400
+  I stdlib.h 1 
+ F math.h 44 0 1C45F34D59D2400
+  I stdlib.h 1 
+ F memory.h 44 0 1C45F34D59D2400
+  I stdlib.h 1 
+ F mm3dnow.h 44 0 1C45F34D59D2400
+  I mmintrin.h 0 
+  I xmmintrin.h 0 
+ F mmintrin.h 44 0 1C45F34D59D2400
+ F mmreg.h 44 0 1C45F34D59D2400
+ F mmsystem.h 44 0 1C45F34D59D2400
+  I pshpack1.h 1 
+  I poppack.h 1 
+ F msacm.h 44 0 1C45F34D59D2400
+ F msacmdlg.h 44 0 1C45F34D59D2400
+ F msgqueue.h 44 0 1C45F34D59D2400
+ F mstcpip.h 44 0 1C45F34D59D2400
+ F mswsock.h 44 0 1C45F34D59D2400
+ F new.h 44 0 1C45F34D59D2400
+  I new 0 
+ F nled.h 44 0 1C45F34D59D2400
+ F notify.h 44 0 1C45F34D59D2400
+  I pnotify.h 0 
+ F ntldap.h 44 0 1C45F34D59D2400
+ F ntstatus.h 44 0 1C45F34D59D2400
+ F oaidl.h 44 0 1C45F34D59D2400
+  I rpc.h 1 
+  I rpcndr.h 1 
+  I windows.h 1 
+  I ole2.h 1 
+  I objidl.h 1 
+ F oaidl.idl 20081 0 1C45F34D59D2400
+  I objidl.idl 1 
+ F objbase.h 44 0 1C45F34D59D2400
+  I rpc.h 0 
+  I rpcndr.h 0 
+  I pshpack8.h 0 
+  I stdlib.h 0 
+  I wtypes.h 0 
+  I unknwn.h 0 
+  I objidl.h 0 
+  I cguid.h 0 
+  I poppack.h 0 
+ F objerror.h 44 0 1C45F34D59D2400
+  I winerror.h 0 
+ F objidl.h 44 0 1C45F34D59D2400
+  I rpc.h 1 
+  I rpcndr.h 1 
+  I windows.h 1 
+  I ole2.h 1 
+  I unknwn.h 1 
+ F objidl.idl 20081 0 1C45F34D59D2400
+  I unknwn.idl 1 
+  I wtypes.idl 1 
+ F ocidl.h 44 0 1C45F34D59D2400
+  I rpc.h 1 
+  I rpcndr.h 1 
+  I windows.h 1 
+  I ole2.h 1 
+  I oleidl.h 1 
+  I oaidl.h 1 
+ F ocidl.idl 20081 0 1C45F34D59D2400
+  I oleidl.idl 1 
+  I oaidl.idl 1 
+ F ole2.h 44 0 1C45F34D59D2400
+  I pshpack8.h 0 
+  I winerror.h 0 
+  I objbase.h 0 
+  I oleauto.h 0 
+  I oleidl.h 0 
+  I poppack.h 0 
+ F oleauto.h 44 0 1C45F34D59D2400
+  I pshpack8.h 0 
+  I oaidl.h 0 
+  I poppack.h 0 
+ F olectl.h 44 0 1C45F34D59D2400
+  I macocidl.h 0 
+  I ocidl.h 0 
+ F oleidl.h 44 0 1C45F34D59D2400
+  I rpc.h 1 
+  I rpcndr.h 1 
+  I windows.h 1 
+  I ole2.h 1 
+  I objidl.h 1 
+ F oleidl.idl 20081 0 1C45F34D59D2400
+  I objidl.idl 1 
+ F osassemblyversion.cs 401 0 1C45F34D59D2400
+ F packoff.h 44 0 1C45F34D59D2400
+ F packon.h 44 0 1C45F34D59D2400
+ F pm.h 44 0 1C45F34D59D2400
+  I mpm.h 0 
+ F pmpolicy.h 44 0 1C45F34D59D2400
+  I msgqueue.h 0 
+ F pnp.h 44 0 1C45F34D59D2400
+ F poppack.h 44 0 1C45F34D59D2400
+ F prsht.h 44 0 1C45F34D59D2400
+  I pprsht.h 0 
+ F psapi.h 44 0 1C45F34D59D2400
+ F pshpack1.h 44 0 1C45F34D59D2400
+ F pshpack2.h 44 0 1C45F34D59D2400
+ F pshpack4.h 44 0 1C45F34D59D2400
+ F pshpack8.h 44 0 1C45F34D59D2400
+ F qos.h 44 0 1C45F34D59D2400
+ F ras.h 44 0 1C45F34D59D2400
+  I lmcons.h 0 
+  I tapi.h 0 
+  I pshpack4.h 1 
+  I poppack.h 1 
+  I pras.h 0 
+ F raseapif.h 44 0 1C45F34D59D2400
+ F raserror.h 44 0 1C45F34D59D2400
+ F recog.h 44 0 1C45F34D59D2400
+  I windows.h 0 
+ F rpc.h 44 0 1C45F34D59D2400
+  I windows.h 0 
+  I pshpack2.h 0 
+  I setjmp.h 0 
+  I rpcdce.h 0 
+  I rpcnsi.h 0 
+  I rpcerr.h 0 
+  I rpcmac.h 0 
+  I poppack.h 0 
+  I rpcnterr.h 0 
+  I excpt.h 0 
+  I winerror.h 0 
+  I rpcasync.h 0 
+ F rpcasync.h 44 0 1C45F34D59D2400
+ F rpcdce.h 44 0 1C45F34D59D2400
+  I rpcdcep.h 0 
+ F rpcdcep.h 44 0 1C45F34D59D2400
+ F rpcndr.h 44 0 1C45F34D59D2400
+  I rpcnsip.h 0 
+  I pshpack4.h 0 
+  I poppack.h 0 
+ F rpcnsi.h 44 0 1C45F34D59D2400
+ F rpcnsip.h 44 0 1C45F34D59D2400
+ F rpcnterr.h 44 0 1C45F34D59D2400
+ F rpcproxy.h 44 0 1C45F34D59D2400
+  I rpc.h 0 
+  I rpcndr.h 0 
+  I string.h 0 
+  I memory.h 0 
+ F rpcwdt.h 44 0 1C45F34D59D2400
+ F schnlsp.h 44 0 1C45F34D59D2400
+  I wincrypt.h 0 
+  I sslsock.h 0 
+ F security.h 44 0 1C45F34D59D2400
+  I windows.h 0 
+  I sspi.h 0 
+ F service.h 44 0 1C45F34D59D2400
+  I winioctl.h 0 
+  I mservice.h 0 
+ F setjmp.h 44 0 1C45F34D59D2400
+  I stdlib.h 1 
+ F shellapi.h 44 0 1C45F34D59D2400
+  I pshpack1.h 0 
+  I mshellap.h 0 
+  I poppack.h 0 
+ F shellsdk.h 44 0 1C45F34D59D2400
+  I windows.h 0 
+  I sipapi.h 0 
+  I prsht.h 0 
+  I shsdkstc.h 0 
+ F shintr.h 44 0 1C45F34D59D2400
+ F shsdkstc.h 44 0 1C45F34D59D2400
+  I wtypes.h 0 
+ F sip.h 44 0 1C45F34D59D2400
+  I rpc.h 1 
+  I rpcndr.h 1 
+  I windows.h 1 
+  I ole2.h 1 
+  I unknwn.h 1 
+  I sipapi.h 1 
+ F sipapi.h 44 0 1C45F34D59D2400
+ F splapi.h 44 0 1C45F34D59D2400
+ F spseal.h 44 0 1C45F34D59D2400
+ F sslsock.h 44 0 1C45F34D59D2400
+ F sspi.h 44 0 1C45F34D59D2400
+ F stdarg.h 44 0 1C45F34D59D2400
+  I stdlib.h 1 
+ F stddef.h 44 0 1C45F34D59D2400
+  I stdlib.h 1 
+ F stdio.h 44 0 1C45F34D59D2400
+  I stdlib.h 1 
+ F stdlib.h 44 0 1C45F34D59D2400
+ F storemgr.h 44 0 1C45F34D59D2400
+  I windows.h 0 
+ F string.h 44 0 1C45F34D59D2400
+  I stdlib.h 1 
+ F strsafe.h 44 0 1C45F34D59D2400
+  I stdio.h 0 
+  I string.h 0 
+  I stdarg.h 0 
+  I specstrings.h 0 
+ F svcguid.h 44 0 1C45F34D59D2400
+  I basetyps.h 0 
+ F svsutil.hxx 44 0 1C45F34D59D2400
+  I tchar.h 0 
+  I wchar.h 0 
+  I stddef.h 0 
+ F tapi.h 44 0 1C45F34D59D2400
+  I windows.h 0 
+  I ptapi.h 0 
+  I mtapi.h 0 
+ F tchar.h 44 0 1C45F34D59D2400
+  I windef.h 0 
+  I stdlib.h 0 
+ F tlhelp32.h 44 0 1C45F34D59D2400
+ F tvout.h 44 0 1C45F34D59D2400
+ F types.h 44 0 1C45F34D59D2400
+ F unknwn.h 44 0 1C45F34D59D2400
+  I rpc.h 1 
+  I rpcndr.h 1 
+  I windows.h 1 
+  I ole2.h 1 
+  I wtypes.h 1 
+ F unknwn.idl 20081 0 1C45F34D59D2400
+  I wtypes.idl 1 
+ F use_ansi.h 44 0 1C45F34D59D2400
+ F usp10.h 44 0 1C45F34D59D2400
+  I windows.h 0 
+ F wchar.h 44 0 1C45F34D59D2400
+  I stdlib.h 0 
+ F wctype.h 44 0 1C45F34D59D2400
+  I stdlib.h 0 
+ F winbase.h 44 0 1C45F34D59D2400
+  I windef.h 0 
+  I winver.h 0 
+  I stdarg.h 0 
+  I winerror.h 0 
+  I dbgapi.h 0 
+  I kfuncs.h 0 
+  I msgqueue.h 1 
+  I winnls.h 0 
+  I pwinbase.h 0 
+  I mwinbase.h 0 
+  I windbase.h 0 
+ F winber.h 44 0 1C45F34D59D2400
+ F wincrypt.h 44 0 1C45F34D59D2400
+ F windbase.h 44 0 1C45F34D59D2400
+  I pwindbas.h 0 
+  I mwindbas.h 0 
+ F windef.h 44 0 1C45F34D59D2400
+  I winnt.h 0 
+  I specstrings.h 0 
+ F windns.h 44 0 1C45F34D59D2400
+ F windows.h 44 0 1C45F34D59D2400
+  I windef.h 0 
+  I types.h 0 
+  I winbase.h 0 
+  I wingdi.h 0 
+  I winuser.h 0 
+  I winreg.h 0 
+  I shellapi.h 0 
+  I ole2.h 0 
+  I imm.h 0 
+  I tchar.h 0 
+  I excpt.h 0 
+  I strsafe.h 0 
+ F windowsx.h 44 0 1C45F34D59D2400
+ F winerror.h 44 0 1C45F34D59D2400
+ F wingdi.h 44 0 1C45F34D59D2400
+  I windef.h 0 
+  I pshpack2.h 1 
+  I poppack.h 1 
+  I pshpack1.h 0 
+  I pwingdi.h 0 
+ F winioctl.h 44 0 1C45F34D59D2400
+ F winldap.h 44 0 1C45F34D59D2400
+  I windef.h 0 
+  I schnlsp.h 0 
+ F winnetwk.h 44 0 1C45F34D59D2400
+  I mwnetfun.h 0 
+ F winnls.h 44 0 1C45F34D59D2400
+ F winnt.h 44 0 1C45F34D59D2400
+  I ctype.h 0 
+  I specstrings.h 0 
+  I basetsd.h 0 
+  I ntstatus.h 0 
+  I pshpack4.h 0 
+  I poppack.h 0 
+  I pshpack2.h 1 
+  I pshpack1.h 1 
+  I pshpack8.h 1 
+  I string.h 0 
+ F winreg.h 44 0 1C45F34D59D2400
+  I macwin32.h 0 
+  I pwinreg.h 0 
+  I mwinreg.h 0 
+ F winscard.h 44 0 1C45F34D59D2400
+  I wtypes.h 0 
+  I winioctl.h 0 
+  I winsmcrd.h 1 
+  I SCardErr.h 1 
+ F winsmcrd.h 44 0 1C45F34D59D2400
+ F winsock.h 44 0 1C45F34D59D2400
+  I windows.h 0 
+ F winsock2.h 44 0 1C45F34D59D2400
+  I pshpack4.h 0 
+  I windows.h 0 
+  I qos.h 0 
+  I guiddef.h 0 
+  I poppack.h 0 
+ F wintrust.h 44 0 1C45F34D59D2400
+  I wincrypt.h 0 
+  I pshpack8.h 0 
+  I poppack.h 0 
+ F winuser.h 44 0 1C45F34D59D2400
+  I windef.h 0 
+  I mmsystem.h 0 
+  I pshpack2.h 1 
+  I poppack.h 1 
+  I pwinuser.h 0 
+ F winuserm.h 44 0 1C45F34D59D2400
+ F winver.h 44 0 1C45F34D59D2400
+ F ws2atm.h 44 0 1C45F34D59D2400
+  I pshpack4.h 0 
+  I poppack.h 0 
+ F ws2bth.h 44 0 1C45F34D59D2400
+ F ws2spi.h 44 0 1C45F34D59D2400
+  I pshpack4.h 0 
+  I winsock2.h 0 
+  I poppack.h 0 
+ F ws2tcpip.h 44 0 1C45F34D59D2400
+ F wtypes.h 44 0 1C45F34D59D2400
+  I rpc.h 1 
+  I rpcndr.h 1 
+ F wtypes.idl 20081 0 1C45F34D59D2400
+ F xmmintrin.h 44 0 1C45F34D59D2400
+  I mmintrin.h 0 
+  I xmm_func.h 1 
+  I malloc.h 0 
+ F ymath.h 44 0 1C45F34D59D2400
+  I math.h 0 
+  I yvals.h 0 
+ F yvals.h 44 0 1C45F34D59D2400
+  I libdefs 0 
+ F specstrings.h 44 0 1C45F34D59D2400
+

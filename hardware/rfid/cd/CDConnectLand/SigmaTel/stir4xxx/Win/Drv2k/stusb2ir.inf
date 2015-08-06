@@ -1,0 +1,105 @@
+;
+; stusb2ir.inf - Driver installation file for USB 2.0 IrDA Bridge
+;
+; Copyright (c) 2004 SigmaTel, Inc.
+;
+
+[Version]
+Signature = "$Windows NT$"
+Class = Infrared
+provider = %ST%
+ClassGUID = {6bdd1fc5-810f-11d0-BEC7-08002BE2092F}
+DriverVer = 09/07/2004,1.00.1638
+CatalogFile = stusb2ir.cat
+
+[Manufacturer]
+%ST%=ST
+
+[ControlFlags]
+ExcludeFromSelect = USB\VID_066F&PID_4210
+
+[ST]
+%USB\VID_066F&PID_4210.DeviceDesc%=stusb2ir.Dev,USB\VID_066F&PID_4210
+
+[DestinationDirs]
+stusb2ir.CopyFiles = 12
+DefaultDestDir = 12
+
+
+[stusb2ir.Dev.NTx86]
+CopyFiles=stusb2ir.CopyFiles
+AddReg=stusb2ir.AddReg, stusb2ir.Params.AddReg
+BusType=1
+Characteristics = 0x84; NCF_PHYSICAL, NCF_HAS_UI
+
+[stusb2ir.Dev.NTx86.Services]
+Addservice = stusb2ir, 0x00000002, stusb2ir.AddService, common.EventLog
+
+[stusb2ir.AddService]
+DisplayName    = %STUSB2Ir.SvcDesc%
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_DEMAND_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\stusb2ir.sys
+LoadOrderGroup = NDIS
+
+[stusb2ir.AddReg]
+HKR,  Ndi,            HelpText,     0,      %STUSB2Ir.Help%
+HKR,  Ndi,            Service,      0,      "stusb2ir"
+HKR,  Ndi\Interfaces, UpperRange,   0,      "ndisirda"
+HKR,  Ndi\Interfaces, LowerRange,   0,      "nolower"
+HKR,  Ndi,            RequiredAll,  0,      "MS_IrDA"
+
+[stusb2ir.Params.AddReg]
+;
+;    IrDA Maximum Speed Mask
+;
+;       Note:  Driver will always enable 2400 & 9600,
+;               no matter what this key says
+;
+HKR,Ndi\params\MaximumSpeedMask,ParamDesc,,%strMAXIMUMSPEED%
+HKR,Ndi\params\MaximumSpeedMask,Type,,"enum"
+HKR,Ndi\params\MaximumSpeedMask,default,,"FFFF"
+HKR,Ndi\params\MaximumSpeedMask\enum,"0003",,"    9600"
+HKR,Ndi\params\MaximumSpeedMask\enum,"0007",,"   19200"
+HKR,Ndi\params\MaximumSpeedMask\enum,"000F",,"   38400"
+HKR,Ndi\params\MaximumSpeedMask\enum,"001F",,"   57600"
+HKR,Ndi\params\MaximumSpeedMask\enum,"003F",,"  115200" 
+HKR,Ndi\params\MaximumSpeedMask\enum,"007F",,"  576000"
+HKR,Ndi\params\MaximumSpeedMask\enum,"00FF",," 1152000" 
+HKR,Ndi\params\MaximumSpeedMask\enum,"01FF",," 4000000"
+HKR,Ndi\params\MaximumSpeedMask\enum,"03FF",,"16000000"
+HKR,Ndi\params\MaximumSpeedMask\enum,"FFFF",,%strNOLIMIT%
+
+[common.EventLog]
+AddReg = common.AddEventLog.reg
+
+[common.AddEventLog.reg]
+HKR, , EventMessageFile, 0x00020000,"%%SystemRoot%%\System32\IoLogMsg.dll;%%SystemRoot%%\System32\drivers\stusb2ir.sys"
+HKR, , TypesSupported,   0x00010001, 7		; FLG_ADDREG_TYPE_DWORD,
+									;   EVENTLOG_SUCCESS, EVENTLOG_ERROR_TYPE|EVENTLOG_WARNING_TYPE|EVENTLOG_INFORMATION_TYPE
+
+
+[stusb2ir.CopyFiles]
+stusb2ir.sys
+
+[SourceDisksFiles]
+stusb2ir.sys=1
+wdmstub.sys=1
+
+[SourceDisksNames]
+1 = %strDRIVERDISK%,,,
+
+;---------------------------------------------------------------;
+
+[Strings]
+ST="SigmaTel, Inc."
+USB\VID_066F&PID_4210.DeviceDesc="USB 2.0 IrDA Bridge"
+STUSB2Ir.SvcDesc="USB 2.0 IrDA Bridge"
+STUSB2Ir.Help   = "The USB 2.0 IrDA Bridge is a very fast IrDA infrared port. It can be used to establish wireless serial and network links to other computers, handhelds and peripherals."
+strDRIVERDISK="Driver Disk"
+strMAXIMUMSPEED="Maximum Speed"
+strNOLIMIT="No Limit"
+strPACKETPOOLSIZE="Packet Pool"
+strPACKETPOOLOVERFLOWSIZE="Packet Pool Overflow"
+strRECEIVEQUEUESIZE="Receive Queue"

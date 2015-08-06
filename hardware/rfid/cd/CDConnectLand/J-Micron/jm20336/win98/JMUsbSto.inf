@@ -1,0 +1,62 @@
+[Version]
+Signature="$CHICAGO$"
+Class=HDC
+provider=%MSFT%
+
+[Manufacturer]
+%MfgName%=Microsoft
+
+[Microsoft]
+%JM20338.DeviceDesc%=JMUSB.install,USB\VID_152D&PID_2338
+%JM20336.DeviceDesc%=JMUSB.install,USB\VID_152D&PID_2336
+%JMUS\DISK.DeviceDesc%=jmuspdr.install,USBSTOR\JMDISK
+
+[PreCopySection]
+HKR,,NoSetupUI,,1
+
+[DestinationDirs]
+jmus.files = 10,System32\Drivers
+jmuspdr.files = 12
+
+[JMUSB.install]
+CopyFiles=jmus.files, jmuspdr.files
+AddReg=jmus.addreg
+
+[jmus.addreg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,jmusbsto.SYS
+
+
+; Install the port driver
+[jmuspdr.install]
+AddReg=jmuspdr.addreg
+
+[jmuspdr.addreg]
+HKR,,DevLoader,,*ios
+HKR,,PortDriver,,jmuspdr.pdr
+HKLM,%AUTORUN%,JMUsbMon,,"JMUsbMon.exe"
+
+
+[jmus.files]
+jmusbsto.sys
+
+[jmuspdr.files]
+jmuspdr.pdr
+
+[SourceDisksNames]
+1000 = "USB Mass Storage Driver Disk","",,
+
+[SourceDisksFiles]
+jmusbsto.SYS = 1000
+jmusPDR.PDR = 1000
+
+;---------------------------------------------------------------;
+
+[Strings]
+MSFT="JMicron"
+MfgName="JMicron"
+
+JM20338.DeviceDesc="JM20338 SATA, USB Combo"
+JM20336.DeviceDesc="JM20336 SATA II, USB Combo"
+jmus\DISK.DeviceDesc="USB Mass Storage Device"
+AUTORUN="Software\Microsoft\Windows\CurrentVersion\Run"

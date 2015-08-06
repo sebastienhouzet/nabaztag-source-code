@@ -1,0 +1,40 @@
+;ALL the information must be Consistent with 2 INF files!!!!
+VIDPID=VID_0402&PID_5632
+VIDPID2=VID_0402&PID_5632
+ProviderName=Provider
+DriverDate=06/23/2003
+DriverVersion=1.2.0.19
+BINFILENAME=M5633.BIN
+
+LANDriverDesc=USB Virtual Network Adapter
+LANDriverDesc2=USB Virtual Network Adapter
+LANDriverDescGB=USB Virtual Network Adapter
+LANDriverDescGB2=USB Virtual Network Adapter
+LANDriverDescGB=USB Virtual Network Adapter
+LANDriverDescGB2=USB Virtual Network Adapter
+LANDriverDescTW=USB Virtual Network Adapter
+LANDriverDescTW2=USB Virtual Network Adapter
+LANDefaultInstallPath=C:\Program Files\VirtualNetwork
+LANDriverDirectoryName=VirtualNetwork
+LANDriverName=VNic.sys
+LANDriverName9x=VNic9x.sys
+LANInfFileName=Ulan.inf
+LANInstallExeFileName=Setup.exe
+LANShortcutFolderName=USB Virtual Network
+
+LinkDriverDesc=USB Super Link Adapter
+LinkDriverDesc2=USB Super Link Adapter
+LinkDriverDescGB=USB Super Link Adapter
+LinkDriverDescGB2=USB Super Link Adapter
+LinkDriverDescTW=USB Super Link Adapter
+LinkDriverDescTW2=USB Super Link Adapter
+LinkDefaultInstallPath=C:\Program Files\SuperLink
+LinkDriverDirectoryName=SuperLink
+LinkDriverName=ulink.sys
+LinkInfFileName=ulink.inf
+LinkInstallExeFileName=Setup.exe
+LinkExeFileName=SuperLink.exe
+LinkShortcutFileName=SuperLink.lnk
+LinkShortcutFolderName=USB SuperLink
+SupportedLanguageID=0409,0404,0804,0411,0407
+DefaultLanguageID=0409

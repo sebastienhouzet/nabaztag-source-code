@@ -1,0 +1,186 @@
+;	SERWPL.INF - INF file for USB-Serial Device
+;	Copyright (C) 1999, Prolific Technology Inc.
+;
+;	05/24/2005
+
+[Manufacturer]
+%MfgName%=Pro, NTamd64
+
+[Pro]
+%DeviceDesc%=ComPort.NTx86, USB\VID_067B&PID_2303
+
+[Pro.NTamd64]
+%DeviceDesc%=ComPort.NTamd64, USB\VID_067B&PID_2303
+
+[SourceDisksNames]
+1="USB-Serial Cable Diskette",,,
+
+[SourceDisksFiles]
+SER9PL.SYS=1
+SERSPL.VXD=1
+PSERENUM.VXD=1
+PRSEENUM.SYS=1
+SERSPL.INF=1
+SERWPL.INF=1
+
+[SourceDisksFiles.x86]
+ser2pl.sys=1
+
+[SourceDisksFiles.amd64]
+ser2pl64.sys=1
+
+[DestinationDirs]
+USB2SER.Files.Ext = 11
+USB2SER.Files.Inf = 10,INF
+ComPort.NTx86.Copy = 12        ;DIRID_DRIVERS
+ComPort.NTamd64.Copy = 12
+SerialEnumerator.NT.Copy=12 ;DIRID_DRIVERS
+
+[ComPort_install]
+
+;Windows98_ME
+
+[Version]
+Signature="$CHICAGO$"
+Class=USB
+provider=%Mfg%
+LayoutFile=layout.inf
+; DriverVer=5/20/2003,2.0.0.16
+
+[PreCopySection]
+HKR,,NoSetupUI,,1
+
+[ComPort]
+CopyFiles=USB2SER.Files.Ext, USB2SER.Files.Inf
+AddReg=USB2SER.AddReg
+
+; steel
+[ComPort.HW]
+AddReg=USB2SER.AddReg.HW
+;
+[USB2SER.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,SER9PL.SYS
+
+; steel
+[USB2SER.AddReg.HW]
+HKR,,"UpperFilters",0x00010000,"prseenum.sys"
+;
+[USB2SER.Files.Ext]
+SER9PL.SYS
+SERSPL.VXD
+PSERENUM.VXD
+PRSEENUM.SYS
+
+[USB2SER.Files.Inf]
+SERWPL.INF
+SERSPL.INF
+
+;========================================================================
+; Windows 2000/XP
+[ComPort_Install.NTx86]
+
+; Windows XP 64-bit
+[ComPort_Install.NTamd64]
+
+[Version]
+Signature="$Chicago$"
+Class=Ports
+ClassGuid={4D36E978-E325-11CE-BFC1-08002BE10318}
+Provider=%Mfg%
+LayoutFile=layout.inf
+DriverVer=01/19/2005,2.0.1.5
+
+AddReg=PortsClass.AddReg
+
+[PortsClass.AddReg]
+HKR,,,,%PortsClassName%
+
+[ComPort.NTx86]
+CopyFiles=ComPort.NTx86.Copy
+AddReg=ComPort.NT.AddReg
+
+[ComPort.NTamd64]
+CopyFiles=ComPort.NTamd64.Copy
+AddReg=ComPort.NT.AddReg
+
+[ClassInstall32.NT]
+AddReg=PortsClass.NT.AddReg
+
+[PortsClass.NT.AddReg]
+HKR,,,,%PortsClassName%
+HKR,,Icon,,"-23"
+HKR,,Installer32,,"MsPorts.Dll,PortsClassInstaller"
+
+[ComPort.NT.HW]
+AddReg=ComPort.NT.HW.AddReg
+
+[ComPort.NTx86.Copy]
+ser2pl.sys
+
+[ComPort.NTamd64.Copy]
+ser2pl64.sys
+
+[ComPort.NT.AddReg]
+HKR,,EnumPropPages32,,"MsPorts.dll,SerialPortPropPageProvider"
+
+[ComPort.NT.HW.AddReg]
+HKR,,"UpperFilters",0x00010000,"serenum"
+
+; The serial enumerator by itself, so that other INFs can install serenum w/out ser2pl.sys
+; -------------------------------------------------------
+
+[SerialEnumerator.NT]
+CopyFiles=SerialEnumerator.NT.Copy
+
+[SerialEnumerator.NT.Copy]
+serenum.sys
+
+;-------------- Service installation
+; Port Driver (function driver for this device)
+[ComPort.NTx86.Services]
+AddService = Ser2pl, 0x00000002, Serial_Service_Inst
+AddService = Serenum,,Serenum_Service_Inst
+
+[ComPort.NTamd64.Services]
+AddService = Ser2pl64, 0x00000002, Serial_Service_Inst64
+AddService = Serenum,,Serenum_Service_Inst
+
+[SerialEnumerator.NT.Services]
+AddService = Serenum,,Serenum_Service_Inst
+
+; -------------- Serial Port Driver install sections
+[Serial_Service_Inst]
+DisplayName    = %Serial.SVCDESC%
+ServiceType    = 1               ; SERVICE_KERNEL_DRIVER
+StartType      = 3               ; SERVICE_SYSTEM_START (this driver may do detection)
+ErrorControl   = 1               ; SERVICE_ERROR_IGNORE
+ServiceBinary  = %12%\ser2pl.sys
+; LoadOrderGroup = Extended base
+
+[Serial_Service_Inst64]
+DisplayName    = %Serial.SVCDESC%
+ServiceType    = 1               ; SERVICE_KERNEL_DRIVER
+StartType      = 3               ; SERVICE_SYSTEM_START (this driver may do detection)
+ErrorControl   = 1               ; SERVICE_ERROR_IGNORE
+ServiceBinary  = %12%\ser2pl64.sys
+; LoadOrderGroup = Extended base
+
+; -------------- Serenum Driver install section
+[Serenum_Service_Inst]
+DisplayName    = %Serenum.SVCDESC%
+ServiceType    = 1               ; SERVICE_KERNEL_DRIVER
+StartType      = 3               ; SERVICE_DEMAND_START
+ErrorControl   = 1               ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\serenum.sys
+LoadOrderGroup = PNP Filter
+
+; User readable strings
+;----------------------------------------------------------
+[Strings]
+Mfg= "Prolific"
+MfgName = "Prolific Technology Inc."
+PortsClassName = "Ports (COM & LPT)"
+DeviceDesc="Prolific USB-to-Serial Bridge"
+Serial.SVCDESC   = "Prolific Serial port driver"
+Serenum.SVCDESC = "Serenum Filter Driver"

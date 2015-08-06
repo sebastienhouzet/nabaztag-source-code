@@ -1,0 +1,58 @@
+------------------------------------------------------------------
+ ALi USB HostLink Controller VirtualNetwork/SuperLink 安装说明 
+               for Windows 98/Me/2000/XP Platform
+                          Jan 2003
+------------------------------------------------------------------
+ (c) Copyright ALi Corporation 2002. All Rights Reserved
+------------------------------------------------------------------
+
+
+--------
+内容
+--------
+
+1：介绍
+2：安装
+3：安装VirtualNetwork软件
+4：安装SuperLink软件
+
+1：介绍
+==============================
+扬智(ALi Corp)USB host link连接控制器用一个安装包提供了两种基于该控制器的软件应用方案。这两种方案是"USB Super Link" 和 "USB Virtual Network"。由于目前的计算机操作系统的特点，这两种应用方案不能在同一台计算机中共存。
+"USB Super Link"应用方案提供了一套软件使本地计算机用户能通过简单的鼠标操作存取远程计算机的数据文件。
+"USB Virtual Network" 应用方案将该连接控制器虚拟成一个局域网卡，能在两台计算机间建立点对点相连的局域网络。
+
+2. 安装									
+================================================================================
+这个安装软件包提供了一个安装工具来自动安装、卸载、升级驱动程序。用户可以也可以用指定驱动程序的路径的方式来安装驱动程序，但是我们推荐用户使用这个安装工具来安装。
+下面介绍一下如何使用这个安装工具。
+
+安装前请确认USB host link连接控制器已经从USB口拔除，然后在安装程序所在的目录运行setup.exe。
+这个安装工具用来自动安装、卸载、升级和切换扬智的VirtualNetwork和SuperLink的驱动程序。扬智的VirtualNetwork和SuperLink软件包是两种不同的基于扬智的host link控制器的软件应用方案。为了防止误操作和不必要的混淆，这个安装工具会自动探测当前系统安装的是哪一种软件应用方案，然后让用户选择想要安装的类型。
+
+3. 安装VirtualNetwork						
+================================================================================
+1) 运行 setup.exe
+   a) 选择安装 "USB Virtual Network Adapter"，进入下一屏选项。
+   b) 如果该计算机是第一次安装VirtualNetwork, 缺省的选项是“安装USB Virtual Network Adapter”。.
+   c) 如果VirtualNetwork已经安装过了, 安装程序会让用户选择是卸载还是重新安装USB Virtual Network Adapter。
+   d) 如果该计算机已经安装过USB Super Link了，安装程序会让用户选择是只卸载USB Super Link，还是卸载USB Super Link后安装USB Virtual Network Adapter。
+2) 作出上一步的选择后点"下一步".
+3) 安装程序会进行安装的工作，安装完成后请点击"完成"。
+4) 如果用户在第一步选择的是安装USB Virtual Network Adapter，那么在安装结束后请将USB host link连接控制器插入USB口。
+   如果用户的平台是Windows 2000 或 Windows XP，系统会提示该驱动程序没有通过数字签名，请在这时点“下一步”继续。
+
+5) 然后请等待大约30秒直到系统产生IP地址。如果是windows 98操作系统，系统在产生IP地址期间可能会暂时停止相应。
+
+4. 安装SuperLink
+================================================================================
+1) 运行 setup.exe
+   a) 选择安装  "USB Super Link Adapter"，进入下一屏选项。
+   b) 果该计算机是第一次安装USB Super Link Adapter, 缺省的选项是“安装USB Super Link Adapter”。
+   c) 如果USB Super Link Adapter已经安装过了, 安装程序会让用户选择是卸载还是重新安装USB Super Link Adapter。
+   d) 如果该计算机已经安装过USB Virtual Network Adapter了，安装程序会让用户选择是只卸载USB Virtual Network Adapter，还是卸载后安装USB Super Link Adapter。
+2) 选择安装路径.
+3) 作出上一步的选择后点"下一步".
+4) 安装程序会进行安装的工作，安装完成后请点击"完成"。
+5) 如果用户在第一步选择的是安装USB Super Link Adapter，那么在安装结束后请将USB host link连接控制器插入USB口。
+   如果用户的平台是Windows 2000 或 Windows XP，系统会提示该驱动程序没有通过数字签名，请在这时点“下一步”继续。

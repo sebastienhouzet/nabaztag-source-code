@@ -1,0 +1,93 @@
+[Version]
+Signature="$CHICAGO$"
+Class=USB
+ClassGUID={36FC9E60-C465-11CF-8056-444553540000}
+
+;HDC
+provider=%MSFT%
+
+[Manufacturer]
+%MfgName%=Sunplus
+
+[Sunplus]
+%USB\VID_04FC&PID_0C15.DeviceDesc%=Sandisk.install,USB\VID_04FC&PID_0C15
+%USB\VID_04FC&PID_0C16.DeviceDesc%=Sandisk.install,USB\VID_04FC&PID_0C16
+%UMSS\DISK.DeviceDesc%=umsspdr.install,UMSS\DISK
+
+[PreCopySection]
+HKR,,NoSetupUI,,1
+
+[DestinationDirs]
+; \<WINDIR>\SYSTEM32\DRIVERS
+umss.files = 10,System32\Drivers
+
+; \<WINDIR>\SYSTEM\IOSUBSYS
+umsspdr.files = 12
+
+[SonyCDRW.install]
+CopyFiles=umss.files, umsspdr.files
+AddReg=umss.addreg
+
+[Sandisk.install]
+CopyFiles=umss.files, umsspdr.files
+AddReg=umss.addreg
+
+[ImationLS120.install]
+CopyFiles=umss.files, umsspdr.files
+AddReg=umss.addreg
+
+[ImationLS120.install.HW]
+AddReg=cb.addreg.HW
+
+[umss.addreg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,UMSS.SYS
+
+
+; If the device does not correctly indicate which protocol it uses,
+; one of the following sections should be added to indicate which protocol
+; the driver should use.
+
+; Indicate that the device uses the C/B/I protocol
+[cbi.addreg.HW]
+HKR,,DeviceProtocol,0x10001,00
+
+; Indicate that the device uses the C/B protocol
+[cb.addreg.HW]
+HKR,,DeviceProtocol,0x10001,01
+
+; Indicate that the device uses the BULK ONLY protocol
+[bulkonly.addreg.HW]
+HKR,,DeviceProtocol,0x10001,50
+
+; Install the port driver
+[umsspdr.install]
+AddReg=umsspdr.addreg
+
+[umsspdr.addreg]
+HKR,,DevLoader,,*ios
+HKR,,PortDriver,,umsspdr.pdr
+
+
+
+[umss.files]
+umss.sys
+
+[umsspdr.files]
+umsspdr.pdr
+
+[SourceDisksNames]
+1000 = "Sunplus USB to SATA Bridge Driver Disk","",,
+
+[SourceDisksFiles]
+UMSS.SYS = 1000
+UMSSPDR.PDR = 1000
+
+;---------------------------------------------------------------;
+
+[Strings]
+MSFT="Sunplus"
+MfgName="Sunplus"
+USB\VID_04FC&PID_0C15.DeviceDesc="Sunplus USB to SATA Bridge"
+USB\VID_04FC&PID_0C16.DeviceDesc="Sunplus USB to SATA Bridge"
+UMSS\DISK.DeviceDesc="USB Mass Storage Device"

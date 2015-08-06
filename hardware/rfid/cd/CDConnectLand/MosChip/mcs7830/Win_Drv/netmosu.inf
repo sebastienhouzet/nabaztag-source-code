@@ -1,0 +1,285 @@
+;;/*********************************************************************
+;;
+;;  (c) Copyright 2002
+;;
+;;  MosUMac ndis-wdm driver
+;;
+;;  netmosu.inf: INF file for USB-Ethernet Adapter driver
+;;
+;;*********************************************************************/
+
+[Version]
+Signature="$CHICAGO$"
+Compatible=1
+Class=Net
+Provider=%ProviderName%
+ClassGUID={4D36E972-E325-11CE-BFC1-08002BE10318}
+;CatalogFile=
+DriverVer = 10/01/2004,1.8.2.0
+
+[Manufacturer]
+%MfgName%=COMPANY
+
+[SourceDisksNames]
+50=%DisketteDesc%,,0
+
+[SourceDisksFiles]
+MOSUMAC.SYS = 50
+MOSMAC98.SYS = 50
+MOSUMAC.INF = 50
+MacUnInstall.exe = 50
+
+[DestinationDirs]
+MOSUMAC.CopyFiles = 10,system32\drivers
+MOSMAC98.CopyFiles = 11
+ndis5.CopyFiles   = 12
+Uninstall.Copy=11
+
+
+;****************************************************************************
+; Exclude from select the USB device -- it should be auto-detected!
+;****************************************************************************
+
+[ControlFlags]
+ExcludeFromSelect     = USB\VID_9710&PID_7830
+ExcludeFromSelect     = USB\VID_9710&PID_7730
+
+
+[COMPANY]
+%USB\VID_9710&PID_7830.DeviceDesc% = MosUsbEth, USB\VID_9710&PID_7830
+%USB\VID_9710&PID_7730.DeviceDesc% = MosUsbEth, USB\VID_9710&PID_7730
+
+;****************************************************************************
+; Device Install Sections
+;
+; Section names ending in ".NT" point to Windows NT 5.0-compatible sections
+;****************************************************************************
+
+; COMPANY USB-Ethernet Adapter
+;;;;;;;;;;;;;;;;
+;9x Section
+;;;;;;;;;;;;;;;;
+
+[MosUsbEth]
+AddReg=MOSUMAC_Win9x.ndi,MOSUMAC_parms.reg,MOSUMAC_DevID.ndi, Uninstall.AddReg
+CopyFiles=MOSMAC98.CopyFiles
+DeviceID=USB\VID_9710&PID_7830
+DeviceID=USB\VID_9710&PID_7730
+
+[MOSMAC98.CopyFiles]
+MOSMAC98.SYS
+
+;;;;;;;;;;;;;;;;
+; NT SECTION
+;;;;;;;;;;;;;;;;
+
+[MOSUsbEth.NT]
+AddReg=MOSUMAC.ndi,MOSUMAC_parms.reg,Uninstall.AddReg
+;AddReg=MOSUMAC.ndi,MOSUMAC_parms.reg,Uninstall.AddReg
+Characteristics=0x84; NCF_PHYSICAL, NCF_HAS_UI
+BusType=0 ; USB
+CopyFiles=ndis5.CopyFiles, Uninstall.Copy
+
+[MOSUsbEth.NT.Services]
+AddService=MOSUMAC,2,MOSUMAC.ServiceDesc,MOSUMAC.EventLog
+
+[ndis5.CopyFiles]
+MOSUMAC.SYS,,,0x2
+
+[MOSUMAC.CopyFiles]
+MOSUMAC.SYS
+
+[Uninstall.Copy]
+MacUnInstall.exe
+
+[MOSUMAC.EventLog]
+AddReg=MOSUMAC.AddEventLog
+
+[MOSUMAC.AddEventLog]
+HKR, ,EventMessageFile,  0x00020000, "%%SystemRoot%%\System32\netevent.dll"
+HKR, ,TypeSupported,     0x00010001, 7
+
+[MOSUMAC.ServiceDesc]
+DisplayName      = %MOSUMAC.DriverDesc%
+ServiceType      = 1
+StartType        = 3
+ErrorControl     = 1
+ServiceBinary    = %12%\MOSUMAC.SYS
+LoadOrderGroup   = NDIS,NTKERN,NDIS
+
+[MOSUMAC.ndi]
+HKR,Ndi,                Service,         0,  "MOSUMAC"
+HKR,Ndi\Interfaces,     UpperRange,      0,  "ndis5"
+HKR,Ndi\Interfaces,     LowerRange,      0,  "ethernet"
+HKR,,                   PlatformType,    0,  "1"
+
+
+[MOSUMAC_Win9x.ndi]
+
+HKR,,AdapterName,,MOSUMAC
+HKR,NDIS,LogDriverName,,MOSUMAC
+HKR,NDIS,MajorNdisVersion,1,03
+HKR,NDIS,MinorNdisVersion,1,0a
+HKR,Ndi,CardType,,"PNP"
+HKR,Ndi\Interfaces,DefUpper,,"ndis3"
+HKR,Ndi\Interfaces,DefLower,,"ethernet"
+HKR,Ndi\Interfaces,UpperRange,,"ndis3"
+HKR,Ndi\Interfaces,LowerRange,,"ethernet"
+HKR,Ndi\Install,,,"MOSUMAC.Install"
+HKR,Ndi\Remove,,,"MOSUMAC.Remove"
+HKR,Ndi,HelpText,,"USB-Ethernet Adapter"
+
+[MOSUMAC_DevID.ndi]
+HKR,Ndi,DeviceID,,USB\VID_9710&PID_7830
+HKR,Ndi,DeviceID,,USB\VID_9710&PID_7730
+
+[MOSUMAC.Install]
+AddReg=MOSUMAC.Addreg
+
+[MOSUMAC.AddReg]
+HKR,,DevLoader,,*ndis,*ntkern,*ndis
+HKR,,EnumPropPages,,"netdi.dll,EnumPropPages"
+HKR,,DeviceVxDs,,MOSMAC98.sys
+
+
+;****************************************************************************
+; Device Parameters
+;****************************************************************************
+
+[MOSUMAC_parms.reg]
+
+;Flow Control
+HKR, Ndi\params\DuplexMode,      ParamDesc, 0, %DuplexMode%
+HKR, Ndi\params\DuplexMode,      type,      0, "enum"
+HKR, Ndi\params\DuplexMode,      default,   0, "0"
+HKR, Ndi\params\DuplexMode\enum, 0,         0, %AutoMode%
+HKR, Ndi\params\DuplexMode\enum, 1,         0, %10HalfMode%
+HKR, Ndi\params\DuplexMode\enum, 2,         0, %10FullMode%
+HKR, Ndi\params\DuplexMode\enum, 3,         0, %100HalfMode%
+HKR, Ndi\params\DuplexMode\enum, 4,         0, %100FullMode%
+
+;FPGA 
+HKR, Ndi\params\FPGA,  		ParamDesc, 	0, "Version"
+HKR, Ndi\params\FPGA,  		type, 	0, "enum"
+HKR, Ndi\params\FPGA,   	default, 	0, "0"
+HKR, Ndi\params\FPGA\enum,   	0, 		0, "ASIC"
+HKR, Ndi\params\FPGA\enum,   	1, 		0, "FPGA"
+
+;NetworkAddress
+HKR, NDI\params\NetworkAddress,       ParamDesc,       0, "NetworkAddress"
+HKR, NDI\params\NetworkAddress,       type,            0, "edit"
+HKR, NDI\params\NetworkAddress,       LimitText,       0, "12"
+HKR, NDI\params\NetworkAddress,       UpperCase,       0, "1"
+HKR, NDI\params\NetworkAddress,       default,         0, " "
+HKR, NDI\params\NetworkAddress,       optional,        0, "1"
+
+;PauseFrame Enable/Disable
+HKR, Ndi\params\PauseFrames,  	ParamDesc, 	0, "PauseFrames"
+HKR, Ndi\params\PauseFrames,  	type, 	0, "enum"
+HKR, Ndi\params\PauseFrames,   	default, 	0, "0"
+HKR, Ndi\params\PauseFrames\enum,   0, 		0, "Enable"
+HKR, Ndi\params\PauseFrames\enum,   1, 		0, "Disable"
+
+;PauseThreshold Values
+HKR, Ndi\params\PauseThreshold,  ParamDesc, 0, "PauseThreshold"
+HKR, Ndi\params\PauseThreshold,  type,	  0, "enum"
+HKR, Ndi\params\PauseThreshold,  default,   0, "0"
+HKR, Ndi\params\PauseThreshold\enum,  0,   0, "1516 WORDS"
+HKR, Ndi\params\PauseThreshold\enum,  1,   0, " 758 WORDS"
+HKR, Ndi\params\PauseThreshold\enum,  2,   0, "1000 WORDS"
+HKR, Ndi\params\PauseThreshold\enum,  3,   0, "1600 WORDS"
+HKR, Ndi\params\PauseThreshold\enum,  4,   0, "1650 WORDS"
+HKR, Ndi\params\PauseThreshold\enum,  5,   0, "1700 WORDS"
+HKR, Ndi\params\PauseThreshold\enum,  6,   0, "1800 WORDS"
+HKR, Ndi\params\PauseThreshold\enum,  7,   0, "2000 WORDS"
+
+;Threshold Difference Values
+HKR, Ndi\params\ThresholdDifference, ParamDesc, 0, "Threshold Difference"
+HKR, Ndi\params\ThresholdDifference,  type,	0, "enum"
+HKR, Ndi\params\ThresholdDifference,  default,  0, "0"
+HKR, Ndi\params\ThresholdDifference\enum,   0,  0, "0 WORDS"
+HKR, Ndi\params\ThresholdDifference\enum,   1,  0, "128 WORDS"
+HKR, Ndi\params\ThresholdDifference\enum,   2,  0, "256 WORDS"
+HKR, Ndi\params\ThresholdDifference\enum,   3,  0, "384 WORDS"
+HKR, Ndi\params\ThresholdDifference\enum,   4,  0, "512 WORDS"
+HKR, Ndi\params\ThresholdDifference\enum,   5,  0, "640 WORDS"
+HKR, Ndi\params\ThresholdDifference\enum,   6,  0, "700 WORDS"
+HKR, Ndi\params\ThresholdDifference\enum,   7,  0, "758 WORDS"
+
+;PauseTime
+;HKR,Ndi\Params\PauseTime,  ParamDesc,  0, "PauseTime"
+;HKR,Ndi\Params\PauseTime,  Type,       0, "int"
+;HKR,Ndi\Params\PauseTime,  Default,    0, "-1"
+;HKR,Ndi\Params\PauseTime,  Min,        0, "0"
+;HKR,Ndi\Params\PauseTime,  Max,        0, "255"
+;HKR,Ndi\Params\PauseTime,  Step,       0, "10"
+;HKR,Ndi\Params\PauseTime,  Base,       0, "10"
+
+;SetPowerDelay
+HKR,Ndi\Params\SetPowerDelayInMilliSec,  ParamDesc,  0, "SetPowerDelay in MilliSec"
+HKR,Ndi\Params\SetPowerDelayInMilliSec,  Type,       0, "int"
+HKR,Ndi\Params\SetPowerDelayInMilliSec,  Default,    0, "2000"
+HKR,Ndi\Params\SetPowerDelayInMilliSec,  Min,        0, "2000"
+HKR,Ndi\Params\SetPowerDelayInMilliSec,  Max,        0, "5000"
+HKR,Ndi\Params\SetPowerDelayInMilliSec,  Step,       0, "500"
+HKR,Ndi\Params\SetPowerDelayInMilliSec,  Base,       0, "10"
+
+
+;TCBS
+HKR,Ndi\Params\TCBS,  ParamDesc,  0, "TCBS"
+HKR,Ndi\Params\TCBS,  Type,       0, "int"
+HKR,Ndi\Params\TCBS,  Default,    0, "128"
+HKR,Ndi\Params\TCBS,  Min,        0, "1"
+HKR,Ndi\Params\TCBS,  Max,        0, "128"
+HKR,Ndi\Params\TCBS,  Step,       0, "1"
+HKR,Ndi\Params\TCBS,  Base,       0, "10"
+HKR,Ndi\Params\TCBS,  LimitText,  0, 3
+
+
+;RCBS
+HKR,Ndi\Params\RCBS,  ParamDesc,  0, "RCBS"
+HKR,Ndi\Params\RCBS,  Type,       0, "int"
+HKR,Ndi\Params\RCBS,  Default,    0, "128"
+HKR,Ndi\Params\RCBS,  Min,        0, "1"
+HKR,Ndi\Params\RCBS,  Max,        0, "128"
+HKR,Ndi\Params\RCBS,  Step,       0, "1"
+HKR,Ndi\Params\RCBS,  Base,       0, "10"
+HKR,Ndi\Params\RCBS,  LimitText,  0, 3
+
+;MultipleIrpIn2_0 
+HKR, Ndi\params\MultipleIrpIn2_0,  		ParamDesc, 	0, "MultipleIrpIn2_0"
+HKR, Ndi\params\MultipleIrpIn2_0,  		type, 		0, "enum"
+HKR, Ndi\params\MultipleIrpIn2_0,   		default, 	0, "0"
+HKR, Ndi\params\MultipleIrpIn2_0\enum,   	1, 		0, "TRUE"
+HKR, Ndi\params\MultipleIrpIn2_0\enum,   	0, 		0, "FALSE"
+
+
+[Uninstall.AddReg]
+HKLM,SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\%MosUsbMac.DevName%,DisplayName,0,%MosUsbMac.DevName%
+HKLM,SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\%MosUsbMac.DevName%,UninstallString,0,MacUnInstall.exe
+
+[strings]
+; Manufacturer and Provider strings
+ProviderName="MosChip"
+MfgName="MosChip"
+
+; Diskette Names
+DisketteDesc="USB-Ethernet Device Drivers: Windows 98/2000/XP"
+
+; Devices
+USB\VID_9710&PID_7830.DeviceDesc = "HighSpeed USB-Ethernet Adapter"
+USB\VID_9710&PID_7730.DeviceDesc = "FullSpeed USB-Ethernet Adapter"
+
+; Parameter Names
+DebugLevel="Level for debug msgs"
+DuplexMode="Link Speed/Duplex Mode"
+AutoMode="AutoNegotiation"
+10HalfMode="Force 10Mbps Half-Duplex"
+10FullMode="Force 10Mbps Full-Duplex"
+100HalfMode="Force 100Mbps Half-Duplex"
+100FullMode="Force 100Mbps Full-Duplex"
+PhySelection="PhySelection"
+IntelPhy="IntelPhy"
+FaradayPhy="FaradayPhy"
+MOSUMAC.DriverDesc="USB-Ethernet Driver"
+MosUsbMac.DevName="USB-Ethernet Adapter Device"

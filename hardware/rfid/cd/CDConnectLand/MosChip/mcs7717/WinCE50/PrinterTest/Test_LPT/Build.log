@@ -1,0 +1,66 @@
+BUILD: [Thrd:Sequence:Type  ] Message
+BUILD: [00:0000000000:PROGC ] Checking for \WINCE500\sdk\bin\i386\srccheck.exe.
+BUILD: [00:0000000001:PROGC ] SrcCheck exit code: 0 (dec).
+BUILD: [00:0000000002:PROGC ] Compile and Link for x86.
+BUILD: [00:0000000003:PROGC ] Loading D:\WINCE500\PBWorkspaces\7717_Platform\Test_LPT\Build.dat.
+BUILD: [00:0000000004:PROGC ] Done.
+BUILD: [00:0000000005:PROGC ] Computing include file dependencies:
+BUILD: [00:0000000006:PROGC ] Checking for SDK include directory: D:\WINCE500\sdk\ce\inc.
+BUILD: [00:0000000007:PROGC ] Scan \WINCE500\PBWorkspaces\7717_Platform\Test_LPT\
+BUILD: [00:0000000008:PROG  ] ' prelink.bat'
+BUILD: [00:0000000009:INFO  ] Relinking \WINCE500\PBWorkspaces\7717_Platform\Test_LPT\ because target lib: obj\x86\retail\Test_LPT.exe does not exist.
+BUILD: [00:0000000010:PROGC ] Linking \WINCE500\PBWorkspaces\7717_Platform\Test_LPT\ directory.
+BUILD: [00:0000000011:PROG  ] 'NMAKE.EXE   -i -c BUILDMSG=Stop.  LINKONLY=1 NOPASS0=1'
+BUILD: [01:0000000012:INFO  ] makefile.def: BUILDROOT is D:\WINCE500\PBWorkspaces\7717_Platform\Test_LPT
+BUILD: [01:0000000013:INFO  ] 3 Please add _COMMONPUBROOT and __PROJROOT to your D:\WINCE500\PBWorkspaces\7717_Platform\Test_LPT\sources.cmn file.
+BUILD: [01:0000000014:INFO  ] Directory: D:\WINCE500\PBWorkspaces\7717_Platform\Test_LPT
+BUILD: [01:0000000015:INFO  ] TARGETNAME: Test_LPT
+BUILD: [01:0000000016:INFO  ] makefile.def: Including D:\WINCE500\public\common\oak\misc\sources.ReleaseType_LOCAL
+BUILD: [01:0000000017:INFO  ] 	set LIB=D:\WINCE500\sdk\CE\lib
+BUILD: [01:0000000018:PROGC ] Linking obj\x86\retail\Test_LPT.exe
+BUILD: [01:0000000019:INFO  ] 	link /LARGEADDRESSAWARE -out:obj\x86\retail\Test_LPT.exe -machine:x86 @D:\DOCUME~1\Madhukar\LOCALS~1\Temp\nmD76.tmp
+BUILD: [01:0000000020:INFO  ] Microsoft (R) Incremental Linker Version 7.10.4017
+BUILD: [01:0000000021:INFO  ] Copyright (C) Microsoft Corporation.  All rights reserved.
+BUILD: [01:0000000022:INFO  ] 
+BUILD: [01:0000000023:INFO  ] -nodefaultlib 
+BUILD: [01:0000000024:INFO  ] -entry:mainWCRTStartup 
+BUILD: [01:0000000025:INFO  ] -pdb:obj\x86\retail\Test_LPT.pdb 
+BUILD: [01:0000000026:INFO  ] /opt:ref 
+BUILD: [01:0000000027:INFO  ] -debug -debugtype:cv -incremental:no 
+BUILD: [01:0000000028:INFO  ] -map:obj\x86\retail\Test_LPT.map 
+BUILD: [01:0000000029:INFO  ] -savebaserelocations:obj\x86\retail\Test_LPT.rel 
+BUILD: [01:0000000030:INFO  ] -MERGE:.rdata=.text -ignore:4001,4070,4078,4086,4089,4096,4099,4108,4229 /STACK:65536,4096 
+BUILD: [01:0000000031:INFO  ] -subsystem:windowsce,5.00 
+BUILD: [01:0000000032:INFO  ] -base:0x00010000 
+BUILD: [01:0000000033:INFO  ] obj\x86\retail\Test_LPT.obj obj\x86\retail\StdAfx.obj 
+BUILD: [01:0000000034:INFO  ] D:\WINCE500\PBWorkspaces\7717_Platform\WINCE500\CEPC_x86\cesysgen\sdk\lib\x86\retail\coredll.lib D:\WINCE500\PBWorkspaces\7717_Platform\WINCE500\CEPC_x86\cesysgen\sdk\lib\x86\retail\corelibc.lib 
+BUILD: [01:0000000035:INFO  ] 	copylink /S:a /D:f /E:a /R:n obj\x86\retail\Test_LPT.exe D:\WINCE500\PBWorkspaces\7717_Platform\RelDir\CEPC_x86_Release\Test_LPT.exe
+BUILD: [01:0000000036:INFO  ] Can't create hard link.  (FAT file system?)
+BUILD: [01:0000000037:INFO  ] Copying files instead of creating hard links.
+BUILD: [01:0000000038:INFO  ] 	copylink /S:a /D:f /E:a /R:n obj\x86\retail\Test_LPT.map D:\WINCE500\PBWorkspaces\7717_Platform\RelDir\CEPC_x86_Release\Test_LPT.map
+BUILD: [01:0000000039:INFO  ] Can't create hard link.  (FAT file system?)
+BUILD: [01:0000000040:INFO  ] Copying files instead of creating hard links.
+BUILD: [01:0000000041:INFO  ] 	copylink /S:a /D:f /E:a /R:n obj\x86\retail\Test_LPT.pdb D:\WINCE500\PBWorkspaces\7717_Platform\RelDir\CEPC_x86_Release
+BUILD: [01:0000000042:INFO  ] Can't create hard link.  (FAT file system?)
+BUILD: [01:0000000043:INFO  ] Copying files instead of creating hard links.
+BUILD: [01:0000000044:INFO  ] 	if exist obj\x86\retail\Test_LPT.rel copylink /S:a /D:f /E:a /R:n obj\x86\retail\Test_LPT.rel D:\WINCE500\PBWorkspaces\7717_Platform\RelDir\CEPC_x86_Release\Test_LPT.rel
+BUILD: [01:0000000045:INFO  ] Stop.
+BUILD: [00:0000000046:PROG  ] ' postlink.bat'
+BUILD: [00:0000000047:PROGC ] Done.
+BUILD: [00:0000000048:PROGC ]                      Files      Warnings      Errors
+BUILD: [00:0000000049:PROGC ] Midl                     0             0           0
+BUILD: [00:0000000050:PROGC ] Resource                 0             0           0
+BUILD: [00:0000000051:PROGC ] Message                  0             0           0
+BUILD: [00:0000000052:PROGC ] Precomp Header           0             0           0
+BUILD: [00:0000000053:PROGC ] C/Cpp/Cxx                0             0           0
+BUILD: [00:0000000054:PROGC ] Assembler                0             0           0
+BUILD: [00:0000000055:PROGC ] Static Libraries         0             0           0
+BUILD: [00:0000000056:PROGC ] Dll's                    0             0           0
+BUILD: [00:0000000057:PROGC ] Exe's                    1             0           0
+BUILD: [00:0000000058:PROGC ] Resx                     0             0           0
+BUILD: [00:0000000059:PROGC ] Csharp Targets           0             0           0
+BUILD: [00:0000000060:PROGC ] Other                    0             0           0
+BUILD: [00:0000000061:PROGC ] 
+BUILD: [00:0000000062:PROGC ] Total                    1             0           0
+BUILD: [00:0000000063:PROGC ] 
+BUILD: [00:0000000064:PROGC ] 0 Warnings,  0 Errors

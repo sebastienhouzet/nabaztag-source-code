@@ -1,0 +1,34 @@
+[CompanyInfo]
+Company_Name = "ITE_Tech_Inc"
+Application_Name = "Change Icon"
+TrayIconHint = "Change Icon Application"
+LabelCopyright = "Copyright (C) 1996-2004 ITE Tech. Inc. All rights reserved"
+IT8902_0_Name = "Pen Driver"
+IT8903_0_Name = "Mass Storage Device" 
+
+[UnitMain]
+//========== for creator UnitMain  ==========
+RefreshNow = "Refresh Icon Now"
+BootAutorun = "Disable Change Icon"
+CustomizeIcon = "Customize Icon"
+Hide = "Hide Program"
+About = "About"
+Exit = "Exit"
+
+WAlreadyRunning = " is already running!"
+WWarning = "Warning"
+
+[UnitFormAbout]
+Title_Caption = "About"
+LabelOSVersion = "OS Version : "
+ButtonOK = "OK"
+
+[UnitCustomizeIcon]
+Title_Caption = "Customize Icon"
+LabelSource = "Current Icon"
+LabelCustomize = "Customize Icon"
+LabelHint = "Change to"
+ButtonBrowser = "Browser"
+ButtonDefault = "Set Default"
+ButtonOK = "OK"
+ButtonReset = "Cancel"

@@ -1,0 +1,180 @@
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;;
+;;  FILE : MosUPort.inf
+;;  OS SUPPORTED : WIN2000/XP 
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+[version]
+LayoutFile=layout.inf
+Signature="$WINDOWS NT$"
+Class=Ports
+ClassGuid={4D36E978-E325-11CE-BFC1-08002BE10318}
+Provider=%ProviderName%
+DriverVer=09/28/2004,1.8.2.0
+
+[DestinationDirs]
+DefaultDestDir  = 11        ;LDID_SYS
+Inf.Copy=17
+
+[SourceDiskFiles]
+; 1 = Disk Number
+MosUComp.inf=1
+MosUPort.inf=1
+
+
+[SourceDisksNames]
+1=%DiskName%,,
+
+
+[ControlFlags]
+
+
+;===============================
+; Driver Installation
+;===============================
+[Manufacturer]
+%MfgName%=MosUsbPortsList
+
+;
+; Manufacturer Name Section
+;
+[MosUsbPortsList]
+%MosUsbPort.ComPortName%=ComPort.NT,MOSCHIP\USB_SERIAL_INTERFACE
+%MosUsbPort.LptPortName%=LptPort.NT,MOSCHIP\USB_PARALLEL_INTERFACE
+
+
+
+;----------------------------------------
+; COM Port Install
+;----------------------------------------
+[ComPort.NT]
+AddReg=ComPort.NT.AddReg
+SyssetupPnPFlags = 1
+
+[ComPort.NT.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,mosuport.sys
+
+;RegMaxTxPacketSize is valid 32 - 512K
+HKLM,"System\CurrentControlSet\Services\mosuport\Parameters", "RegMaxTxPacketSize", 0x10001, 512
+
+;RegMaxTxPacketSize is valid 64 - 512K
+HKLM,"System\CurrentControlSet\Services\mosuport\Parameters", "RegMaxRxPacketSize", 0x10001, 1024
+
+;RegUsbReadMaxPolls is valid 1 - 10
+HKLM,"System\CurrentControlSet\Services\mosuport\Parameters", "RegUsbReadMaxPolls", 0x10001, 1
+
+;RegUsbStatusMaxPolls is valid 1 - 10
+HKLM,"System\CurrentControlSet\Services\mosuport\Parameters", "RegUsbStatusMaxPolls", 0x10001, 1
+
+;RegEnableHwFlowControl is valid 0 - 1
+HKLM,"System\CurrentControlSet\Services\mosuport\Parameters", "RegEnableHwFlowControl", 0x10001, 0
+
+;DebugLevel is valid 0 - 3
+HKLM,"System\CurrentControlSet\Services\mosuport\Parameters", "DebugLevel", 0x10001, 0
+
+;OneShot Specific
+HKLM,"System\CurrentControlSet\Services\mosuport\Parameters", "DeviceControlReg0", 0x10001, 01
+HKLM,"System\CurrentControlSet\Services\mosuport\Parameters", "DeviceControlReg1", 0x10001, 05
+HKLM,"System\CurrentControlSet\Services\mosuport\Parameters", "DeviceControlReg2", 0x10001, 36
+HKLM,"System\CurrentControlSet\Services\mosuport\Parameters", "ClockStartReg", 0x10001, 0
+HKLM,"System\CurrentControlSet\Services\mosuport\Parameters", "ClockMultiReg", 0x10001, 0
+HKLM,"System\CurrentControlSet\Services\mosuport\Parameters", "MaskBaudsLowToHigh", 0x10001, 0
+HKLM,"System\CurrentControlSet\Services\mosuport\Parameters", "WriteDCR", 0x10001, 1
+HKLM,"System\CurrentControlSet\Services\mosuport\Parameters", "ControlReg", 0x10001, 0
+
+
+HKR,,EnumPropPages32,,"MsPorts.dll,SerialPortPropPageProvider"
+HKR,,EnumPropPages32,,"MosUSBSerPropPage.dll,MosUSBSerPropPageProvider"
+HKR,,PortSubClass,1,01
+
+[ComPort.NT.HW]
+AddReg=ComPort.NT.HW.AddReg
+
+[ComPort.NT.HW.AddReg]
+HKR,,"UpperFilters",0x00010000,"serenum"
+
+[ComPort.NT.Services]
+AddService=mosuport,2,ComPort.NT.AddService
+AddService= Serenum,,Serenum_Service_Inst
+
+[ComPort.NT.AddService]
+DisplayName    = %mosuport.ServiceName%
+ServiceType    = 1           ; SERVICE_KERNEL_DRIVER
+StartType      = 3           ; SERVICE_DEMAND_START
+ErrorControl   = 0           ; SERVICE_ERROR_IGNORE
+ServiceBinary  = %12%\mosuport.sys
+;LoadOrderGroup = Base
+
+
+; -------------- Serenum Driver install section
+[Serenum_Service_Inst]
+DisplayName    = %Serenum.SVCDESC%
+ServiceType    = 1               ; SERVICE_KERNEL_DRIVER
+StartType      = 3               ; SERVICE_DEMAND_START
+ErrorControl   = 1               ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\serenum.sys
+LoadOrderGroup = PNP Filter
+
+;----------------------------------------
+; LPT Port Install
+;----------------------------------------
+[LptPort.NT]
+AddReg=LptPort.NT.AddReg
+
+[LptPort.NT.AddReg]
+
+HKLM,"System\CurrentControlSet\Services\mosuport\Parameters", "ClkFreq", 0x10001, 0
+; 0 - 12   MHz
+; 1 -  6   MHz
+; 2 -  3   MHz
+; 3 - 1.5  MHz
+; 4 - 0.75 MHz
+
+;DebugLevel is valid 0 - 3
+HKLM,"System\CurrentControlSet\Services\mosuport\Parameters", "DebugLevel", 0x10001, 0
+
+;RegUsbStatusMaxPolls is valid 1 - 10
+HKLM,"System\CurrentControlSet\Services\mosuport\Parameters", "RegUsbStatusMaxPolls", 0x10001, 1
+
+
+;HKR,,EnumPropPages32,,"MsPorts.dll,ParallelPortPropPageProvider"
+HKR,,EnumPropPages32,,"MosUSBParPropPage.dll,MosUSBParPropPageProvider"
+HKR,,PortSubClass,1,00
+HKR,,ECPDevice,1,00
+
+[LptPort.NT.Services]
+;Include=msports.inf
+;Needs=SerialEnumerator.NT.Services
+AddService=mosuport,2,LptPort.NT.AddService
+
+[LptPort.NT.AddService]
+DisplayName    = %mosuport.ServiceName%
+ServiceType    = 1           ; SERVICE_KERNEL_DRIVER
+StartType      = 3           ; SERVICE_DEMAND_START
+ErrorControl   = 0           ; SERVICE_ERROR_IGNORE
+ServiceBinary  = %12%\mosuport.sys
+LoadOrderGroup = Base
+
+;----------------------------------------------
+; User readable strings
+;----------------------------------------------
+[Strings]
+ProviderName="MosChip Semiconductor Technology"
+MfgName="MosChip Semiconductor Technology"
+DiskName="USB Compound Device Installation Disc"
+MosUsbComp.DevName="USB Compound Device"
+mosuport.ServiceName="USB Serial/Parallel Ports"
+PortsClassName = "Ports (COM & LPT)"
+MosUsbPort.ComPortName="USB Serial Port"
+MosUsbPort.LptPortName="USB Parallel Port"
+Serenum.SVCDESC = "Serenum Filter Driver"
+Enumerator = "Serial Enumerator"
+
+;-----------------------
+; END OF FILE
+;-----------------------
+

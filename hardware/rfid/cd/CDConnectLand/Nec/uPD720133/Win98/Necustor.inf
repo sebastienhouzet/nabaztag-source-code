@@ -1,0 +1,91 @@
+;------------------------------------------------------------------------------
+;
+; NEC Electronics uPD720130 USB2.0-ATA/ATAPI Bridge
+; USB Mass Storage Class Driver inf for Windows 98 / 98Se
+;
+; File version 3.0.3.0 : 26th Aug. 2003
+; Copyright (C) NEC Electronics Corporation 2002-2003. All Rights Reserved.
+;
+;------------------------------------------------------------------------------
+[Version]
+Signature  = "$CHICAGO$"
+Class      = USB
+ClassGUID  = {36FC9E60-C465-11CF-8056-444553540000}
+provider   = %NEC%
+LayoutFile = LAYOUT.INF
+DriverVer  = 08/25/2003, Ver 3.0.3.0
+;CatalogFile=Necustor.cat
+
+
+[Manufacturer]
+%MfgName%=NEC
+
+[ControlFlags]
+ExcludeFromSelect = *
+
+[NEC]
+%NEC_IDE-Bridge%=NECUSTOR.Dev,USB\VID_0409&PID_006A            ;USB2.0 IDE-Bridge
+%NEC_IDE-Bridge%=NECUSTOR.Dev,USB\VID_0409&PID_006D            ;USB2.0 IDE-Bridge
+%NEC_IDE-Bridge%=NECUSTOR.Dev,USB\VID_0409&PID_0056            ;USB2.0 IDE-Bridge
+%NECUSTOR\DISK.DeviceDesc%=usbmspd.Dev,NECUSTOR\DISK
+
+[PreCopySection]
+HKR,,NoSetupUI,,1
+
+[DestinationDirs]
+NECUSTOR.Files.Ext = 10,System32\Drivers
+NECUSTPD.Files.Ext = 12
+NECUTRAY.Files.Ext = 10
+
+
+[NECUSTOR.Dev]
+CopyFiles=NECUSTOR.Files.Ext,NECUSTPD.Files.Ext,NECUTRAY.Files.Ext
+AddReg=NECUSTOR.AddReg
+
+[NECUSTOR.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,NECUSTOR.SYS
+
+[NECUSTOR.Dev.HW]
+AddReg=NECUSTOR.HW.AddReg
+
+[NECUSTOR.HW.AddReg]
+HKR,,"UpperFilters",0,"NECUSTFL.SYS"
+HKLM, %RUN%, "Necutray",,"NECUTRAY.EXE"
+
+[usbmspd.Dev]
+AddReg=usbmspd.AddReg
+
+[usbmspd.AddReg]
+HKR,,DevLoader,,*ios
+HKR,,PortDriver,,NECUSTPD.PDR
+
+[NECUSTOR.Files.Ext]
+NECUSTOR.SYS
+NECUSTFL.SYS
+
+[NECUSTPD.Files.Ext]
+NECUSTPD.PDR
+
+[NECUTRAY.Files.Ext]
+NECUTRAY.EXE
+
+[SourceDisksNames]
+1000 = "USB Storage Driver Disk","",,
+
+[SourceDisksFiles]
+NECUSTOR.SYS = 1000
+NECUSTPD.PDR = 1000
+NECUSTFL.SYS = 1000
+NECUTRAY.EXE = 1000
+
+
+
+;---------------------------------------------------------------;
+
+[Strings]
+NEC="NEC"
+MfgName="NEC"
+NEC_IDE-Bridge="USB Storage Driver"
+NECUSTOR\DISK.DeviceDesc="USB Storage Port Driver"
+RUN="Software\Microsoft\Windows\CurrentVersion\Run"

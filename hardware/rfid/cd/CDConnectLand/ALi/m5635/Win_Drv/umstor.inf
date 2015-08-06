@@ -1,0 +1,78 @@
+[Version]
+Signature="$CHICAGO$"
+Class=HDC
+provider=%MfgName%
+
+[Manufacturer]
+%MfgName%=USBCompliance
+
+[USBCompliance]
+%USB\VID_0402&PID_5621.DeviceDesc%=USB_STOR.BULK,USB\VID_0402&PID_5621
+%USB\VID_0402&PID_5635.DeviceDesc%=USB_STOR.BULK,USB\VID_0402&PID_5635
+%USB\VID_0402&PID_5637.DeviceDesc%=USB_STOR.BULK,USB\VID_0402&PID_5637
+%UMSTOR\DISK.DeviceDesc%=umsspdr.install,UMSTOR\DISK
+
+[PreCopySection]
+HKR,,NoSetupUI,,1
+
+[DestinationDirs]
+; \<WINDIR>\SYSTEM32\DRIVERS
+umss.files = 10,System32\Drivers
+
+; \<WINDIR>\SYSTEM\IOSUBSYS
+umsspdr.files = 12
+
+[USB_STOR.BULK]
+CopyFiles=umss.files, umsspdr.files
+AddReg=umss.addreg
+
+[umss.addreg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,UMSTOR.SYS
+
+
+; If the device does not correctly indicate which protocol it uses,
+; one of the following sections should be added to indicate which protocol
+; the driver should use.
+
+; Indicate that the device uses the C/B/I protocol
+[cbi.addreg.HW]
+HKR,,DeviceProtocol,0x10001,00
+
+; Indicate that the device uses the C/B protocol
+[cb.addreg.HW]
+HKR,,DeviceProtocol,0x10001,01
+
+; Indicate that the device uses the BULK ONLY protocol
+[bulkonly.addreg.HW]
+HKR,,DeviceProtocol,0x10001,50
+
+; Install the port driver
+[umsspdr.install]
+AddReg=umsspdr.addreg
+
+[umsspdr.addreg]
+HKR,,DevLoader,,*ios
+HKR,,PortDriver,,umstorpr.pdr
+
+[umss.files]
+umstor.sys
+
+[umsspdr.files]
+umstorpr.pdr
+
+[SourceDisksNames]
+1000 = "USB Mass Storage Driver Disk","",,
+
+[SourceDisksFiles]
+UMSTOR.SYS = 1000
+UMSTORPR.PDR = 1000
+
+;---------------------------------------------------------------;
+
+[Strings]
+MfgName="USB Compliance."
+USB\VID_0402&PID_5635.DeviceDesc="USB Mass Storage Device"
+USB\VID_0402&PID_5621.DeviceDesc="USB Mass Storage Device"
+USB\VID_0402&PID_5637.DeviceDesc="USB Mass Storage Device"
+UMSTOR\DISK.DeviceDesc="USB TO ATAPI Adapter"

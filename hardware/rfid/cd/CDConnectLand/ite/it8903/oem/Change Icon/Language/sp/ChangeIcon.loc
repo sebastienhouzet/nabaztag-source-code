@@ -1,0 +1,28 @@
+[CompanyInfo]
+Company_Name="ITE_Tech_Inc"
+Application_Name="Change Icon"
+TrayIconHint="Change Icon Application"
+LabelCopyright="Copyright (C) 1996-2004 ITE Tech. Inc. Todos los derechos reservados"
+IT8903_0_Name="Dispositivo de almacenamiento masivo"
+[UnitMain]
+RefreshNow="Actualizar icono ahora"
+BootAutorun="Deshabilitar cambiar icono"
+CustomizeIcon="Personalizar icono"
+Hide="Ocultar programa"
+About="Acerca de"
+Exit="Salir"
+WAlreadyRunning="ya se está ejecutando!"
+Wwarning="Aviso"
+[UnitFormAbout]
+Title_Caption="Acerca de"
+LabelOSVersion="Versión del SO :"
+ButtonOK="Aceptar"
+[UnitCustomizeIcon]
+Title_Caption="Personalizar icono"
+LabelSource="Icono actual"
+LabelCustomize="Personalizar icono"
+LabelHint="Cambiar a"
+ButtonBrowser="Explorador"
+ButtonDefault="Defecto"
+ButtonOK="Aceptar"
+ButtonReset="Cancelar"

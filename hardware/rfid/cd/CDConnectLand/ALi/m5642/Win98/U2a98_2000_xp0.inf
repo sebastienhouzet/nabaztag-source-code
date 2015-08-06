@@ -1,0 +1,104 @@
+[Version]
+Signature="$CHICAGO$"
+Class=HDC
+ClassGUID={4D36E96A-E325-11CE-BFC1-08002BE10318}
+Provider=%MfgName%
+DriverVer=04/03/2003, 1.42
+;CatalogFile=U2a98_2000.cat
+
+[ControlFlags]
+ExcludeFromSelect = *
+
+[Manufacturer]
+%MfgName%=USBCompliance
+
+[USBCompliance]
+%USB\VID_10B9&PID_5619.DeviceDesc%=USBSTOR_CBI,  USB\VID_10B9&PID_5619
+%USB\VID_1189&PID_6000.DeviceDesc%=USBSTOR_CBI,  USB\VID_1189&PID_6000
+%USB\VID_1189&PID_6001.DeviceDesc%=USBSTOR_CBI,  USB\VID_1189&PID_6001
+%USB\VID_1189&PID_6002.DeviceDesc%=USBSTOR_CBI,  USB\VID_1189&PID_6002
+%USB\VID_1189&PID_6003.DeviceDesc%=USBSTOR_CBI,  USB\VID_1189&PID_6003
+%USB\VID_1189&PID_6004.DeviceDesc%=USBSTOR_CBI,  USB\VID_1189&PID_6004
+%USB\VID_1189&PID_6005.DeviceDesc%=USBSTOR_CBI,  USB\VID_1189&PID_6005
+%USB\VID_1189&PID_6006.DeviceDesc%=USBSTOR_CBI,  USB\VID_1189&PID_6006
+%USB\VID_1189&PID_6007.DeviceDesc%=USBSTOR_CBI,  USB\VID_1189&PID_6007
+%U2I\ATAPI.DeviceDesc%=usbpd.Dev,U2I\ATAPI
+
+[DestinationDirs]
+DefaultDestDir = 10, system32\drivers
+
+; Windows 2000 Install Sections
+;
+[USBSTOR_CBI.NT]
+CopyFiles=USBSTOR.CopyList
+AddReg=USBSTOR_CBI.AddReg
+Include=usbstor.inf
+
+;[USBSTOR_CB.NT]
+;CopyFiles=USBSTOR.CopyList
+;AddReg=USBSTOR_CB.AddReg
+
+;[USBSTOR_BULK.NT]
+;CopyFiles=USBSTOR.CopyList
+;AddReg=USBSTOR_BULK.AddReg
+
+[USBSTOR_CBI.NT.HW]
+AddReg=NTUSBU2A.AddReg
+
+
+; Windows 2000 Registry Sections
+;
+[USBSTOR_CBI.AddReg]
+HKR,,DriverFlags,0x00010001,0x00000002
+
+;[USBSTOR_CB.AddReg]
+;HKR,,DriverFlags,0x00010001,0x00000003
+
+;[USBSTOR_BULK.AddReg]
+;HKR,,DriverFlags,0x00010001,0x00000001
+
+[NTUSBU2A.AddReg]
+HKR,,"LowerFilters",0x00010000,"usbu2a"
+
+
+; Windows 2000 Service Install Sections
+;
+[USBSTOR_CBI.NT.Services]
+Addservice = USBSTOR, 0x00000002, USBSTOR.AddService
+Addservice = usbu2a,,UsbU2AInst
+
+;[USBSTOR_CB.NT.Services]
+;Addservice = USBSTOR, 0x00000002, USBSTOR.AddService
+
+;[USBSTOR_BULK.NT.Services]
+;Addservice = USBSTOR, 0x00000002, USBSTOR.AddService
+
+[USBSTOR.AddService]
+DisplayName    = %USBSTOR.SvcDesc%
+ServiceType    = 1
+StartType      = 3
+ErrorControl   = 1
+ServiceBinary  = %12%\USBSTOR.SYS
+
+[UsbU2AInst]
+DisplayName    = "UsbU2A"
+ServiceType    = 1
+StartType      = 3
+ErrorControl   = 0
+ServiceBinary  = %10%\System32\Drivers\usbu2a.sys
+LoadOrderGroup = Extended Base
+
+[Strings]
+MfgName="USB Compliance."
+USB\VID_10B9&PID_5619.DeviceDesc="USB Optical Storage Device"
+USB\VID_1189&PID_6000.DeviceDesc="USB Optical Storage Device"
+USB\VID_1189&PID_6001.DeviceDesc="USB Optical Storage Device"
+USB\VID_1189&PID_6002.DeviceDesc="USB Optical Storage Device"
+USB\VID_1189&PID_6003.DeviceDesc="USB Optical Storage Device"
+USB\VID_1189&PID_6004.DeviceDesc="USB Optical Storage Device"
+USB\VID_1189&PID_6005.DeviceDesc="USB Optical Storage Device"
+USB\VID_1189&PID_6006.DeviceDesc="USB Optical Storage Device"
+USB\VID_1189&PID_6007.DeviceDesc="USB Optical Storage Device"
+USBSTOR.SvcDesc="USB Mass Storage Driver"
+U2I\ATAPI.DeviceDesc="USB to ATAPI Adapter"
+U2A_Driver_Disk="U2A Driver Disk"

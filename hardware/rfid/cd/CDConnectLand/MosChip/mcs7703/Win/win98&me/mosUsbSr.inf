@@ -1,0 +1,161 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; mosUsbSr.INF
+; USB-to-Serial Windows98se Driver
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+[Version]
+signature="$CHICAGO$"
+Class=USB
+ClassGUID={36fc9e60-c465-11cf-8056-444553540000}
+Provider=%ProviderName%
+DriverVer=09/28/2004,1.8.2.0
+
+[SourceDisksNames]
+1=%DriversDisk%,,,
+2="Install disk",,,..\
+
+[SourceDisksFiles]
+MOSUSRPT.vxd=1
+MOSUPRPT.vxd=1
+MCSENUM.vxd=1
+mosUsbSr.sys=1
+DbgMsg9X.sys=1
+monitor.exe=1
+;dbgmsgcfg.dll=1
+MosUPar.exe=1
+MosUSer.exe=1
+MOSUPAR.DLL=1
+MOSUSER.DLL=1
+msvcp60.dll=1
+MosUnst.exe=2
+
+[DestinationDirs]
+mosUsbSr.CopyBin = 11
+mosUsbSr.CopyDRV = 10,system32\drivers
+mosUsbSr.CopyInf = 17
+
+[Manufacturer]
+%MfgName%=mosUsbSrHW
+
+[mosUsbSrHW]
+%MosUsbComp.DeviceDesc%=mosUsbSr,USB\VID_9710&PID_7705
+%MosUsbComp.DeviceDesc%=mosUsbSr,USB\VID_9710&PID_7710
+%MosUsbComp.DeviceDesc%=mosUsbSr,USB\VID_9710&PID_7715
+%MosUsbComp.DeviceDesc%=mosUsbSr,USB\VID_9710&PID_7720
+%MosUsbComp.DeviceDesc%=mosUsbSr,USB\VID_9710&PID_7717&Rev_0100
+%MosUsbComp.DeviceDesc%=mosUsbSr,USB\VID_9710&PID_7719
+%MosUsbComp.DeviceDesc%=mosUsbSr,USB\VID_9710&PID_7703
+
+[ControlFlags]
+ExcludeFromSelect=USB\VID_9710&PID_7720
+
+[mosUsbSr]
+CopyFiles=mosUsbSr.CopyBin,mosUsbSr.CopyDRV,mosUsbSr.CopyInf
+AddReg=mosUsbSr.AddReg,mosUsbSrUnInst.Reg
+RemoveDevice=mosUsbSr.RemDev
+
+[mosUsbSr.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,mosUsbSr.sys
+
+;Default entries
+HKLM,"Enum\MOSCHIP", "ClkFreq", 0x10001, 0
+
+;DebugLevel is valid 0 - 3
+HKLM,"Enum\MOSCHIP", "DebugLevel", 0x10001, 0
+
+;RegEnableHwFlowControl is valid 0 - 1
+HKLM,"Enum\MOSCHIP", "RegEnableHwFlowControl", 0x10001, 0
+
+;RegUsbReadMaxPolls is valid 1 - 10
+HKLM,"Enum\MOSCHIP", "RegUsbReadMaxPolls", 0x10001, 10
+
+;RegUsbStatusMaxPolls is valid 1 - 10
+HKLM,"Enum\MOSCHIP", "RegUsbStatusMaxPolls", 0x10001, 1
+
+;RegUsbRxPktSize is valid 64 - 512K
+HKLM,"Enum\MOSCHIP", "RegUsbRxPktSize", 0x10001, 1024
+
+;RegUsbTxPktSize is valid 32 - 512K
+HKLM,"Enum\MOSCHIP", "RegUsbTxPktSize", 0x10001, 512
+
+;RegUParTxPktSize is valid 32 - 512K
+HKLM,"Enum\MOSCHIP", "RegUParTxPktSize", 0x10001, 512
+
+;OneShot Specific
+
+HKLM,"Enum\MOSCHIP", "DeviceControlReg0", 0x10001, 1
+HKLM,"Enum\MOSCHIP", "DeviceControlReg1", 0x10001, 5
+HKLM,"Enum\MOSCHIP", "DeviceControlReg2", 0x10001, 0x24
+HKLM,"Enum\MOSCHIP", "MaskBaudsLowToHigh", 0x10001, 0
+HKLM,"Enum\MOSCHIP", "ControlReg", 0x10001, 0
+HKLM,"Enum\MOSCHIP", "ClockMultiReg", 0x10001, 0
+HKLM,"Enum\MOSCHIP", "ClockStartReg", 0x10001, 0
+HKLM,"Enum\MOSCHIP", "WriteDCR", 0x10001, 1
+
+;create DbgMsg entry
+HKLM,"System\CurrentControlSet\Services\DbgMsg", "ErrorControl", 0x10001, 1
+HKLM,"System\CurrentControlSet\Services\DbgMsg", "Group",, "Extended Base"
+HKLM,"System\CurrentControlSet\Services\DbgMsg", "ImagePath",, %ImagePath%
+HKLM,"System\CurrentControlSet\Services\DbgMsg", "Start", 0x10001, 2
+HKLM,"System\CurrentControlSet\Services\DbgMsg", "Type", 0x10001, 1
+
+[mosUsbSr.CopyBin]
+MOSUSRPT.vxd
+MOSUPRPT.vxd
+MCSENUM.vxd
+mosUsbSr.sys
+monitor.exe
+;dbgmsgcfg.dll
+MosUPar.exe
+MosUSer.exe
+MOSUPAR.DLL
+MOSUSER.DLL
+msvcp60.dll
+MosUnst.exe
+
+[mosUsbSr.CopyDRV]
+DbgMsg9X.sys
+
+[mosUsbSr.CopyInf]
+mosUsbSr.inf
+
+[mosUsbSr.RemDev]
+DelFiles=mosUsbSr.Delfiles
+DELKEY=HKLM,%WINUN%\MOSUSERL
+
+
+[mosUsbSr.DelFiles]
+MOSUSRPT.vxd
+MOSUPRPT.vxd
+MCSENUM.vxd
+mosUsbSr.sys
+mosUsbSr.inf
+MosUPar.exe
+MosUSer.exe
+MOSUPAR.DLL
+MOSUSER.DLL
+MosUnst.exe
+
+
+[mosUsbSrUnInst.Reg]
+HKLM,SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\%MosUsbComp.DeviceDesc%,DisplayName,0,%MosUsbComp.DeviceDesc%
+HKLM,SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\%MosUsbComp.DeviceDesc%,UninstallString,0,MosUnst.exe
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+[Strings]
+ProviderName="MosChip Semiconductor Technology"
+MfgName="MosChip Semiconductor Technology"
+DriversDisk="USB-to-Serial Drivers Disk"
+MosUsbComp.DeviceDesc="USB Compound Device" 
+MosUsbComp.ServiceName="USB Serial/Parallel Ports"
+WINUN="Software\Microsoft\Windows\CurrentVersion\Uninstall"
+ImagePath="\SystemRoot\System32\drivers\dbgmsg9x.sys"
+
+
+;;;;;;;;;;;;;
+END
+;;;;;;;;;;;;;

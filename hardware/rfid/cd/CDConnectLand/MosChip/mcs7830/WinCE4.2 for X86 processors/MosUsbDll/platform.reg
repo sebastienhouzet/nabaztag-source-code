@@ -1,0 +1,485 @@
+;
+; Copyright (c) Microsoft Corporation.  All rights reserved.
+;
+;
+; Use of this source code is subject to the terms of the Microsoft end-user
+; license agreement (EULA) under which you licensed this SOFTWARE PRODUCT.
+; If you did not accept the terms of the EULA, you are not authorized to use
+; this source code. For a copy of the EULA, please see the LICENSE.RTF on your
+; install media.
+;
+
+; Our variables
+#define BUILTIN_ROOT HKEY_LOCAL_MACHINE\Drivers\BuiltIn
+#define PCI_BUS_ROOT $(BUILTIN_ROOT)\PCI
+#define DRIVERS_DIR $(_PUBLICROOT)\common\oak\drivers
+
+; Platform type: 1=DK3, 2=Perp 3=Rose
+[HKEY_LOCAL_MACHINE\Platform]
+   "Name"=LOC_PLATFORMNAME
+   "Type"=dword:2
+
+
+; @CESYSGEN IF FILESYS_FSREGHIVE
+; @CESYSGEN ENDIF FILESYS_FSREGHIVE
+
+
+; @CESYSGEN IF CE_MODULES_DEVICE
+
+; Resources available at time of device.exe initialization.
+; Key names are descriptive; resource ids are definitive.
+; System ids are defined in ddk\inc\resmgr.h.
+; HIVE BOOT SECTION
+[HKEY_LOCAL_MACHINE\Drivers\Resources\IRQ]
+   "Identifier"=dword:1
+   "Minimum"=dword:1
+   "Space"=dword:F
+   "Ranges"="1,3-7,9-0xF"
+   "Shared"="1,3-7,9-0xF"
+
+; I/O ranges are reserved for all drivers listed in this file that are not
+; part of an expansion bus (PCI, PCMCIA, etc).  If your platform doesn't
+; have one of these peripherals you may edit this list accordingly.  This
+; sample configuration assumes that, if you have any COM port you have all of
+; the lower-numbered ones as well.
+[HKEY_LOCAL_MACHINE\Drivers\Resources\IO]
+   "Identifier"=dword:2
+   "Minimum"=dword:0
+   "Space"=dword:10000
+IF BSP_NOSERIAL
+   "Ranges"="0-0x5F,0x65-0x277,0x284-0x38F,0x392-0x3DF,0x3E2-0xFFFF"
+ENDIF ; BSP_NOSERIAL
+IF BSP_NOSERIAL !
+   "Ranges"="0-0x5F,0x65-0x277,0x284-0x2F7,0x300-0x38F,0x392-0x3DF,0x3E2-0xFFFF"
+ENDIF ; BSP_NOSERIAL !
+IF BSP_SERIAL2
+   "Ranges"="0-0x5F,0x65-0x277,0x284-0x2F7,0x300-0x38F,0x392-0x3DF,0x3E2-0x3E7,0x3F0-0xFFFF"
+ENDIF ; BSP_SERIAL2
+IF BSP_SERIAL3
+   "Ranges"="0-0x5F,0x65-0x277,0x284-0x2E7,0x2F0-0x2F7,0x300-0x38F,0x392-0x3DF,0x3E2-0x3E7,0x3F0-0xFFFF"
+ENDIF ; BSP_SERIAL3
+
+[HKEY_LOCAL_MACHINE\Drivers\USB\LoadClients\38672_30768\255_0_255\Default\mosusbce]
+   "Dll"="mosusbce.DLL"
+
+[HKEY_LOCAL_MACHINE\Drivers\USB\ClientDrivers\Default]
+   "Dll"="mosusbce.DLL"
+
+; END HIVE BOOT SECTION
+
+
+; ---------------------------- BEGIN PCI DEVICES ----------------------------
+; @CESYSGEN IF CE_MODULES_PCI
+IF BSP_NOPCIBUS !   
+; HIVE BOOT SECTION
+
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\PCI]
+    "Dll"="PCIbus.dll"
+    "Order"=dword:20
+    "Flags"=dword:1
+    "NoConfig"=dword:0
+    "MemBase"=dword:80000000	
+    "MemLen" =dword:78000000
+    "IoBase"=dword:A000
+    "IoLen" =dword:6000
+
+; Registry enumerator used for loading each PCI device driver instance   
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\PCI\Instance]
+    "Dll"="RegEnum.dll"
+    "InterfaceType"=dword:5
+
+; END HIVE BOOT SECTION
+
+;
+; *************************
+;   NDIS miniport drivers
+; *************************
+;
+; @CESYSGEN IF CE_MODULES_NDIS
+IF BSP_NOETHER !
+
+
+ENDIF BSP_NOETHER !
+; @CESYSGEN ENDIF CE_MODULES_NDIS
+
+;Because the BIOS configure the PCI-PCI bridge and it is different from how we configured.
+;So we can not touch the window. Set NoConfig to all PCI to PCI Bridge to indicate PCiBus do
+;not configure PCI-PCI bridge window.
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\PCI\Template\PCI-PCI-BRIDGE]
+   "Class"=dword:06
+   "SubClass"=dword:04
+   "NoConfig"=dword:1
+
+; @CESYSGEN IF CE_MODULES_PCMCIA
+IF BSP_NOPCMCIA !
+#if defined BSP_PCMCIA_TI1250
+#include "$(DRIVERS_DIR)\pcmcia\ti1250\ti1250.reg"
+#endif
+ENDIF BSP_NOPCMCIA !
+; @CESYSGEN ENDIF CE_MODULES_PCMCIA
+
+; @CESYSGEN IF CE_MODULES_NDIS
+IF BSP_NOETHER !
+
+; @CESYSGEN IF CE_MODULES_SISNIC
+; @CESYSGEN ENDIF CE_MODULES_SISNIC
+
+ENDIF BSP_NOETHER !
+; @CESYSGEN ENDIF CE_MODULES_NDIS
+
+
+; @CESYSGEN IF CE_MODULES_WAVEAPI
+IF BSP_NOAUDIO !
+IF BSP_WAVEDEV_ES1371
+#include "$(DRIVERS_DIR)\wavedev\pdd\es1371\es1371.reg"
+ENDIF BSP_WAVEDEV_ES1371
+
+IF BSP_WAVEDEV_ENSONIQ
+#include "$(DRIVERS_DIR)\wavedev\unified\ensoniq\ensoniq.reg"
+ENDIF BSP_WAVEDEV_ENSONIQ
+
+IF BSP_WAVEDEV_TVIA5000
+#include "$(DRIVERS_DIR)\wavedev\pdd\tvia5000\tvia5000.reg"
+ENDIF
+
+ENDIF BSP_NOAUDIO !
+; @CESYSGEN ENDIF CE_MODULES_WAVEAPI
+
+
+; @CESYSGEN IF CE_MODULES_CEWDMMGR
+; @CESYSGEN IF CE_MODULES_1394OHCD
+; @CESYSGEN ENDIF CE_MODULES_1394OHCD
+; @CESYSGEN ENDIF CE_MODULES_CEWDMMGR
+
+; @CESYSGEN IF CE_MODULES_USBD
+IF BSP_NOUSB !
+IF BSP_USB_OHCI
+#include "$(DRIVERS_DIR)\usb\hcd\ohc\ohci.reg"
+ENDIF
+
+IF BSP_USB_UHCI
+#include "$(DRIVERS_DIR)\usb\hcd\uhc\uhci.reg"
+ENDIF BSP_USB_UHCI
+ENDIF BSP_NOUSB !
+; @CESYSGEN ENDIF CE_MODULES_USBD
+
+
+; @CESYSGEN IF CE_MODULES_ATAPI
+; @CESYSGEN ENDIF CE_MODULES_ATAPI
+
+; @CESYSGEN IF CE_MODULES_SDNPCID
+; @CESYSGEN ENDIF CE_MODULES_SDNPCID
+
+; @CESYSGEN IF CE_MODULES_SDMMC
+; @CESYSGEN ENDIF CE_MODULES_SDMMC
+; @CESYSGEN ENDIF CE_MODULES_PCI
+
+
+; @CESYSGEN IF CE_MODULES_DISPLAY
+
+IF BSP_NODISPLAY !
+
+IF BSP_DISPLAY_PERM3
+
+; @CESYSGEN IF CE_MODULES_PCI
+
+; GWES will be able to auto-detect the display adapter if a candidate value 
+; points to the adapter's PCI instance.  Values from Candidate1 to Candidate32
+; (decimal) are possible; GWES will examine them sequentially until it finds
+; a match.
+[HKEY_LOCAL_MACHINE\System\GDI\DisplayCandidates]
+	"Candidate1"="Drivers\\BuiltIn\\PCI\\Instance\\Permedia3"
+
+#include "$(DRIVERS_DIR)\display\perm3\perm3.reg"
+
+; @CESYSGEN ENDIF CE_MODULES_PCI
+
+ENDIF ; BSP_DISPLAY_PERM3
+
+IF BSP_DISPLAY_TVIA5000
+
+; @CESYSGEN IF CE_MODULES_PCI
+
+; GWES will be able to auto-detect the display adapter if a candidate value 
+; points to the adapter's PCI instance.  Values from Candidate1 to Candidate32
+; (decimal) are possible; GWES will examine them sequentially until it finds
+; a match.
+[HKEY_LOCAL_MACHINE\System\GDI\DisplayCandidates]
+	"Candidate2"="Drivers\\BuiltIn\\PCI\\Instance\\TVIA5000"
+
+#include "$(DRIVERS_DIR)\display\tvia5000\tvia5000.reg"
+
+; @CESYSGEN ENDIF CE_MODULES_PCI
+
+ENDIF ; BSP_DISPLAY_TVIA5000
+
+IF BSP_DISPLAY_MQ200
+
+; @CESYSGEN IF CE_MODULES_PCI
+
+; GWES will be able to auto-detect the display adapter if a candidate value 
+; points to the adapter's PCI instance.  Values from Candidate1 to Candidate32
+; (decimal) are possible; GWES will examine them sequentially until it finds
+; a match.
+[HKEY_LOCAL_MACHINE\System\GDI\DisplayCandidates]
+	"Candidate3"="Drivers\\BuiltIn\\PCI\\Instance\\MQ200"
+
+#include "$(DRIVERS_DIR)\display\mq200\mq200.reg"
+
+; @CESYSGEN ENDIF CE_MODULES_PCI
+
+ENDIF ; BSP_DISPLAY_MQ200
+
+IF BSP_DISPLAY_ATI
+
+; @CESYSGEN IF CE_MODULES_PCI
+
+; GWES will be able to auto-detect the display adapter if a candidate value 
+; points to the adapter's PCI instance.  Values from Candidate1 to Candidate32
+; (decimal) are possible; GWES will examine them sequentially until it finds
+; a match.
+[HKEY_LOCAL_MACHINE\System\GDI\DisplayCandidates]
+	"Candidate4"="Drivers\\BuiltIn\\PCI\\Instance\\ATI"
+
+#include "$(DRIVERS_DIR)\display\ati\ati.reg"
+
+; @CESYSGEN ENDIF CE_MODULES_PCI
+
+ENDIF ; BSP_DISPLAY_ATI
+
+ENDIF BSP_NODISPLAY !
+
+; @CESYSGEN ENDIF CE_MODULES_DISPLAY
+
+ENDIF BSP_NOPCIBUS !
+; ---------------------------- END PCI DEVICES ------------------------------
+
+
+; Example settings for configuring this platform as an Internet Connection
+; Sharing device.  
+; @CESYSGEN IF CE_MODULES_IPNAT
+; @CESYSGEN IF !CE_MODULES_FW6
+; @CESYSGEN ENDIF
+; @CESYSGEN IF CE_MODULES_NE2000
+; @CESYSGEN IF CE_MODULES_PPP
+; @CESYSGEN ENDIF CE_MODULES_PPP
+; @CESYSGEN IF SERVERS_MODULES_WEBPROXY
+; @CESYSGEN ENDIF SERVERS_MODULES_WEBPROXY
+; @CESYSGEN IF SERVERS_MODULES_UPNPSVC
+; @CESYSGEN ENDIF SERVERS_MODULES_UPNPSVC
+; @CESYSGEN ENDIF CE_MODULES_NE2000
+; @CESYSGEN IF CE_MODULES_RTL8139
+; @CESYSGEN IF CE_MODULES_PPP
+; @CESYSGEN ENDIF CE_MODULES_PPP
+; @CESYSGEN IF SERVERS_MODULES_WEBPROXY
+; @CESYSGEN ENDIF SERVERS_MODULES_WEBPROXY
+; @CESYSGEN IF SERVERS_MODULES_UPNPSVC
+; @CESYSGEN ENDIF SERVERS_MODULES_UPNPSVC
+; @CESYSGEN ENDIF CE_MODULES_RTL8139
+; @CESYSGEN IF SERVERS_MODULES_UPNPSVC
+; @CESYSGEN ENDIF SERVERS_MODULES_UPNPSVC
+; @CESYSGEN ENDIF CE_MODULES_IPNAT
+
+
+; @CESYSGEN IF CE_MODULES_NDIS
+IF BSP_NOETHER !
+
+; @CESYSGEN IF CE_MODULES_NE2000
+IF BSP_NIC_NE2000_ISA
+; These are the registry settings for using the Linksys ISA NE2000 ethernet
+; adapter on a CEPC. "BusType=1" => ISA, InterruptNumber and IoBaseAddress
+; a Linksys setup utility.
+; These setting will conflict with those for PCMCIA NE2000 in that multiply
+; instanced comm settings are not yet supported (i.e. NE20001, NE20002 ...)
+[HKEY_LOCAL_MACHINE\Comm\NE2000]
+   "DisplayName"=LOC_DISPLAYNAME_COMM_NE2000
+   "Group"="NDIS"
+   "ImagePath"="ne2000.dll"
+
+[HKEY_LOCAL_MACHINE\Comm\NE2000\Linkage]
+   "Route"=multi_sz:"NE20001"
+
+[HKEY_LOCAL_MACHINE\Comm\NE20001]
+   "DisplayName"=LOC_DISPLAYNAME_COMM_NE20001
+   "Group"="NDIS"
+   "ImagePath"="ne2000.dll"
+
+[HKEY_LOCAL_MACHINE\Comm\NE20001\Parms]
+   "BusNumber"=dword:0
+   "BusType"=dword:1
+   "InterruptNumber"=dword:0f
+   "IoBaseAddress"=dword:300
+   "Transceiver"=dword:3
+   "Sysintr"=dword:1f	; <-- This assumes the adapter will use IRQ 15.
+                        ;     On CEPC this will be SYSINTR_FIRMWARE + IRQ
+
+ENDIF BSP_NIC_NE2000_ISA
+; @CESYSGEN ENDIF CE_MODULES_NE2000
+
+ENDIF BSP_NOETHER !
+; @CESYSGEN ENDIF CE_MODULES_NDIS
+
+
+; @CESYSGEN IF CE_MODULES_SERIAL
+IF BSP_NOUSBSER !
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\PCI\Template\2890_SER]
+   "Prefix"="COM"
+   "Tsp"="Unimodem.dll"
+   "DeviceArrayIndex"=dword:0
+   "Dll"="2890_ser.dll"
+   "Order"=dword:0
+   "DeviceType"=dword:0
+   "FriendlyName"=LOC_FRIENDLYNAME_USBSER
+   "DevConfig"=hex: 10,00, 00,00, 05,00,00,00, 10,01,00,00, 00,4B,00,00, 00,00, 08, 00, 00, 00,00,00,00
+   "Class"=dword:06
+   "SubClass"=dword:80
+   "ProgIF"=dword:00
+   "VendorID"=multi_sz:"10b5"
+   "DeviceID"=multi_sz:"9054"
+   "IsrDll"="giisr.dll"
+   "IsrHandler"="ISRHandler"
+ENDIF BSP_NOUSBSER !
+
+IF BSP_NOSERIAL !
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\Serial]
+   "SysIntr"=dword:13
+   "IoBase"=dword:02F8
+   "IoLen"=dword:8
+   "DeviceArrayIndex"=dword:0
+   "Prefix"="COM"
+   "Dll"="Com16550.Dll"
+   "Order"=dword:0
+   "Priority"=dword:0
+; Turn on follows for Installable ISR (isr16550 supporting SOFTWARE FIFO
+;   "Irq"=dword:3
+;   "IsrDll"="isr16550.dll"
+;   "IsrHandler"="ISRHandler"
+
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\Serial\Unimodem]
+   "Tsp"="Unimodem.dll"
+   "DeviceType"=dword:0
+   "FriendlyName"=LOC_FRIENDLYNAME_SERIAL
+   "DevConfig"=hex: 10,00, 00,00, 05,00,00,00, 10,01,00,00, 00,4B,00,00, 00,00, 08, 00, 00, 00,00,00,00
+ENDIF BSP_NOSERIAL !
+
+IF BSP_SERIAL2
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\Serial2]
+   "SysIntr"=dword:14
+   "IoBase"=dword:03E8
+   "IoLen"=dword:8
+   "DeviceArrayIndex"=dword:1
+   "Prefix"="COM"
+   "Dll"="Com16550.Dll"
+   "Order"=dword:0
+
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\Serial2\Unimodem]
+   "Tsp"="Unimodem.dll"
+   "DeviceType"=dword:0
+   "FriendlyName"=LOC_FRIENDLYNAME_SERIAL2
+   "DevConfig"=hex: 10,00, 00,00, 05,00,00,00, 10,01,00,00, 00,4B,00,00, 00,00, 08, 00, 00, 00,00,00,00
+ENDIF BSP_SERIAL2
+
+IF BSP_SERIAL3
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\Serial3]
+   "SysIntr"=dword:15
+   "IoBase"=dword:02E8
+   "IoLen"=dword:8
+   "DeviceArrayIndex"=dword:2
+   "Prefix"="COM"
+   "Dll"="Com16550.Dll"
+   "Order"=dword:0
+
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\Serial3\Unimodem]
+   "Tsp"="Unimodem.dll"
+   "DeviceType"=dword:0
+   "FriendlyName"=LOC_FRIENDLYNAME_SERIAL3
+   "DevConfig"=hex: 10,00, 00,00, 05,00,00,00, 10,01,00,00, 00,4B,00,00, 00,00, 08, 00, 00, 00,00,00,00
+ENDIF BSP_SERIAL3
+; @CESYSGEN ENDIF CE_MODULES_SERIAL
+
+
+; @CESYSGEN IF CE_MODULES_IRDASTK
+; @CESYSGEN ENDIF CE_MODULES_IRDASTK
+
+
+; @CESYSGEN IF CE_MODULES_PCMCIA
+IF BSP_NOPCMCIA !
+#if ! defined BSP_PCMCIA_TI1250 ; default to BSP_PCMCIA_I82365
+
+#include "$(DRIVERS_DIR)\pcmcia\i82365\i82365.reg"
+
+#endif
+ENDIF BSP_NOPCMCIA !
+; @CESYSGEN ENDIF CE_MODULES_PCMCIA
+
+   
+; @CESYSGEN IF CE_MODULES_PARALLEL
+IF BSP_NOPARALLEL !
+; Parallel Port Driver
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\Parallel]
+   "DeviceArrayIndex"=dword:0
+   "Prefix"="LPT"
+   "Dll"="Parallel.Dll"
+   "Order"=dword:0
+   "IoBase"=dword:278
+   "IoLen"=dword:C
+   "SysIntr"=dword:15	; SYSINTR_FIRMWARE + irq (IRQ5 for LPT2, IRQ7 for LPT1)
+   "DeviceType"=dword:0
+   "FriendlyName"=LOC_FRIENDLYNAME_PARALLEL
+   "DevConfig"=hex: 10,00, 00,00, 05,00,00,00, 10,01,00,00, 00,4B,00,00, 00,00, 08, 00, 00, 00,00,00,00
+ENDIF BSP_NOPARALLEL !
+; @CESYSGEN ENDIF CE_MODULES_PARALLEL
+
+
+; @CESYSGEN IF CE_MODULES_POINTER
+IF BSP_NOTOUCH !
+[HKEY_LOCAL_MACHINE\HARDWARE\DEVICEMAP\TOUCH]
+    "DriverName"="keybddr.dll"
+ENDIF BSP_NOTOUCH !
+; @CESYSGEN ENDIF CE_MODULES_POINTER
+
+
+; @CESYSGEN IF CE_MODULES_POINTER
+IF BSP_NOMOUSE !
+#include "$(DRIVERS_DIR)\keybd\ps2_8042\8042mouse.reg"
+ENDIF BSP_NOMOUSE !
+; @CESYSGEN ENDIF CE_MODULES_POINTER
+
+; @CESYSGEN IF CE_MODULES_KEYBD
+IF BSP_NOKEYBD !
+#include "$(DRIVERS_DIR)\keybd\keybd.reg"
+#include "$(DRIVERS_DIR)\keybd\ps2_8042\8042keybd.reg"
+#include "$(DRIVERS_DIR)\keybd\LayMgr.reg"
+
+ENDIF BSP_NOKEYBD !
+; @CESYSGEN ENDIF CE_MODULES_KEYBD
+
+; @CESYSGEN IF CE_MODULES_BATTDRVR
+; @CESYSGEN ENDIF CE_MODULES_BATTDRVR
+
+; @CESYSGEN ENDIF CE_MODULES_DEVICE
+
+
+; @CESYSGEN IF CE_MODULES_COMMCTRL
+;************************************
+; Common control settings
+;************************************
+;; Turns on hover tooltips (and off click tooltips)
+[HKEY_LOCAL_MACHINE\SYSTEM\GWE\Commctrl]
+   "ToolTipsHold"=dword:0
+; @CESYSGEN ENDIF CE_MODULES_COMMCTRL
+
+
+; @CESYSGEN IF WCESHELLFE_MODULES_CTLPNL
+; This registry setting controls the checkboxes displayed in the Sounds CPL
+; under "enable clicks & taps". Set bit0 if you have a keyboard, set bit1 if
+; you have a touch screen. Set bit2 if you have HW buttons (NOTE: for now
+; HW buttons are mutually exclusive with the keyboard)
+[HKEY_LOCAL_MACHINE\ControlPanel]
+    "InputConfig"=dword:1   ; 1 => keybd, but no touch screen
+; @CESYSGEN ENDIF WCESHELLFE_MODULES_CTLPNL
+
+
+; @CESYSGEN IF WCESHELLFE_MODULES_EXPLORER
+; @CESYSGEN ENDIF WCESHELLFE_MODULES_EXPLORER
+

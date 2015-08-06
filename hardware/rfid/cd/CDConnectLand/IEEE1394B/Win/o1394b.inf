@@ -1,0 +1,106 @@
+;    o1394b.inf -- 
+;
+;    This file contains installation information for 
+;    OrangeWare 1394b boards.
+;
+;    Copyright (c) 2003 - 2005 OrangeWare Corporation
+
+[Version]
+LayoutFile=Layout.inf, Layout1.inf, Layout2.inf
+signature="$CHICAGO$"
+Class=1394
+ClassGUID={6BDD1FC1-810F-11D0-BEC7-08002BE2092F}
+Provider=%OWC%
+DriverVer=2/15/2005,1.02.0000.2
+
+[Manufacturer]
+%OWC%=OWC
+%ORANGEMFG%=ORANGE
+%BELKINMFG%=BELKIN
+%SPEEDDRAGONMFG%=SPEEDDRAGON
+
+[OWC]
+%PCI\VEN_104C&DEV_8025&SUBSYS_702A14DB.DeviceDesc%=OW1394B,PCI\VEN_104C&DEV_8025&SUBSYS_702A14DB
+%PCI\VEN_104C&DEV_8025&SUBSYS_131418AB.DeviceDesc%=OW1394B,PCI\VEN_104C&DEV_8025&SUBSYS_131418AB
+%PCI\VEN_104C&DEV_8025&SUBSYS_38840EE4.DeviceDesc%=OW1394B,PCI\VEN_104C&DEV_8025&SUBSYS_38840EE4
+%PCI\VEN_104C&DEV_8025&SUBSYS_31101409.DeviceDesc%=OW1394B,PCI\VEN_104C&DEV_8025&SUBSYS_31101409
+
+[ORANGE]
+%PCI\VEN_104C&DEV_8025&SUBSYS_804012EE.DeviceDesc%=OW1394B,PCI\VEN_104C&DEV_8025&SUBSYS_804012EE
+
+[BELKIN]
+%PCI\VEN_104C&DEV_8025&SUBSYS_06231799.DeviceDesc%=OW1394B,PCI\VEN_104C&DEV_8025&SUBSYS_06231799
+
+[SPEEDDRAGON]
+%PCI\VEN_104C&DEV_8025&SUBSYS_00051592.DeviceDesc%=OW1394B,PCI\VEN_104C&DEV_8025&SUBSYS_00051592
+%PCI\VEN_104C&DEV_8025&SUBSYS_00061592.DeviceDesc%=OW1394B,PCI\VEN_104C&DEV_8025&SUBSYS_00061592
+
+[OW1394B]
+CopyFiles=  OW1394B.CopyFiles
+Include=    1394.inf
+Needs=      OHCI.Device
+
+[OW1394B.NT]
+CopyFiles=  OW1394B.CopyFiles.NT
+Include=    1394.inf
+Needs=      ClassInstall32,GENERIC_Install
+
+;;----------------------------------------
+;; 98 and ME
+[OW1394B.Addreg]
+HKR,,"UpperFilters",0x00010000,"o1394b.sys"	;| 8 = REG_MULTI_SZ value // also, append to existing list, if any
+
+[OW1394B.HW]
+AddReg=OW1394B.Addreg
+
+[OW1394B.CopyFiles]
+o1394b.sys
+;;----------------------------------------
+
+;;----------------------------------------
+;; 2k and XP
+[OW1394B.HW.AddReg]
+HKR,,"UpperFilters",0x00010000,"o1394b"	;| 8 = REG_MULTI_SZ value // also, append to existing list, if any
+
+[OW1394B.NT.HW]
+AddReg = OW1394B.HW.AddReg
+
+[OW1394B.NT.Services]
+AddService= O1394B,0,OW1394B.AddService
+Include=    1394.inf
+Needs=      GENERIC_Install.NT.Services
+
+[OW1394B.AddService]
+DisplayName    = %O1394bBF.SvcDesc%
+ServiceType    = 1		              ;SERVICE_KERNEL_DRIVER
+StartType      = 0	               	      ;SERVICE_AUTO_START;SERVICE_DEMAND_START
+ErrorControl   = 1		              ;SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\o1394b.sys
+;LoadOrderGroup = PnP Filter
+
+[OW1394B.CopyFiles.NT]
+o1394b.sys
+;;----------------------------------------
+
+[DestinationDirs]
+OW1394B.CopyFiles = 10,SYSTEM32\DRIVERS
+OW1394B.CopyFiles.NT = 12
+OW1394B.DelFiles.Ext = 10,SYSTEM32\DRIVERS
+
+[Strings]
+OWC="OrangeWare Corporation"
+ORANGEMFG = "Orange Micro, Inc."
+BELKINMFG = "Belkin"
+SPEEDDRAGONMFG = "Speed Dragon Multimedia Ltd."
+
+PCI\VEN_104C&DEV_8025&SUBSYS_131418AB.DeviceDesc="OHCI IEEE 1394b Host Controller"
+PCI\VEN_104C&DEV_8025&SUBSYS_804012EE.DeviceDesc="Orange Micro OrangeLink OHCI IEEE 1394b Host Controller"
+PCI\VEN_104C&DEV_8025&SUBSYS_702A14DB.DeviceDesc="OHCI IEEE 1394b Host Controller"
+PCI\VEN_104C&DEV_8025&SUBSYS_38840EE4.DeviceDesc="OHCI IEEE 1394b Host Controller"
+PCI\VEN_104C&DEV_8025&SUBSYS_31101409.DeviceDesc="1394B Host Controller"
+PCI\VEN_104C&DEV_8025&SUBSYS_06231799.DeviceDesc="FireWire 800 PCI Card"
+PCI\VEN_104C&DEV_8025&SUBSYS_00051592.DeviceDesc="1394b 32-Bit PCI Host Controller Card"
+PCI\VEN_104C&DEV_8025&SUBSYS_00061592.DeviceDesc="1394b 64-Bit PCI Host Controller Card"
+PCI\CC_0C0010.DeviceDesc="Generic OHCI 1394 Host Controller with 1394b Driver Support"
+
+O1394bBF.SvcDesc = "OW 1394b Bus Filter Service"

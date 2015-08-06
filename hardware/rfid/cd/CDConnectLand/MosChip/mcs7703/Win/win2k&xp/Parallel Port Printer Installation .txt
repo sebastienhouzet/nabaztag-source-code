@@ -1,0 +1,19 @@
+The following instruction are how to install and use a Printer
+connected to MosChip Parallel Port MCS7705.
+
+1. Plug the MCS7705 in the Host Computer, a new parallel port
+   will be installed in your system. You can see that under
+   Device Manager, Ports.
+2. Connect the Printer to USB Parallel Port. The Printer is 
+   not a Plug and Play device, hence you will have to 
+   manually install the printer.
+3. Go to Add Printer, Select Local Printer.
+4. if Windows is unable to detect a Plug and Play printer
+   it will say so, Click Next Anyway.
+5. Select the Printer Port, e.g if LPT2 is assigned to
+   MosChip USB Parallel Port, then select LPT2. You can 
+   find out the LPTx Number through Device Manager
+6. Then select the Printer model and driver or enter
+   the CD which contains your printer drivers.
+7. Windows will install the Printer drivers and
+    your Printer should be ready to use.

@@ -1,0 +1,73 @@
+;
+; UIR1100B USB-to-Serial Installation Information for Windows XP/2000
+; 
+
+[version]
+signature="$Windows NT$"
+Class=Ports
+ClassGuid={4D36E978-E325-11CE-BFC1-08002BE10318}
+Provider=%UIR1100B%
+
+[SourceDisksNames]
+1=%uir1100b.Disk%,,,
+
+[ControlFlags]
+ExcludeFromSelect = USB\VID_0e55&PID_110b
+
+[SourceDisksFiles]
+uir1100b.sys=1
+
+[DestinationDirs]
+DefaultDestDir=12
+ComPort.NT.Copy=12
+
+[Manufacturer]
+%UIR1100B%=uir1100b
+
+[uir1100b]
+%DeviceDesc% = ComPort, USB\VID_0e55&PID_110b
+
+[ComPort.NT]
+CopyFiles=ComPort.NT.Copy
+AddReg=ComPort.NT.AddReg
+
+[ComPort.NT.HW]
+AddReg=ComPort.NT.HW.AddReg
+
+[ComPort.NT.Copy]
+uir1100b.sys
+
+[ComPort.NT.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,uir1100b.sys
+HKR,,EnumPropPages32,,"MsPorts.dll,SerialPortPropPageProvider"
+
+[ComPort.NT.HW.AddReg]
+HKR,,"UpperFilters",0x00010000,"serenum"
+
+[ComPort.NT.Services]
+AddService = uir1100b, 0x00000002, Serial_Service_Inst
+AddService = Serenum,,Serenum_Service_Inst
+
+[Serial_Service_Inst]
+DisplayName    = %Serial.SVCDESC%
+ServiceType    = 1               ; SERVICE_KERNEL_DRIVER
+StartType      = 3               ; SERVICE_SYSTEM_START (this driver may do detection)
+ErrorControl   = 1               ; SERVICE_ERROR_IGNORE
+ServiceBinary  = %12%\uir1100b.sys
+LoadOrderGroup = Base
+
+[Serenum_Service_Inst]
+DisplayName    = %Serenum.SVCDESC%
+ServiceType    = 1               ; SERVICE_KERNEL_DRIVER
+StartType      = 3               ; SERVICE_DEMAND_START
+ErrorControl   = 1               ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\serenum.sys
+LoadOrderGroup = PNP Filter
+
+[Strings]
+UIR1100B = "UIR1100B"
+uir1100b.Disk="USB-Serial Cable Diskette"
+DeviceDesc = "UIR1100B USB-to-Serial"
+Serial.SVCDESC   = "UIR1100B Serial port driver"
+Serenum.SVCDESC = "Serenum Filter Driver"

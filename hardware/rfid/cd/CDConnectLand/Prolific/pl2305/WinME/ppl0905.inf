@@ -1,0 +1,60 @@
+;
+;  This file is the Parallel port visual driver of USB to Parallel port
+;  Driver Name : usbmon.dll
+;  Inf    Name : ppl0905.inf
+;  Copyright (c) Prolific Technology Inc., 2000
+;
+
+[version]
+signature="$CHICAGO$"
+Class=Ports
+ClassGUID={4d36e978-e325-11ce-bfc1-08002be10318}
+Provider=%Vendor%
+
+[DestinationDirs]
+DefaultDestDir = 11
+
+; Install class "Ports"
+;----------------------------------------------------------
+[ClassInstall]
+AddReg=PortsClass.AddReg
+
+[PortsClass.AddReg]
+HKR,,,,%PortsClassName%
+HKR,,Icon,,-23
+
+; Drivers
+;----------------------------------------------------------
+[Manufacturer]
+%Prolific%=Prolific
+
+[Prolific]
+%*Prolific.DeviceDesc%=USB2ParPort,*VID_067B&PID_2305
+
+; USB2ParPort sections
+;----------------------------------------------------------
+[USB2ParPort]
+AddReg=USB2ParPort.AddReg
+
+[USB2ParPort.AddReg]
+HKR,,DevLoader,,*vcomm
+HKR,,PortDriver,,usbmon.dll
+HKR,,PortSubClass,1,00
+HKR,,ECPDevice,1,01
+HKR,,USBDriver,,usbprint.sys
+
+[*Prolific.det]
+AddReg=USB2ParPorts.AddReg
+
+[USB2ParPorts.AddReg]
+HKR,,NoSetupUI,,1
+
+; User readable strings
+;----------------------------------------------------------
+[Strings]
+Vendor = "Prolific Technology Inc."
+Std = "(Standard Commumication Ports)"
+PortsClassName = "Communication Ports (COM & LPT)"
+Prolific = "Prolific Technology Inc."
+*Prolific.DeviceDesc = "Polific USB-parallel Bridge"
+DISK1 = "(MS):USB Port Installation Disk"

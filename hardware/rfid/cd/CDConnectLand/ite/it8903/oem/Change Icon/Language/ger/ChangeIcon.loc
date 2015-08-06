@@ -1,0 +1,28 @@
+[CompanyInfo]
+Company_Name="ITE_Tech_Inc"
+Application_Name="Change Icon"
+TrayIconHint="Change Icon Application"
+LabelCopyright="Copyright (C) 1996-2004 ITE Tech. Inc. Alle Rechte vorbehalten"
+IT8903_0_Name="Massenspeichergerät"
+[UnitMain]
+RefreshNow="Symbol jetzt aktualisieren"
+BootAutorun="Symboländerung deaktivieren"
+CustomizeIcon="Symbol anpassen"
+Hide="Programm ausblenden"
+About="Über"
+Exit="Beenden"
+WAlreadyRunning="läuft bereits!"
+Wwarning="Warnung"
+[UnitFormAbout]
+Title_Caption="Über"
+LabelOSVersion="Version des Betriebssystems:"
+ButtonOK="OK"
+[UnitCustomizeIcon]
+Title_Caption="Symbol anpassen"
+LabelSource="Aktuelles Symbol "
+LabelCustomize="Symbol anpassen"
+LabelHint="Ändern in"
+ButtonBrowser="Browser"
+ButtonDefault="Rückstellung"
+ButtonOK="OK"
+ButtonReset="Abbrechen"

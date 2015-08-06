@@ -1,0 +1,91 @@
+------------------------------------------------------------------
+ ALi USB HostLink Controller VirtualNetwork/SuperLink Installation 
+               for Windows 98/Me/2000/XP Platform
+                          Jan 2003
+------------------------------------------------------------------
+ (c) Copyright ALi Corporation 2002. All Rights Reserved
+------------------------------------------------------------------
+
+--------
+ 內容
+--------
+1. 簡介 
+2. 安裝
+3. 安裝 VirtualNetwork
+4. 安裝 SuperLink
+
+1. 簡介
+==============================
+ALi USB Host Link controller 一共提供兩款套裝軟體解決方案, 一並儲存於安裝程式
+中,也就是顯示於安裝選項中的   "USB Super Link"   與   "USB Virtual Network". 
+然而,這兩款套裝軟體不可以同時存在於電腦系統中,這是因為受限於作業系統與硬體裝置
+本身的限制.
+
+其中"USB Super Link" 套裝軟體提供一個工具應用程式(SuperLink.exe). 這使得使用者
+有能力從應用程式工具中,用很簡單方便的滑鼠拖曳功能來達成遠端電腦的檔案存取.而另
+一款 "USB Virtual Network" 的套裝軟體則提供了符合網路規格(NDIS-compliant)的解決
+方案,讓使用者的電腦透過軟體虛擬網路提供點對點的溝通服務.
+ 
+2. 安裝									
+================================================================================
+本套裝提供的安裝程式工具(Setup.exe)可以自動地進行驅動程式的 安裝/卸載/更新.使用
+者也可以經由視窗安裝精靈來進行驅動程式的 安裝/卸載/更新.但是,我們還是建議使用者
+使用安裝程式工具(Setup.exe)來進行安裝.
+
+下列步驟將一步一步導引使用者如何來進行安裝步驟:
+
+首先從安裝磁片或CD中的子目錄中尋找安裝程式(Setup.exe).
+
+在安裝程式工具中可以進行 VirtualNetwork 或 SuperLink 驅動程式的安裝/卸載/更新,以及
+切換VirtualNetwork/SuperLink模式 . 請注意 VirtualNetwork  或 SuperLink 這兩款套裝軟體是不
+同型態的驅動程式,一併支援著 USB Host link controller 產品.為避免系統不必要
+的混淆和錯誤操作, 安裝程式工具將提供自動偵測是否有先前安裝好的 VirtualNetwork 或
+SuperLink 驅動程式, 並藉此在開始安裝之前,詢問使用者選擇要安裝的應用程式. 
+
+3. 安裝 VirtualNetwork
+================================================================================
+1) 執行 Setup.exe
+   a) 請選擇 "USB Virtual Network Adapter"
+   b) 如果是第一次安裝 VirtualNetwork, 則請點選 VirtualNetwork 選項.
+   c) 假如 VirtualNetwork 先前已經安裝過, 安裝程式則會顯示兩個選擇項目,一個是重新
+      安裝(reinstall)的選擇項目;另一個是移除(reremove)的選擇項目.
+      使用者可以選擇其中之一選項繼續進行安裝.  
+   d) 假如先前安裝過 SuperLink, 安裝程式則會顯示兩個選擇項目, 一個是只有移除(only 
+      remove SuperLink)的選擇項目;另一個是移除再安裝(remove SuperLink and install 
+      VirtualNetwork)的選擇項目.
+      使用者可以選擇其中之一選項繼續進行安裝. 
+      
+2) 請按"下一步".
+3) 當安裝完成後, 請按 "結束" 結束安裝.
+4) 在安裝 VirtualNetwork 結束後, 請將 ALi's USB Host Link Controller 裝置插入 USB. 
+
+   於Windows 2000 and Windows XP 中, 假如作業系統會提醒使用者此驅動程式尚未通過數
+   位簽章,請點選"下一步"繼續安裝.
+
+5) 安裝結束後,作業系統會接著準備產生 IP 位址. 此時須等待約莫 30 秒時間;等待時間將
+   視作業系統組態而定,不同作業系統,等待時間有所不同. 
+  
+   在 Windows 98 等待時間需要 30 秒, 請耐心等待.
+   在 Windows Me/2000/XP 作業系統產生 IP(0.0.0.0) 位址,請耐心等待直到真正 IP 位址
+   產生為止.
+
+4. 安裝 SuperLink							
+================================================================================
+1) 執行 Setup.exe
+   a) 請選擇 "USB Super Link Adapter"
+   b) 如果是第一次安裝 SuperLink, 則安裝程式原始選項就是 SuperLink.
+   c) 假如 SuperLink 先前已經安裝過, 安裝程式則會顯示兩個選擇項目,一個是重新
+      安裝(reinstall)的選擇項目;另一個是移除(reremove)的選擇項目.
+      使用者可以選擇其中之一選項繼續進行安裝.  
+   d) 假如先前安裝過 VirtualNetwork, 安裝程式則會顯示兩個選擇項目, 一個是只有移除
+      (only remove VirtualNetwork)的選擇項目;另一個是移除再安裝 (remove 
+      VirtualNetwork and install SuperLink)的選擇項目.
+      使用者可以選擇其中之一選項繼續進行安裝. 
+   
+2) 選擇SuperLink 要安裝的目錄.      
+3) 請按"下一步".
+4) 當安裝完成後, 請按 "結束" 結束安裝.
+5) 在安裝 SuperLink 結束後, 請將 ALi's USB Host Link Controller 裝置插入 USB. 
+
+   於Windows 2000 and Windows XP 中, 假如作業系統會提醒使用者此驅動程式尚未通過
+   數位簽章,請點選"下一步"繼續安裝.

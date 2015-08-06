@@ -1,0 +1,1 @@
+mysql.exe -uroot -p123 < rfid.sql

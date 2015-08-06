@@ -1,0 +1,48 @@
+--------------------------------------------------
+MOdification to the HUB functionality in WinCE 5.0
+--------------------------------------------------
+
+1. Go to "C:\WINCE500\PUBLIC\COMMON\OAK\DRIVERS\USB\HCD\COMMON" (assuming the WinCE was isntalled in C:\WINCE500)
+
+2. Open the file "cdevice.cpp"
+
+3. Go to the function "CHub::AttachDevice"
+
+4. In that function, the functional flow moves between different states as given below in the given order:
+
+a) DEVICE_CONFIG_STATUS_OPENING_ENDPOINT0_PIPE
+b) DEVICE_CONFIG_STATUS_USING_ADDRESS0
+c) DEVICE_CONFIG_STATUS_RESET_AND_ENABLE_PORT
+d) DEVICE_CONFIG_STATUS_SCHEDULING_SET_ADDRESS
+e) DEVICE_CONFIG_STATUS_LEAVE_ADDRESS0
+f) DEVICE_CONFIG_STATUS_SCHEDULING_GET_INITIAL_DEVICE_DESCRIPTOR
+g) DEVICE_CONFIG_STATUS_SCHEDULING_GET_DEVICE_DESCRIPTOR
+h) DEVICE_CONFIG_STATUS_SETUP_CONFIGURATION_DESCRIPTOR_ARRAY
+and so on ...
+
+5. The above flow should be modified in the order (a)-(b)-(c)-(f)-(d)-(e)-(g)-(h)-...
+i.e.DEVICE_CONFIG_STATUS_SCHEDULING_SET_ADDRESS and DEVICE_CONFIG_STATUS_SCHEDULING_GET_INITIAL_DEVICE_DESCRIPTOR should be interchanged.
+
+6. To achieve this, make the following modifications.
+
+7. Under 'case DEVICE_CONFIG_STATUS_RESET_AND_ENABLE_PORT', assign 'configStatus' to 'DEVICE_CONFIG_STATUS_SCHEDULING_GET_INITIAL_DEVICE_DESCRIPTOR' (Line 1383)
+
+8. Under 'case DEVICE_CONFIG_STATUS_SCHEDULING_GET_INITIAL_DEVICE_DESCRIPTOR', assign 'configStatus' to 'DEVICE_CONFIG_STATUS_SCHEDULING_SET_ADDRESS' (Line 1500)
+
+9. Under 'case DEVICE_CONFIG_STATUS_LEAVE_ADDRESS0', assign 'configStatus' to 'DEVICE_CONFIG_STATUS_SCHEDULING_GET_DEVICE_DESCRIPTOR' (Line 1478)
+
+10. Under 'case DEVICE_CONFIG_STATUS_SCHEDULING_GET_INITIAL_DEVICE_DESCRIPTOR', before calling 'GetDescriptor', assign address to 0 (Line 1484)
+
+
+NOTE: Refer the cdevice_mcs7717.cpp for the modifications.
+
+
+-----------------------------
+Compiling the new HUB library
+-----------------------------
+
+
+You can compile the above changes by rebuilding the existing or new platform
+i.e Build OS -> Build and Sysgen.
+
+

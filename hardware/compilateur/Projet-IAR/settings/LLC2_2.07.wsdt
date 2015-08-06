@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<Workspace>
+  <ConfigDictionary>
+    
+  <CurrentConfigs><Project>LLC2_2.07/Debug</Project></CurrentConfigs></ConfigDictionary>
+  <Desktop>
+    <Static>
+      <Workspace>
+        <ColumnWidths>
+          
+          
+          
+          
+        <Column0>333</Column0><Column1>1</Column1><Column2>20</Column2><Column3>2010202325</Column3></ColumnWidths>
+      </Workspace>
+      <Build>
+        
+        
+        
+        
+      <PreferedWindows><Position>3</Position><ScreenPosX>0</ScreenPosX><ScreenPosY>0</ScreenPosY><Windows><Window><Factory>Debug-Log</Factory></Window><Window><Factory>Find-in-Files</Factory></Window></Windows></PreferedWindows><ColumnWidth0>20</ColumnWidth0><ColumnWidth1>698</ColumnWidth1><ColumnWidth2>268</ColumnWidth2><ColumnWidth3>67</ColumnWidth3></Build>
+      <TerminalIO/>
+      <Profiling/>
+    <Debug-Log/><Find-in-Files><PreferedWindows><Position>3</Position><ScreenPosX>0</ScreenPosX><ScreenPosY>0</ScreenPosY><Windows><Window><Factory>Debug-Log</Factory></Window></Windows></PreferedWindows><ColumnWidth0>440</ColumnWidth0><ColumnWidth1>62</ColumnWidth1><ColumnWidth2>754</ColumnWidth2></Find-in-Files><Disassembly><PreferedWindows><Position>4</Position><ScreenPosX>907</ScreenPosX><ScreenPosY>568</ScreenPosY><Windows/></PreferedWindows></Disassembly><CodeCoveragePlugin/></Static>
+    <Windows>
+      
+      
+    <Wnd0>
+        <Tabs>
+          <Tab>
+            <Identity>TabID-28858-5469</Identity>
+            <TabName>Workspace</TabName>
+            <Factory>Workspace</Factory>
+            <Session>
+              
+            <NodeDict><ExpandedNode>LLC2_2.07</ExpandedNode></NodeDict></Session>
+          </Tab>
+        </Tabs>
+        
+      <SelectedTab>0</SelectedTab></Wnd0><Wnd2>
+        <Tabs>
+          
+        <Tab><Identity>TabID-10269-9903</Identity><TabName>Build</TabName><Factory>Build</Factory><Session/></Tab><Tab><Identity>TabID-16366-9734</Identity><TabName>Find in Files</TabName><Factory>Find-in-Files</Factory><Session/></Tab></Tabs>
+        
+      <SelectedTab>0</SelectedTab></Wnd2><Wnd3><Tabs><Tab><Identity>TabID-3058-2792</Identity><TabName>Debug Log</TabName><Factory>Debug-Log</Factory><Session/></Tab></Tabs><SelectedTab>0</SelectedTab></Wnd3></Windows>
+    <Editor>
+      
+      
+      
+      
+    <Pane><Tab><Factory>TextEditor</Factory><Filename>E:\StageRomain\Nabaztag\Rabbit-V2\Projet-IAR\bc.c</Filename><XPos>72</XPos><YPos>0</YPos><SelStart>765</SelStart><SelEnd>845</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>E:\StageRomain\Nabaztag\Rabbit-V2\Projet-IAR\COMMON\SRC\67405x_cstartup_IAR.s79</Filename><XPos>0</XPos><YPos>59</YPos><SelStart>3212</SelStart><SelEnd>3212</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>E:\StageRomain\Nabaztag\Rabbit-V2\Projet-IAR\vinterp.c</Filename><XPos>0</XPos><YPos>1346</YPos><SelStart>32583</SelStart><SelEnd>32586</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>E:\StageRomain\Nabaztag\Rabbit-V2\Projet-IAR\i2c.c</Filename><XPos>0</XPos><YPos>15</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>E:\StageRomain\Nabaztag\Rabbit-V2\Projet-IAR\vmem.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd></Tab><ActiveTab>4</ActiveTab></Pane><ActivePane>0</ActivePane><Sizes><Pane><X>1000000</X><Y>1000000</Y></Pane></Sizes><SplitMode>1</SplitMode></Editor>
+    <Positions>
+      
+      
+      
+      
+      
+    <Top><Row0><Sizes><Toolbar-008ee748><key>iaridepm1</key></Toolbar-008ee748></Sizes></Row0></Top><Left><Row0><Sizes><Wnd0><Rect><Top>-2</Top><Left>-2</Left><Bottom>538</Bottom><Right>391</Right><x>-2</x><y>-2</y><xscreen>0</xscreen><yscreen>0</yscreen><sizeHorzCX>0</sizeHorzCX><sizeHorzCY>0</sizeHorzCY><sizeVertCX>307031</sizeVertCX><sizeVertCY>569620</sizeVertCY></Rect></Wnd0></Sizes></Row0></Left><Right><Row0><Sizes/></Row0></Right><Bottom><Row0><Sizes><Wnd3><Rect><Top>-2</Top><Left>-2</Left><Bottom>366</Bottom><Right>141</Right><x>-2</x><y>-2</y><xscreen>143</xscreen><yscreen>368</yscreen><sizeHorzCX>111719</sizeHorzCX><sizeHorzCY>388186</sizeHorzCY><sizeVertCX>210156</sizeVertCX><sizeVertCY>388186</sizeVertCY></Rect></Wnd3><Wnd2><Rect><Top>0</Top><Left>0</Left><Bottom>13296720</Bottom><Right>13295808</Right><x>139</x><y>-2</y><xscreen>1143</xscreen><yscreen>368</yscreen><sizeHorzCX>892969</sizeHorzCX><sizeHorzCY>388186</sizeHorzCY><sizeVertCX>0</sizeVertCX><sizeVertCY>0</sizeVertCY></Rect></Wnd2></Sizes></Row0></Bottom><Float><Sizes/></Float></Positions>
+  </Desktop>
+</Workspace>
+
+

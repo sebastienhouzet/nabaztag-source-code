@@ -1,0 +1,117 @@
+;
+; stusb2ir.inf - Driver installation file for SigmaTel USB 2.0 IrDA Bridge
+;              Windows Me ONLY
+;
+; Copyright © 2004 SigmaTel, Inc.
+; All Rights Reserved
+;
+; U.S. GOVERNMENT RESTRICTED RIGHTS
+;
+; This software, when provided to the United States Government or its
+; agencies and/or instrumentalities ("U.S. Government"), is provided
+; with Restricted Rights.  Use, duplication, or disclosure by the U.S.
+; Government is subject to restrictions as set forth in subparagraph
+; (c)(1)(ii) of the Rights in Technical Data and Computer Software
+; clause at DFARS 252.227-7013 or subparagraphs (c)(1) and (2) of the
+; Commercial Computer Software - Restricted Rights at 48 CFR 52.227-19,
+; as applicable.  Manufacturer is SigmaTel, Inc., Texas.
+;
+
+[Version]
+Signature = "$Windows 95$"
+Class = Net
+provider = %ST%
+ClassGUID = {4D36E972-E325-11CE-BFC1-08002BE10318}
+DriverVer = 09/07/2004,1.00.1638
+CatalogFile = stusb2ir.cat
+
+[Manufacturer]
+%ST%=ST
+
+[ControlFlags]
+ExcludeFromSelect = USB\VID_066F&PID_4210
+
+[ST]
+%USB\VID_066F&PID_4210.DeviceDesc%=STUSB2Ir.ndi,USB\VID_066F&PID_4210
+
+[STUSB2Ir.ndi]
+DeviceID=USB\VID_066F&PID_4210
+CopyFiles=STUSB2Ir.CopyFiles.sys
+AddReg=STUSB2Ir.ndi.AddReg, STUSB2Ir.ndi.Param
+
+[STUSB2Ir.ndi.AddReg]
+HKR,,DevLoader,,*ndis,*ntkern,*ndis
+HKR,,DeviceVxDs,,"wdmstub.sys,stusb2ir.sys"
+HKR,,EnumPropPages,,"netdi.dll,EnumPropPages"
+
+HKR,NDIS,LogDriverName,,"STUSB2Ir"
+HKR,NDIS,MajorNdisVersion,1,05
+HKR,NDIS,MinorNdisVersion,1,00
+
+HKR,NDI\Interfaces,DefUpper,0,%UpperInterface%
+HKR,NDI\Interfaces,UpperRange,0,%UpperInterface%
+HKR,Ndi,NetType,,1
+HKR,Ndi,DeviceID,,"STUSB2Ir"
+HKR,,CardType,,"PNP"
+
+HKR,Ndi,MaxInstance,,0  ;prevent multiple bindings
+HKR,Ndi,NdiInstaller,,"ir_ndi.dll,IRWDM_NdiProc"
+HKR,Ndi\Compatibility,RequireAll,,"IRDA"
+HKR,Ndi,AdapterType,,"IrDA Infrared Miniport"
+HKR,,DriverDesc,0,%STUSB2Ir.DeviceDesc%
+HKR,NDI,HelpText,0,%STUSB2Ir.Help%
+
+[STUSB2Ir.ndi.Param]
+;
+;    IrDA Maximum Speed Mask
+;
+;       Note:  Driver will always enable 2400 & 9600,
+;               no matter what this key says
+;
+HKR,Ndi\params\MaximumSpeedMask,ParamDesc,,%strMAXIMUMSPEED%
+HKR,Ndi\params\MaximumSpeedMask,Type,,"enum"
+HKR,Ndi\params\MaximumSpeedMask,default,,"FFFF"
+HKR,Ndi\params\MaximumSpeedMask\enum,"0003",,"    9600"
+HKR,Ndi\params\MaximumSpeedMask\enum,"0007",,"   19200"
+HKR,Ndi\params\MaximumSpeedMask\enum,"000F",,"   38400"
+HKR,Ndi\params\MaximumSpeedMask\enum,"001F",,"   57600"
+HKR,Ndi\params\MaximumSpeedMask\enum,"003F",,"  115200" 
+HKR,Ndi\params\MaximumSpeedMask\enum,"007F",,"  576000"
+HKR,Ndi\params\MaximumSpeedMask\enum,"00FF",," 1152000" 
+HKR,Ndi\params\MaximumSpeedMask\enum,"01FF",," 4000000"
+HKR,Ndi\params\MaximumSpeedMask\enum,"03FF",,"16000000"
+HKR,Ndi\params\MaximumSpeedMask\enum,"FFFF",,%strNOLIMIT%
+
+[STUSB2Ir.CopyFiles.sys]
+stusb2ir.sys
+wdmstub.sys
+
+[DestinationDirs]
+DefaultDestDir=11
+STUSB2Ir.CopyFiles.sys=11
+
+[SourceDisksNames]
+1 = %strDRIVERDISK%,,,
+
+
+[SourceDisksFiles]
+stusb2ir.sys=1
+wdmstub.sys=1
+;--#I#stusb2ir.cat=1
+
+;---------------------------------------------------------------;
+
+[Strings]
+ST="SigmaTel, Inc."
+USB\VID_066F&PID_4210.DeviceDesc="SigmaTel USB 2.0 IrDA Bridge"
+STUSB2Ir.DeviceDesc="SigmaTel USB 2.0 IrDA Bridge"
+STUSB2Ir.Help = "The SigmaTel USB 2.0 IrDA Bridge is a very fast IrDA infrared port. It can be used to establish wireless serial and network links to other computers, handhelds and peripherals."
+strDRIVERDISK="SigmaTel Windows Me Driver Disk"
+strINSTALLPATH="\Windows\Inf"
+strMAXIMUMSPEED="Maximum Speed"
+strNOLIMIT="No Limit"
+strPACKETPOOLSIZE="Packet Pool"
+strPACKETPOOLOVERFLOWSIZE="Packet Pool Overflow"
+UpperInterface="ndisirda"
+strRECEIVEQUEUESIZE="Receive Queue"
+strRECEIVETHROTTLE="Receive Throttle"

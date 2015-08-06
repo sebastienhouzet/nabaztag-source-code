@@ -1,0 +1,18 @@
+  			DRIVER DESCRIPTION
+			==================
+
+(1) STIR4XXX - Driver for USB2.0 STIR4116 (SIR-115.2Kbps), STIR4210 (FIR-4Mbps) & 
+               STIR4220 (VFIR-16Mbps) Infra-red Dongle
+
+    Win   - For Windows 98. 98SE, ME, 2000, XP, 2003                - Ver 1.0.1638 
+
+    Mac   - For MacOS Ver 10.2 or above
+
+    Linux - For Linux
+
+
+(2) STIR4200 -  Driver for USB1.1 STIR4200 (FIR-4Mbps) Infra-red Dongle
+
+    Win - For Windows 98, 98SE, ME, 2000, XP, 2003                  - Ver 1.28
+
+    Linux - For Linux

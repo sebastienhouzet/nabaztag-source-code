@@ -1,0 +1,11 @@
+[Registry]
+Company Name = USB_HD
+Application Name = Change Icon
+Execution File Name = ChangeIconA.exe
+Support Device Number = 1
+
+Key0 = IT8903_0
+IT8903_0_PID = 8903
+IT8903_0_VID = 048D
+
+

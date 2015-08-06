@@ -1,0 +1,33 @@
+#######################################################
+	MCS7717 Parallel Port Testing in WinCE5.0
+#######################################################
+
+Since we are not able to install/add printer in the WinCE5.0 environment 
+We are providing a Test applications ( Source which you need to include in 
+your platform ) to test the parallel port of the MCS7717 USB to Serial parallel
+adapter.
+
+This application sends 80 lines of text to the printer.
+
+How to include the Test_LPT to the platform.
+
+1) Create a new platform if not created. ( Assuming platform name is MyPlatform)
+2) copy Test_LPT folder to the Drive:\WINCE500\PBWorkspaces\MyPlatform folder.
+3) From the Project menu select
+   Project->Insert->Existing_Project
+4) Open dialog appears and select the Test_LPT.pbpxml in the Test_LPT folder.
+5) For Building the project select Build_Project->Build_All_Projects 
+6) Once it is successfully builds then build the OS image and download the image to 
+   to the target.
+
+
+
+How to run the Test_LPT application.
+
+1) Once the OS image is downloaded connect the MCS7717Ce to the target
+2) Connect any printer the the Parallel connector of MCS7717 device.
+3) From the Target menu select Run_Programs then select Test_LPT to run the application
+   on the target.
+
+
+### End ###  

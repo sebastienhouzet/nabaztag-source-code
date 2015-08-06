@@ -1,0 +1,34 @@
+[CompanyInfo]
+Company_Name = "ITE Tech. Inc."
+Application_Name = "Change Icon"
+TrayIconHint = "Change Icon Application"
+LabelCopyright = "版權所有為聯陽半導體股份有限公司"
+IT8902_0_Name = "大姆哥裝置"
+IT8903_0_Name = "大量儲存裝置" 
+
+[UnitMain]
+//========== for creator UnitMain  ==========
+RefreshNow = "立即更新圖示"
+BootAutorun = "關閉更換圖示"
+CustomizeIcon = "個人化圖示"
+Hide = "隱藏主程式"
+About = "關於"
+Exit = "離開"
+
+WAlreadyRunning = " 目前正在執行中!"
+WWarning = "警告"
+
+[UnitFormAbout]
+Title_Caption = "關於"
+LabelOSVersion = "作業系統版本 : "
+ButtonOK = "確定"
+
+[UnitCustomizeIcon]
+Title_Caption = "個人化圖示"
+LabelSource = "目前圖示"
+LabelCustomize = "個人化圖示"
+LabelHint = "更換"
+ButtonBrowser = "瀏灠"
+ButtonDefault = "預設值"
+ButtonOK = "確定"
+ButtonReset = "取消"

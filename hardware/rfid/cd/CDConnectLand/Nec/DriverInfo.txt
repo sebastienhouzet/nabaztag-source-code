@@ -1,0 +1,18 @@
+  			DRIVER DESCRIPTION
+			==================
+
+(1) uPD720101 -  USB 2.0 Drivers for NEC uPD720101 chipset
+
+    For Windows 98, 98SE, ME, 2000, XP                        		- Ver 2.4.2
+
+
+(2) uPD720102 -  USB 2.0 Drivers for NEC uPD720102 chipset
+
+    For Windows 98, 98SE, ME, 2000, XP                        		- Ver 2.4.2
+
+
+(3) uPD720130 -  Windows 98/98SE Driver for NEC uPD720130 / uPD720133 chipset	- Ver 3.0.3.0
+
+
+(4) uPD720133 -  Windows 98/98SE Driver for NEC uPD720130 / uPD720133 chipset	- Ver 3.0.3.0
+                         One Button Backup Software Application

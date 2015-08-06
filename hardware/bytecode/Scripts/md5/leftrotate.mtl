@@ -1,0 +1,24 @@
+// ################################################
+// ##### LeftRotate 16bits // Octobre 2007 // Romain COCHET
+// ################################################
+var tmp;;
+var val;;
+fun leftrotate val nb_rot =
+	let val.(0) -> valh in
+	let val.(1) -> vall in ( 
+		if nb_rot == 16 then (
+			{vall valh}
+		) else (
+			if nb_rot > 16 then (
+				// inversion de h et l, et on gère comme si c'était n-16.
+				set tmp = valh;
+				set valh = vall;
+				set vall = tmp;
+				set nb_rot = nb_rot - 16
+			);				
+			{
+				(valh << nb_rot) & 0xFFFF | (vall >> (16 - nb_rot))
+				(vall << nb_rot) & 0xFFFF | (valh >> (16 - nb_rot))
+			}
+		)
+	);;

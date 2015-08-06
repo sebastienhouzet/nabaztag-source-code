@@ -1,0 +1,73 @@
+Installation of Printers with Moschip USB Parallel Hardware:
+============================================================
+
+Procedure for installing printers (other than HP610C) with 
+Moschip USB-Parallel Port (MCS7705/MCS7715/MCS7717): 
+
+1. Plug the Moschip USB Parallel hardware in the Host Computer, 
+   a new parallel port will be installed in your system. You can 
+   see that under Device Manager, Ports.
+2. Connect the Printer to USB Parallel Port. The Printer is 
+   not a Plug and Play device, hence you will have to 
+   manually install the printer.
+3. From "Control Panel"  open "Printers" folder.
+   Double click Add Printer, Select Local Printer.
+4. if Windows is unable to detect a Plug and Play printer
+   it will say so, Click Next Anyway.
+5. Select the Printer Port, e.g if LPT2 is assigned to
+   MosChip USB Parallel Port, then select LPT2. You can 
+   find out the LPTx Number through Device Manager
+6. Then select the Printer model and driver or enter
+   the CD which contains your printer drivers.
+7. Windows will install the Printer drivers and
+    your Printer should be ready to use.
+
+------------------------------------------------------------------
+For installing HP610C Printers with Moschip USB-Parallel 
+Port(MCS7705/MCS7715/MCS7717):
+
+1. If you are using HP610C printer, download HP640C driver from 
+   http://h20015.www2.hp.com/en/softwareDownloadIndex.jhtml?lc=en&softitem=dj654en&sw_lang=en
+2. Plug the Moschip USB Parallel hardware in the Host Computer, 
+   a new parallel port will be installed in your system. You can 
+   see that under Device Manager, Ports.
+3. Connect the Printer to USB Parallel Port. The Printer is 
+   not a Plug and Play device, hence you will have to 
+   manually install the printer.
+4. From "Control Panel"  open "Printers" folder.
+   Double click Add Printer, Select Local Printer.
+5. if Windows is unable to detect a Plug and Play printer
+   it will say so, Click Next Anyway.
+6. Select the Printer Port, e.g if LPT2 is assigned to
+   MosChip USB Parallel Port, then select LPT2. You can 
+   find out the LPTx Number through Device Manager
+6. Then select the HP 640C Printer model and HP640C driver or 
+   install the HP640C drivers from the downloaded package.
+7. Windows will install the Printer drivers and
+    your Printer should be ready to use.
+
+
+What if the printer is already installed on LPT1 (Standard Parallel Port)?
+--------------------------------------------------------------------------
+1. Plug the Moschip USB Parallel hardware in the Host Computer, 
+   a new parallel port will be installed in your system. You can 
+   see that under Device Manager, Ports.
+2. Connect the Printer to USB Parallel Port.
+3. Note the Printer Port, e.g if LPT2 is assigned to
+   MosChip USB Parallel Port, then printer port is LPT2. 
+   You can find out the LPTx Number through Device Manager.
+4. From "Control Panel"  open "Printers" folder.
+5. Select the printer connected to Moschip USB-Parallel port and 
+   right click.
+6. In the Property Page select/set the Port number to Moschip USB-Parallel
+   Printer port number.
+Note: If you are using HP610C please follow the installation instructions
+   as specified in above section
+
+
+In case of printing problems with Moschip USB-Parallel Adapter:
+--------------------------------------------------------------
+In your desktop, there will be a shortcut for MosUsbPrintConfig application.
+Run the MosUsbPrintConfig application and restart the system.
+Check whether the printing problems with Moschip USB-Parallel
+Adapter are resolved.

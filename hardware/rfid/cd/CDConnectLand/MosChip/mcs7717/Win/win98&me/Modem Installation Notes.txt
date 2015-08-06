@@ -1,0 +1,99 @@
+Installation of Modems with Moschip USB Serial Hardware:
+============================================================
+
+Procedure for installing Modems with Moschip USB-Serial Port 
+(MCS7710/MCS7715/MCS7717/MCS7720):
+----------------------------------------------------------------- 
+a. Connect the modem to the Moschip USB Serial port and
+   turn ON the power supply to the Modem.
+
+b. Plug in the MOSCHIP USB Serial hardware in the Host Computer.
+
+c. Follow the setup instructions mentioned in the "Installation.notes" 
+   to install the drivers required for the Moschip USB Serial Hardware.
+
+d. After installing the drivers, Windows should detect the Modem connected 
+   and automatically display a "Add New Hardware Wizard".
+
+e. Click "Next" to continue.
+
+f. Select "Display a list of all the drivers in a specific location ..."
+   option (radio button) and click "Next" to continue.
+
+g. Wizard displays a list of appropriate Manufacturer and Model of different 
+   modems. Select an appropriate option if it is present in the list.
+   If it is not in the list, click "Have Disk" button on the Wizard 
+   and select the location where appropriate drivers for Modem are located.
+
+h. Click "Next" to continue. 
+
+i. At the next dialog, Windows should display an additional dialog box, saying 
+   "Windows is now ready to install the selected driver for this device. 
+   Click Back to select a different driver or Click Next to continue."
+   Click "Next" to continue.
+
+j. Windows searches and installs the selected drivers and displays a dialog 
+   saying it has finished installing the Drivers.  
+
+k. Click "Finish" to complete the installation.
+
+
+Check Modem Installation.
+------------------------------
+a. Open the Windows Device Manager
+     i) Right-Click the "My Computer" icon on the Desktop.
+    ii) Select "Properties" from the drop-down menu.
+   iii) Click the "Hardware" tab.
+    iv) Click the "Device Manager" button to show the current Hardware list.
+
+b. Confirm that the Modem has been installed
+   	In Modem Category newly connected Modem should be displayed.
+ 
+
+
+What if the MOSCHIP USB Serial device is already installed and 
+Modem is connected to the MOSCHIP USB serial port later?
+--------------------------------------------------------------
+a. Open the Windows Device Manager
+     i) Right-Click the "My Computer" icon on the Desktop.
+    ii) Select "Properties" from the drop-down menu.
+   iii) Click the "Hardware" tab.
+    iv) Click the "Device Manager" button to show the current Hardware list.
+
+b. Press the "Refresh" button for the newly connected Modem to be listed.
+
+c. Windows should detect the Modem connected and automatically display a 
+   "Add New Hardware Wizard".
+
+d. Click "Next" to continue.
+
+e. Select "Display a list of all the drivers in a specific location ..."
+   option and click "Next" to continue.
+
+f. Wizard displays a list of appropriate Manufacturer and Model of different 
+   modems. Select an appropriate option if it is present in the list.
+   If it is not in the list, click "Have Disk" button on the Wizard 
+   and select the location where appropriate drivers for Modem are located.
+
+g. Click "Next" to continue. 
+
+h. At the next dialog, Windows should display an additional dialog box, saying 
+   "Windows is now ready to install the selected driver for this device. 
+   Click Back to select a different driver or Click Next to continue."
+   Click "Next" to continue.
+
+i. Windows searches and installs the selected drivers and displays a dialog 
+   saying it has finished installing the Drivers.  
+
+j. Click "Finish" to complete the installation.
+
+Note: When Modem is connected and the "Refresh" button is pressed, If windows 
+      does not display a "Add New Hardware Wizard" press "Refresh" two to theree 
+      times and try. 
+
+      With Windows-ME operating system, On system reboot Operating system doesn't 
+      enumerate the MODEM(s) which connected to the MosChip Serial Port(s) and 
+      Device Manager shows the "MosChip USB Serial Port" with the "disabled" icon.
+      Press "Refresh" button, so that operating system will enumerate the MODEM(s)
+      and Device Manager shows the "MosChip USB Serial Port" with the proper icon.	
+   	

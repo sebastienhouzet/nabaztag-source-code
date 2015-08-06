@@ -1,0 +1,132 @@
+; Stirusb.inf
+; Copyright 2000, SigmaTel, Inc.
+
+[Version]
+Signature = "$Windows NT$"
+Class = Infrared
+provider = %ST%
+ClassGUID = {6bdd1fc5-810f-11d0-BEC7-08002BE2092F}
+DriverVer = 11/03/2003,1.28.0.0 
+CatalogFile = irstusb.cat
+
+[Manufacturer]
+%ST%=ST
+
+[ControlFlags]
+ExcludeFromSelect = USB\VID_066F&PID_4200
+
+[ST]
+%USB\VID_066F&PID_4200.DeviceDesc%=STIrUsb.Dev,USB\VID_066F&PID_4200
+
+[DestinationDirs]
+STIrUsb.CopyFiles = 12
+DefaultDestDir = 12
+                
+[STIrUsb.Dev.NT]
+CopyFiles=STIrUsb.CopyFiles
+AddReg=STIrUsb.AddReg, STIrUsb.Params.AddReg
+BusType=1
+Characteristics = 0x84; NCF_PHYSICAL, NCF_HAS_UI
+
+[STIrUsb.Dev.NT.Services]
+Addservice = STIrUsb, 0x00000002, STIrUsb.AddService, common.EventLog
+
+[STIrUsb.AddService]
+DisplayName    = %STIrUsb.SvcDesc%
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_DEMAND_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\irstusb.sys
+LoadOrderGroup = NDIS
+
+[STIrUsb.AddReg]
+HKR,  Ndi,            HelpText,     0,      %STIrUsb.Help%
+HKR,  Ndi,            Service,      0,      "STIrUsb"
+HKR,  Ndi\Interfaces, UpperRange,   0,      "ndisirda"
+HKR,  Ndi\Interfaces, LowerRange,   0,      "nolower"
+HKR,  Ndi,            RequiredAll,  0,      "MS_IrDA"
+
+[STIrUsb.Params.AddReg]
+;
+;    Receive Mode.
+;    0 = Slow - RXSLOW only (4115)
+;    1 = SlowFast - both lines (HP style)
+;    2 = Fast - !RXSLOW
+;
+HKR,,ReceiveMode,0,"2"
+
+;
+;    Transceiver Type.
+;    Sets default Dpll and Sensitivity values.
+;    HP setting also forces "Slow/Fast" ReceiveMode.
+;
+HKR,Ndi\params\TransceiverType,ParamDesc,,%strRXSEL%
+HKR,Ndi\params\TransceiverType,default,,"2"
+HKR,Ndi\params\TransceiverType,type,,"enum"
+HKR,Ndi\params\TransceiverType\enum,"0",,"SigmaTel 4012"
+HKR,Ndi\params\TransceiverType\enum,"1",,"Vishay 6101E"
+HKR,Ndi\params\TransceiverType\enum,"2",,"Vishay 6102F [Default]"
+HKR,Ndi\params\TransceiverType\enum,"3",,"Vishay 6102F (alternate)"
+HKR,Ndi\params\TransceiverType\enum,"4",,"Infineon"
+HKR,Ndi\params\TransceiverType\enum,"5",,"HP 1100"
+HKR,Ndi\params\TransceiverType\enum,"6",,"Zilog ZHX2010"
+
+;
+;    IrDA Minimum Turnaround Time (value in microseconds)
+;
+HKR,Ndi\params\MinTurnTime,ParamDesc,,%strIRDATURNTIME%
+HKR,Ndi\params\MinTurnTime,default,,"1000"
+HKR,Ndi\params\MinTurnTime,type,,"enum"
+HKR,Ndi\params\MinTurnTime\enum,"500",," 0.5 mS"
+HKR,Ndi\params\MinTurnTime\enum,"1000",," 1.0 mS [Default]"
+HKR,Ndi\params\MinTurnTime\enum,"5000",," 5.0 mS"
+HKR,Ndi\params\MinTurnTime\enum,"10000",,"10.0 mS"
+
+;
+;    IrDA Speed enables
+;
+;
+;       Note:  Miniport will always enable 9600,
+;               no matter what this key says
+;
+HKR,Ndi\params\SpeedEnable,ParamDesc,,%strSPEEDENABLE%
+HKR,Ndi\params\SpeedEnable,type,,"enum"
+HKR,Ndi\params\SpeedEnable,default,,"4000000"
+HKR,Ndi\params\SpeedEnable\enum,"2400",,   "   2400"
+HKR,Ndi\params\SpeedEnable\enum,"9600",,   "   9600"
+HKR,Ndi\params\SpeedEnable\enum,"19200",,  "  19200"
+HKR,Ndi\params\SpeedEnable\enum,"38400",,  "  38400"
+HKR,Ndi\params\SpeedEnable\enum,"57600",,  "  57600"
+HKR,Ndi\params\SpeedEnable\enum,"115200",, " 115200" 
+HKR,Ndi\params\SpeedEnable\enum,"4000000",,"4000000 [Default]"
+
+[common.EventLog]
+AddReg = common.AddEventLog.reg
+
+[common.AddEventLog.reg]
+HKR, , EventMessageFile, 0x00020000, "%%SystemRoot%%\System32\netevent.dll"
+HKR, , TypesSupported,   0x00010001, 7
+
+[STIrUsb.CopyFiles]
+irstusb.sys
+
+[SourceDisksFiles]
+irstusb.sys=1
+
+[SourceDisksNames]
+1 = %strDRIVERDISK%,,,
+
+;---------------------------------------------------------------;
+
+[Strings]
+ST="SigmaTel, Inc."
+USB\VID_066F&PID_4200.DeviceDesc="SigmaTel USB-IrDA Adapter"
+STIrUsb.SvcDesc="STIrUsb.sys SigmaTel USB-IrDA Adapter"
+STIrUsb.Help   = "The USB-IrDA is a fast IrDA infrared port. It can be used to establish wireless serial and network links to other computers."
+
+strRXSEL="Infrared Transceiver Type"
+strIRDATURNTIME="Min. Turn-Around Time"
+strSPEEDENABLE="Speed Enable"
+strRXWINDOW="Receive Window"
+
+strDRIVERDISK="4200 Driver Disk"

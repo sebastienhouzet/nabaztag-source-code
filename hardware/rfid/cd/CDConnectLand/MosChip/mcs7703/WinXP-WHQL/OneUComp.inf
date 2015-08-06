@@ -1,0 +1,77 @@
+; Copyright (c) 1993-2001 Moschip Semiconductors
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; USB Compound OneShot Device Driver
+;; installation script for Windows 2000
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+[Version]
+Signature=$Windows NT$
+Class=USB
+ClassGuid={36FC9E60-C465-11CF-8056-444553540000}
+Provider=%ProviderName%
+DriverVer=01/17/2005,1.9.1.0
+CatalogFile=OneUport.cat
+
+[Manufacturer]
+%MfgName%=OneUsbCompDeviceList
+
+[SourceDisksNames]
+1=%DiskName%,"",,
+
+[SourceDisksFiles]
+oneuport.sys=1
+;OneUsbSerial.exe=1
+;OneUSBSerPropPage.dll=1
+
+
+[DestinationDirs]
+DefaultDestDir			=11		        ;LDID_SYS
+OneUsbComp.NT.CopyFiles		=12        		;DIRID_DRIVERS
+OneUsbComp.NT.CopyDll       =11  
+
+
+[OneUsbCompDeviceList]
+%OneUsbComp.DevName%=OneUsbComp,USB\VID_9710&PID_7703
+
+[OneUsbComp.NT]
+AddReg=OneUsbComp.NT.AddReg,
+CopyFiles=OneUsbComp.NT.CopyFiles, OneUsbComp.NT.CopyDll
+
+[OneUsbComp.NT.CopyFiles]
+oneuport.sys
+
+[OneUsbComp.NT.CopyDll]
+;OneUSBSerial.exe
+;OneUSBSerPropPage.dll
+
+[OneUsbComp.NT.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,oneuport.sys
+
+[OneUsbComp.NT.Services]
+AddService=oneuport,2,OneUsbComp.NT.AddService
+
+[OneUsbComp.NT.AddService]
+DisplayName    = %oneuport.ServiceName%
+ServiceType    = 1           ; SERVICE_KERNEL_DRIVER
+StartType      = 3           ; SERVICE_DEMAND_START
+ErrorControl   = 0           ; SERVICE_ERROR_IGNORE
+ServiceBinary  = %12%\oneuport.sys
+LoadOrderGroup = Base
+
+
+[Strings]
+ProviderName="MosChip Semiconductor Technology"
+MfgName="MosChip Semiconductor Technology"
+DiskName="USB Compound OneShot Device Installation Disc"
+DiskName2="USB Compound OneShot Device Installation Disc2"
+
+OneUsbComp.DevName="MosChip 7703-USB2Serial Converter"
+oneuport.ServiceName="MosChip 7703-USB2Serial Port"
+
+;-----------------------------------
+; END OF FILE
+;-----------------------------------
+

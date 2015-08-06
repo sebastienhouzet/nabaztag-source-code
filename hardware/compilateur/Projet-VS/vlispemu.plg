@@ -1,0 +1,65 @@
+<html>
+<body>
+<pre>
+<h1>Build Log</h1>
+<h3>
+--------------------Configuration: vlispemu - Win32 Release--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating temporary file "C:\DOCUME~1\funfoo\LOCALS~1\Temp\RSP863.tmp" with contents
+[
+/nologo /ML /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /Fp"Release/vlispemu.pch" /YX /Fo"Release/" /Fd"Release/" /FD /c 
+"C:\users\ambermind\vlisp\Vlispemu\vcomp\stdlib_core.cpp"
+]
+Creating command line "cl.exe @C:\DOCUME~1\funfoo\LOCALS~1\Temp\RSP863.tmp" 
+Creating temporary file "C:\DOCUME~1\funfoo\LOCALS~1\Temp\RSP864.tmp" with contents
+[
+kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib winmm.lib wsock32.lib /nologo /subsystem:console /incremental:no /pdb:"Release/vlispemu.pdb" /machine:I386 /out:"Release/vlispemu.exe" 
+.\Release\bootstrap.obj
+.\Release\compiler.obj
+.\Release\compiler_file.obj
+.\Release\compiler_prog.obj
+.\Release\compiler_term.obj
+.\Release\compiler_type.obj
+.\Release\compiler_var.obj
+.\Release\file.obj
+.\Release\interpreter.obj
+.\Release\memory.obj
+.\Release\parser.obj
+.\Release\parser_xml.obj
+.\Release\prodbuffer.obj
+.\Release\stdlib_core.obj
+.\Release\terminal.obj
+.\Release\util.obj
+.\Release\COMMON.OBJ
+.\Release\dct64_i386.obj
+.\Release\decode_i386.obj
+.\Release\interface.obj
+.\Release\LAYER3.OBJ
+.\Release\TABINIT.OBJ
+.\Release\bc.obj
+.\Release\main.obj
+.\Release\properties.obj
+.\Release\simu.obj
+.\Release\simuaudio.obj
+.\Release\simunet.obj
+.\Release\vaudio.obj
+.\Release\vinterp.obj
+.\Release\vloader.obj
+.\Release\vlog.obj
+.\Release\vmem.obj
+.\Release\vnet.obj
+]
+Creating command line "link.exe @C:\DOCUME~1\funfoo\LOCALS~1\Temp\RSP864.tmp"
+<h3>Output Window</h3>
+Compiling...
+stdlib_core.cpp
+Linking...
+
+
+
+<h3>Results</h3>
+vlispemu.exe - 0 error(s), 0 warning(s)
+</pre>
+</body>
+</html>

@@ -1,0 +1,105 @@
+; INF file for USB storage device
+; Copyright (c) 2000-2005
+
+[Version]
+Signature="$CHICAGO$"
+Class=USB
+provider=%MSFT%
+
+[Manufacturer]
+%MfgName%=General
+
+[General]
+%USB\VID_05E3&PID_0700.DeviceDesc%=USBLS120.Dev,USB\VID_05E3&PID_0700
+%USB\VID_05E3&PID_0701.DeviceDesc%=USBLS120.Dev,USB\VID_05E3&PID_0701
+%USB\VID_05E3&PID_0702.DeviceDesc%=USBLS120.Dev,USB\VID_05E3&PID_0702
+%USB\VID_05E3&PID_0703.DeviceDesc%=USBLS120.Dev,USB\VID_05E3&PID_0703
+%USB\VID_05E3&PID_0760.DeviceDesc%=USBLS120.Dev,USB\VID_05E3&PID_0760
+%USB\VID_05E3&PID_07A0.DeviceDesc%=USBLS120.Dev,USB\VID_05E3&PID_07A0
+%USB\VID_05E3&PID_0705.DeviceDesc%=USBLS120.Dev,USB\VID_05E3&PID_0705
+%USB\VID_05E3&PID_0705.DeviceDesc%=USBLS120.Dev,USB\VID_05E3&PID_0706
+%USB\VID_05E3&PID_0707.DeviceDesc%=USBLS120.Dev,USB\VID_05E3&PID_0707
+%USB\VID_05E3&PID_0708.DeviceDesc%=USBLS120.Dev,USB\VID_05E3&PID_0708
+%USB\VID_07C4&PID_A400.DeviceDesc%=USBLS120.Dev,USB\VID_07C4&PID_A400
+%USB\VID_04BF&PID_0135.DeviceDesc%=USBLS120.Dev,USB\VID_04BF&PID_0135
+%USB\VID_0781&PID_8888.DeviceDesc%=USBLS120.Dev,USB\VID_0781&PID_8888
+%USB\VID_05E3&PID_0927.DeviceDesc%=USBLS120.Dev,USB\VID_05E3&PID_0927
+[PreCopySection]
+HKR,,NoSetupUI,,1
+
+[DestinationDirs]
+DefaultDestDir = 11
+USBLS120.Files.Ext = 10,System32\Drivers
+usbstor.Files.Ext = 12
+usbstor.CopyInf = 17
+
+[USBLS120.Dev]
+CopyFiles=USBLS120.Files.Ext,usbstor.Files.Ext,usbstor.CopyInf, usbstor.CopyUninst, usbstor.CopyTrayIcon
+AddReg=USBLS120.AddReg,UsbStor.AddReg.Uninstall, UsbStor.AddReg.TrayIcon
+
+[USBLS120.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,geneuide.sys
+HKR,,GeneUsbStorTag,,1
+HKLM, "Software\Microsoft\Windows\CurrentVersion\RunOnce","USBIDRV",,"%11%\delentry.exe"
+
+[UsbStor.AddReg.Uninstall]
+HKLM,SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\GENEUIDE,DisplayName,,%UninstDesc%
+HKLM,SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\GENEUIDE,UninstallString,,"DelUIDrv.exe"
+
+[UsbStor.AddReg.TrayIcon]
+HKLM, "Software\Microsoft\Windows\CurrentVersion\RunOnce","Gene USB Monitor",,"%11%\USBMonit.exe"
+HKLM, "Software\Microsoft\Windows\CurrentVersion\Run","Gene USB Monitor",,"%11%\USBMonit.exe"
+
+[USBLS120.Files.Ext]
+geneuide.sys
+
+[usbstor.Files.Ext]
+genestor.pdr
+
+[usbstor.CopyInf]
+genedisk.inf
+
+[usbstor.CopyUninst]
+deluidrv.exe
+delentry.exe
+
+[usbstor.CopyTrayIcon]
+usbmonit.exe
+iconcfg.ini
+geneicon.dll
+
+[SourceDisksNames]
+1000 = "USB Storage Driver Disk","",,
+
+[SourceDisksFiles]
+geneuide.sys = 1000
+genestor.pdr = 1000
+genedisk.inf = 1000
+deluidrv.exe = 1000
+delentry.exe = 1000
+usbmonit.exe = 1000
+iconcfg.ini = 1000
+geneicon.dll = 1000
+
+;---------------------------------------------------------------;
+
+[Strings]
+MSFT="General"
+MfgName="General"
+USB\VID_05E3&PID_0700.DeviceDesc="USB Card Reader"
+USB\VID_05E3&PID_0701.DeviceDesc="USB Optical Device"
+USB\VID_05E3&PID_0702.DeviceDesc="USB Mass Storage Device"
+USB\VID_05E3&PID_0703.DeviceDesc="USB Card Reader"
+USB\VID_05E3&PID_0705.DeviceDesc="USB Card Reader"
+USB\VID_05E3&PID_0707.DeviceDesc="USB Card Reader"
+USB\VID_05E3&PID_0708.DeviceDesc="USB Card Reader"
+USB\VID_05E3&PID_0760.DeviceDesc="USB Card Reader"
+USB\VID_05E3&PID_07A0.DeviceDesc="USB Pen Flash"
+USB\VID_07C4&PID_A400.DeviceDesc="USB Card Reader"
+USB\VID_04BF&PID_0135.DeviceDesc="TDK MediaReader Dual"
+USB\VID_05E3&PID_0927.DeviceDesc="USB Card Reader"
+USB\VID_0781&PID_8888.DeviceDesc="USB Card Reader"
+UninstDesc="USB Storage Driver"
+
+

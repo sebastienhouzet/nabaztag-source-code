@@ -1,0 +1,28 @@
+[CompanyInfo]
+Company_Name="ITE_Tech_Inc"
+Application_Name="Change Icon"
+TrayIconHint="Change Icon Application"
+LabelCopyright="Copyright (C) 1996-2004 ITE Tech. Inc. All rights reserved"
+IT8903_0_Name="マスストレージデバイス"
+[UnitMain]
+RefreshNow="今すぐアイコンを更新"
+BootAutorun="アイコンの変更を無効にする"
+CustomizeIcon="アイコンをカスタマイズ"
+Hide="プログラムを非表示"
+About="バージョン情報"
+Exit="終了"
+WAlreadyRunning="はすでに実行中です!"
+Wwarning="警告"
+[UnitFormAbout]
+Title_Caption="バージョン情報"
+LabelOSVersion="OS バージョン:"
+ButtonOK="OK"
+[UnitCustomizeIcon]
+Title_Caption="アイコンのカスタマイズ"
+LabelSource="現在のアイコン"
+LabelCustomize="アイコンのカスタマイズ"
+LabelHint="変更後"
+ButtonBrowser="ブラウザ"
+ButtonDefault="既定値"
+ButtonOK="OK"
+ButtonReset="キャンセル"
