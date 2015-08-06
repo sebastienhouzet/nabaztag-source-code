@@ -1,0 +1,160 @@
+Index: net/violet/platform/handlers/rfid/FreeAngelChildInitializer.java
+===================================================================
+--- net/violet/platform/handlers/rfid/FreeAngelChildInitializer.java	(révision 21200)
++++ net/violet/platform/handlers/rfid/FreeAngelChildInitializer.java	(copie de travail)
+@@ -7,7 +7,7 @@
+  *
+  * @author christophe - Violet
+  */
+-public class FreeAngelChildInitializer extends AbstractApplicationInitializer {
++public class FreeAngelChildInitializer extends AbstractFreeAngel {
+ 
+ 	public final static Application APPLICATION = Factories.APPLICATION.findByName("net.violet.js.freeangelchild");
+ 
+Index: net/violet/platform/handlers/rfid/AbstractFreeAngel.java
+===================================================================
+--- net/violet/platform/handlers/rfid/AbstractFreeAngel.java	(révision 0)
++++ net/violet/platform/handlers/rfid/AbstractFreeAngel.java	(révision 21201)
+@@ -0,0 +1,29 @@
++package net.violet.platform.handlers.rfid;
++
++import net.violet.platform.datamodel.Application;
++import net.violet.platform.datamodel.SchedulingType;
++import net.violet.platform.datamodel.Subscription;
++import net.violet.platform.datamodel.SubscriptionScheduling;
++import net.violet.platform.datamodel.VObject;
++import net.violet.platform.datamodel.factories.Factories;
++import net.violet.platform.dataobjects.SubscriptionData;
++import net.violet.platform.events.ZtampDetectionEvent;
++import net.violet.platform.events.ZtampRemovalEvent;
++import net.violet.platform.schedulers.InteractionTriggerHandler;
++
++public abstract class AbstractFreeAngel extends AbstractApplicationInitializer {
++
++	@Override
++	public void initRfid(VObject rfid, String defaultParam) {
++
++		final Application promoApp = getApplication();
++
++		if (SubscriptionData.findByApplicationAndObject(promoApp, rfid).isEmpty()) {
++			final Subscription subscr = Factories.SUBSCRIPTION.create(promoApp, rfid);
++			final SubscriptionScheduling theDetectionScheduling = Factories.SUBSCRIPTION_SCHEDULING.create(subscr, SchedulingType.SCHEDULING_TYPE.InteractionTrigger);
++			Factories.SUBSCRIPTION_SCHEDULING_SETTINGS.create(theDetectionScheduling, InteractionTriggerHandler.EVENT, ZtampDetectionEvent.NAME);
++			final SubscriptionScheduling theRemovalScheduling = Factories.SUBSCRIPTION_SCHEDULING.create(subscr, SchedulingType.SCHEDULING_TYPE.InteractionTrigger);
++			Factories.SUBSCRIPTION_SCHEDULING_SETTINGS.create(theRemovalScheduling, InteractionTriggerHandler.EVENT, ZtampRemovalEvent.NAME);
++		}
++	}
++}
+Index: net/violet/platform/handlers/rfid/FreeAngelAdoInitializer.java
+===================================================================
+--- net/violet/platform/handlers/rfid/FreeAngelAdoInitializer.java	(révision 21200)
++++ net/violet/platform/handlers/rfid/FreeAngelAdoInitializer.java	(copie de travail)
+@@ -7,7 +7,7 @@
+  *
+  * @author christophe - Violet
+  */
+-public class FreeAngelAdoInitializer extends AbstractApplicationInitializer {
++public class FreeAngelAdoInitializer extends AbstractFreeAngel {
+ 
+ 	public final static Application APPLICATION = Factories.APPLICATION.findByName("net.violet.js.freeangelado");
+ 
+Index: net/violet/platform/handlers/rfid/FreeAngelAdultInitializer.java
+===================================================================
+--- net/violet/platform/handlers/rfid/FreeAngelAdultInitializer.java	(révision 21200)
++++ net/violet/platform/handlers/rfid/FreeAngelAdultInitializer.java	(copie de travail)
+@@ -7,7 +7,7 @@
+  *
+  * @author christophe - Violet
+  */
+-public class FreeAngelAdultInitializer extends AbstractApplicationInitializer {
++public class FreeAngelAdultInitializer extends AbstractFreeAngel {
+ 
+ 	public final static Application APPLICATION = Factories.APPLICATION.findByName("net.violet.js.freeangeladult");
+ 
+Index: js/applications/FreeAngelAdult-config.xml
+===================================================================
+--- js/applications/FreeAngelAdult-config.xml	(révision 21200)
++++ js/applications/FreeAngelAdult-config.xml	(copie de travail)
+@@ -84,6 +84,7 @@
+ 		<label>"LOC_events/ZtampDetection"</label>
+ 		<minimum>1</minimum>
+ 		<maximum>1</maximum>
++    <supports_target>false</supports_target>
+ 	</map></item>
+ 	<!-- application can be installed on ztamp removal -->
+ 	<item><map>
+@@ -93,6 +94,7 @@
+ 		<label>"LOC_events/ZtampRemoval"</label>
+ 		<minimum>1</minimum>
+ 		<maximum>1</maximum>
++    <supports_target>false</supports_target>
+ 	</map></item>
+ </list></scheduling_masks>
+ 
+Index: js/applications/FreeAngelChild-config.xml
+===================================================================
+--- js/applications/FreeAngelChild-config.xml	(révision 21200)
++++ js/applications/FreeAngelChild-config.xml	(copie de travail)
+@@ -84,6 +84,7 @@
+ 		<label>"LOC_events/ZtampDetection"</label>
+ 		<minimum>1</minimum>
+ 		<maximum>1</maximum>
++    <supports_target>false</supports_target>
+ 	</map></item>
+ 	<!-- application can be installed on ztamp removal -->
+ 	<item><map>
+@@ -93,6 +94,7 @@
+ 		<label>"LOC_events/ZtampRemoval"</label>
+ 		<minimum>1</minimum>
+ 		<maximum>1</maximum>
++    <supports_target>false</supports_target>
+ 	</map></item>
+ </list></scheduling_masks>
+ 
+Index: js/applications/FreeAngelChild.js
+===================================================================
+--- js/applications/FreeAngelChild.js	(révision 21200)
++++ js/applications/FreeAngelChild.js	(copie de travail)
+@@ -21,6 +21,7 @@
+ 	},
+ 
+ 	DEFAULT_PROFILE: "enfant", // "enfant", "ado", "adulte"
++	CHILD_START_URL: "http://www.babygo.fr/lapin.php",
+ 
+ 	onSuccess: {
+ 		"enfant": "Le mode enfant est maintenant activé.",
+@@ -57,6 +58,7 @@
+ 			.playLibSound("FreeAngel").async()
+ 			.showBubble(appTitle, this.onSuccess[commandOption], {pictureurl: appInfo.picture, displaytime: 3000}).async()
+ 			.launchApplication(commandLine, {on_success: this.onSuccess[commandOption], on_failure: this.onFailure})
++			.browsePage(this.CHILD_START_URL)
+ 			.alternativelyAddTextToSpeech(notSupportedMsg, lang) // This application can only be launched from a mirror !
+ 		;
+ 
+Index: js/applications/FreeAngelAdo-config.xml
+===================================================================
+--- js/applications/FreeAngelAdo-config.xml	(révision 21200)
++++ js/applications/FreeAngelAdo-config.xml	(copie de travail)
+@@ -84,6 +84,7 @@
+ 		<label>"LOC_events/ZtampDetection"</label>
+ 		<minimum>1</minimum>
+ 		<maximum>1</maximum>
++    <supports_target>false</supports_target>
+ 	</map></item>
+ 	<!-- application can be installed on ztamp removal -->
+ 	<item><map>
+@@ -93,6 +94,7 @@
+ 		<label>"LOC_events/ZtampRemoval"</label>
+ 		<minimum>1</minimum>
+ 		<maximum>1</maximum>
++    <supports_target>false</supports_target>
+ 	</map></item>
+ </list></scheduling_masks>
+ 
+
+Modification de propriétés sur .
+___________________________________________________________________
+Modifié : svnmerge-integrated
+   - /OS/trunk:1-21058,21060-21066,21068-21070,21074,21076-21079,21085,21087-21088,21090,21096,21105,21107,21109-21110,21113-21119,21123-21124,21134-21137,21139,21141-21142,21145-21152,21154,21163,21167,21174,21178,21186,21188,21191-21192,21196
+   + /OS/trunk:1-21058,21060-21066,21068-21070,21074,21076-21079,21085,21087-21088,21090,21096,21105,21107,21109-21110,21113-21119,21123-21124,21134-21137,21139,21141-21142,21145-21152,21154,21163,21167,21174,21178,21186,21188,21191-21192,21196,21199-21200
+

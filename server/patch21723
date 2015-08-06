@@ -1,0 +1,1564 @@
+Index: test/net/violet/platform/api/actions/notifications/AcceptTest.java
+===================================================================
+--- test/net/violet/platform/api/actions/notifications/AcceptTest.java	(révision 21722)
++++ test/net/violet/platform/api/actions/notifications/AcceptTest.java	(copie de travail)
+@@ -23,6 +23,7 @@
+ import net.violet.platform.datamodel.User;
+ import net.violet.platform.datamodel.VObject;
+ import net.violet.platform.datamodel.Hardware.HARDWARE;
++import net.violet.platform.datamodel.Notification.NOTIFICATION_STATUS;
+ import net.violet.platform.datamodel.factories.Factories;
+ import net.violet.platform.datamodel.mock.MessengerMock;
+ import net.violet.platform.datamodel.mock.NotificationMock;
+@@ -53,11 +54,11 @@
+ 
+ 		final Map<String, Object> settings = new HashMap<String, Object>();
+ 		settings.put(EarsCommunionHandler.FRIEND_OBJECT_ID, theObjectRecipient.getId());
+-		settings.put(EarsCommunionHandler.STATUS, EarsCommunionHandler.Status.REQUEST);
++		settings.put(EarsCommunionHandler.STATUS, NOTIFICATION_STATUS.PENDING.toString());
+ 
+ 		new SubscriptionMock(0, theEarApplication, theObjectSender, settings);
+ 
+-		final Notification theNotification = new NotificationMock(0, theObjectSender, theObjectRecipient, theEarApplication, Notification.NOTIFICATION_STATUS.PENDING);
++		final Notification theNotification = new NotificationMock(0, theObjectSender, theObjectRecipient, theEarApplication, NOTIFICATION_STATUS.PENDING);
+ 
+ 		final Action theAction = new Accept();
+ 		final ApplicationAPICaller caller = getPublicApplicationAPICaller();
+@@ -81,17 +82,17 @@
+ 		Assert.assertTrue(NotificationData.getReceived(VObjectData.getData(theObjectRecipient), 0, 0).isEmpty());
+ 		final List<NotificationData> theReceivedList = NotificationData.getReceived(VObjectData.getData(theObjectSender), 0, 0);
+ 		Assert.assertEquals(1, theReceivedList.size());
+-		Assert.assertEquals(Notification.NOTIFICATION_STATUS.ACCEPTED.toString(), theReceivedList.get(0).getStatus());
++		Assert.assertEquals(NOTIFICATION_STATUS.ACCEPTED.toString(), theReceivedList.get(0).getStatus());
+ 		Assert.assertTrue(theReceivedList.get(0).getSender().equals(VObjectData.getData(theObjectRecipient)));
+ 		Assert.assertTrue(theReceivedList.get(0).getApplication().equals(ApplicationData.getData(theEarApplication)));
+ 
+ 		Map<String, Object> settingsEar = Factories.SUBSCRIPTION.findByApplicationAndObject(theEarApplication, theObjectSender).get(0).getSettings();
+-		Assert.assertEquals(EarsCommunionHandler.Status.OK.getLabel(), settingsEar.get(EarsCommunionHandler.STATUS));
++		Assert.assertEquals(NOTIFICATION_STATUS.ACCEPTED.toString(), settingsEar.get(EarsCommunionHandler.STATUS));
+ 		Assert.assertEquals(theObjectRecipient.getId(), settingsEar.get(EarsCommunionHandler.FRIEND_OBJECT_ID));
+ 
+ 		settingsEar = Factories.SUBSCRIPTION.findByApplicationAndObject(theEarApplication, theObjectRecipient).get(0).getSettings();
+ 
+-		Assert.assertEquals(EarsCommunionHandler.Status.OK.getLabel(), settingsEar.get(EarsCommunionHandler.STATUS));
++		Assert.assertEquals(NOTIFICATION_STATUS.ACCEPTED.toString(), settingsEar.get(EarsCommunionHandler.STATUS));
+ 		Assert.assertEquals(theObjectSender.getId(), settingsEar.get(EarsCommunionHandler.FRIEND_OBJECT_ID));
+ 		Assert.assertEquals(1, Factories.MESSAGE_RECEIVED.findMessageReceivedByRecipient(Factories.MESSENGER.getByObject(theObjectSender), 0, 0).size());
+ 	}
+@@ -99,7 +100,7 @@
+ 	@Test(expected = InvalidNotificationException.class)
+ 	public void invalidNotification() throws APIException {
+ 		final Application theEarApplication = Factories.APPLICATION.findByName(Application.NativeApplication.EARS_COMMUNION.getName());
+-		final Notification theNotification = new NotificationMock(0, getKowalskyObject(), getPrivateObject(), theEarApplication, Notification.NOTIFICATION_STATUS.PENDING);
++		final Notification theNotification = new NotificationMock(0, getKowalskyObject(), getPrivateObject(), theEarApplication, NOTIFICATION_STATUS.PENDING);
+ 
+ 		final Action theAction = new Accept();
+ 		final ApplicationAPICaller caller = getPublicApplicationAPICaller();
+@@ -120,7 +121,7 @@
+ 	@Test(expected = UnsupportedException.class)
+ 	public void unsupportedRequest() throws APIException {
+ 		final Application theEarApplication = Factories.APPLICATION.findByName(Application.NativeApplication.EARS_COMMUNION.getName());
+-		final Notification theNotification = new NotificationMock(0, getKowalskyObject(), getPrivateObject(), theEarApplication, Notification.NOTIFICATION_STATUS.REJECTED);
++		final Notification theNotification = new NotificationMock(0, getKowalskyObject(), getPrivateObject(), theEarApplication, NOTIFICATION_STATUS.REJECTED);
+ 
+ 		final Action theAction = new Accept();
+ 		final ApplicationAPICaller caller = getPublicApplicationAPICaller();
+@@ -141,7 +142,7 @@
+ 	@Test(expected = UnsupportedException.class)
+ 	public void unsupportedApplication() throws APIException {
+ 		final Application theMailApplication = Factories.APPLICATION.findByName(Application.NativeApplication.MAIL.getName());
+-		final Notification theNotification = new NotificationMock(0, getKowalskyObject(), getPrivateObject(), theMailApplication, Notification.NOTIFICATION_STATUS.PENDING);
++		final Notification theNotification = new NotificationMock(0, getKowalskyObject(), getPrivateObject(), theMailApplication, NOTIFICATION_STATUS.PENDING);
+ 
+ 		final Action theAction = new Accept();
+ 		final ApplicationAPICaller caller = getPublicApplicationAPICaller();
+@@ -162,7 +163,7 @@
+ 	@Test(expected = NoSuchSubscriptionException.class)
+ 	public void noSubscription() throws APIException {
+ 		final Application theMailApplication = Factories.APPLICATION.findByName(Application.NativeApplication.EARS_COMMUNION.getName());
+-		final Notification theNotification = new NotificationMock(0, getKowalskyObject(), getPrivateObject(), theMailApplication, Notification.NOTIFICATION_STATUS.PENDING);
++		final Notification theNotification = new NotificationMock(0, getKowalskyObject(), getPrivateObject(), theMailApplication, NOTIFICATION_STATUS.PENDING);
+ 
+ 		final Action theAction = new Accept();
+ 		final ApplicationAPICaller caller = getPublicApplicationAPICaller();
+Index: test/net/violet/platform/api/actions/notifications/CountReceivedTest.java
+===================================================================
+--- test/net/violet/platform/api/actions/notifications/CountReceivedTest.java	(révision 21722)
++++ test/net/violet/platform/api/actions/notifications/CountReceivedTest.java	(copie de travail)
+@@ -15,10 +15,10 @@
+ import net.violet.platform.api.exceptions.NoSuchObjectException;
+ import net.violet.platform.datamodel.Annu;
+ import net.violet.platform.datamodel.Application;
+-import net.violet.platform.datamodel.Notification;
+ import net.violet.platform.datamodel.User;
+ import net.violet.platform.datamodel.VObject;
+ import net.violet.platform.datamodel.Hardware.HARDWARE;
++import net.violet.platform.datamodel.Notification.NOTIFICATION_STATUS;
+ import net.violet.platform.datamodel.factories.Factories;
+ import net.violet.platform.datamodel.mock.NotificationMock;
+ import net.violet.platform.datamodel.mock.UserMock;
+@@ -40,10 +40,10 @@
+ 		final VObject theObjectSender = new VObjectMock(0, "F00000300001", "sender", theUserSender, HARDWARE.V2, getParisTimezone(), getFrLang());
+ 		final VObject theObjectRecipient = new VObjectMock(0, "F00000300002", "recipient", theUserRecipient, HARDWARE.V2, getParisTimezone(), getFrLang());
+ 
+-		new NotificationMock(0, theObjectSender, theObjectRecipient, theEarApplication, Notification.NOTIFICATION_STATUS.PENDING);
+-		new NotificationMock(0, getBrewsterObject(), theObjectRecipient, theEarApplication, Notification.NOTIFICATION_STATUS.CANCELLED);
+-		new NotificationMock(0, getKowalskyObject(), theObjectRecipient, theEarApplication, Notification.NOTIFICATION_STATUS.REJECTED);
+-		new NotificationMock(0, theObjectRecipient, getPrivateObject(), theEarApplication, Notification.NOTIFICATION_STATUS.PENDING);
++		new NotificationMock(0, theObjectSender, theObjectRecipient, theEarApplication, NOTIFICATION_STATUS.PENDING);
++		new NotificationMock(0, getBrewsterObject(), theObjectRecipient, theEarApplication, NOTIFICATION_STATUS.CANCELLED);
++		new NotificationMock(0, getKowalskyObject(), theObjectRecipient, theEarApplication, NOTIFICATION_STATUS.REJECTED);
++		new NotificationMock(0, theObjectRecipient, getPrivateObject(), theEarApplication, NOTIFICATION_STATUS.PENDING);
+ 
+ 		final Action theAction = new CountReceived();
+ 		final ApplicationAPICaller caller = getPublicApplicationAPICaller();
+Index: test/net/violet/platform/api/actions/notifications/CountSentTest.java
+===================================================================
+--- test/net/violet/platform/api/actions/notifications/CountSentTest.java	(révision 21722)
++++ test/net/violet/platform/api/actions/notifications/CountSentTest.java	(copie de travail)
+@@ -15,10 +15,10 @@
+ import net.violet.platform.api.exceptions.NoSuchObjectException;
+ import net.violet.platform.datamodel.Annu;
+ import net.violet.platform.datamodel.Application;
+-import net.violet.platform.datamodel.Notification;
+ import net.violet.platform.datamodel.User;
+ import net.violet.platform.datamodel.VObject;
+ import net.violet.platform.datamodel.Hardware.HARDWARE;
++import net.violet.platform.datamodel.Notification.NOTIFICATION_STATUS;
+ import net.violet.platform.datamodel.factories.Factories;
+ import net.violet.platform.datamodel.mock.NotificationMock;
+ import net.violet.platform.datamodel.mock.UserMock;
+@@ -40,10 +40,10 @@
+ 		final VObject theObjectSender = new VObjectMock(0, "F00000300001", "sender", theUserSender, HARDWARE.V2, getParisTimezone(), getFrLang());
+ 		final VObject theObjectRecipient = new VObjectMock(0, "F00000300002", "recipient", theUserRecipient, HARDWARE.V2, getParisTimezone(), getFrLang());
+ 
+-		new NotificationMock(0, theObjectSender, theObjectRecipient, theEarApplication, Notification.NOTIFICATION_STATUS.PENDING);
+-		new NotificationMock(0, getBrewsterObject(), theObjectRecipient, theEarApplication, Notification.NOTIFICATION_STATUS.CANCELLED);
+-		new NotificationMock(0, getKowalskyObject(), theObjectRecipient, theEarApplication, Notification.NOTIFICATION_STATUS.REJECTED);
+-		new NotificationMock(0, theObjectRecipient, getPrivateObject(), theEarApplication, Notification.NOTIFICATION_STATUS.PENDING);
++		new NotificationMock(0, theObjectSender, theObjectRecipient, theEarApplication, NOTIFICATION_STATUS.PENDING);
++		new NotificationMock(0, getBrewsterObject(), theObjectRecipient, theEarApplication, NOTIFICATION_STATUS.CANCELLED);
++		new NotificationMock(0, getKowalskyObject(), theObjectRecipient, theEarApplication, NOTIFICATION_STATUS.REJECTED);
++		new NotificationMock(0, theObjectRecipient, getPrivateObject(), theEarApplication, NOTIFICATION_STATUS.PENDING);
+ 
+ 		final Action theAction = new CountSent();
+ 		final ApplicationAPICaller caller = getPublicApplicationAPICaller();
+Index: test/net/violet/platform/api/actions/notifications/DeleteTest.java
+===================================================================
+--- test/net/violet/platform/api/actions/notifications/DeleteTest.java	(révision 21722)
++++ test/net/violet/platform/api/actions/notifications/DeleteTest.java	(copie de travail)
+@@ -16,6 +16,7 @@
+ import net.violet.platform.api.exceptions.UnsupportedException;
+ import net.violet.platform.datamodel.Application;
+ import net.violet.platform.datamodel.Notification;
++import net.violet.platform.datamodel.Notification.NOTIFICATION_STATUS;
+ import net.violet.platform.datamodel.factories.Factories;
+ import net.violet.platform.datamodel.mock.NotificationMock;
+ import net.violet.platform.dataobjects.NotificationData;
+@@ -31,7 +32,7 @@
+ 	public void delete() throws APIException {
+ 		final Application theEarApplication = Factories.APPLICATION.findByName(Application.NativeApplication.EARS_COMMUNION.getName());
+ 
+-		final Notification theNotification = new NotificationMock(0, getPrivateObject(), getKowalskyObject(), theEarApplication, Notification.NOTIFICATION_STATUS.ACCEPTED);
++		final Notification theNotification = new NotificationMock(0, getPrivateObject(), getKowalskyObject(), theEarApplication, NOTIFICATION_STATUS.ACCEPTED);
+ 
+ 		final Action theAction = new Delete();
+ 		final ApplicationAPICaller caller = getPublicApplicationAPICaller();
+@@ -59,7 +60,7 @@
+ 	@Test(expected = UnsupportedException.class)
+ 	public void unsupportedRequest() throws APIException {
+ 		final Application theEarApplication = Factories.APPLICATION.findByName(Application.NativeApplication.EARS_COMMUNION.getName());
+-		final Notification theNotification = new NotificationMock(0, getKowalskyObject(), getPrivateObject(), theEarApplication, Notification.NOTIFICATION_STATUS.PENDING);
++		final Notification theNotification = new NotificationMock(0, getKowalskyObject(), getPrivateObject(), theEarApplication, NOTIFICATION_STATUS.PENDING);
+ 
+ 		final Action theAction = new Delete();
+ 		final ApplicationAPICaller caller = getPublicApplicationAPICaller();
+@@ -112,7 +113,7 @@
+ 		final Application theEarApplication = Factories.APPLICATION.findByName(Application.NativeApplication.EARS_COMMUNION.getName());
+ 
+ 		final Action theAction = new Delete();
+-		final Notification theNotification = new NotificationMock(0, getPrivateObject(), getKowalskyObject(), theEarApplication, Notification.NOTIFICATION_STATUS.ACCEPTED);
++		final Notification theNotification = new NotificationMock(0, getPrivateObject(), getKowalskyObject(), theEarApplication, NOTIFICATION_STATUS.ACCEPTED);
+ 		final String notificationId = NotificationData.getData(theNotification).getApiId(getPublicApplicationAPICaller());
+ 		final Map<String, Object> theParams = new HashMap<String, Object>();
+ 		final Calendar theCalendar = Calendar.getInstance();
+Index: test/net/violet/platform/api/actions/notifications/RetractTest.java
+===================================================================
+--- test/net/violet/platform/api/actions/notifications/RetractTest.java	(révision 21722)
++++ test/net/violet/platform/api/actions/notifications/RetractTest.java	(copie de travail)
+@@ -23,6 +23,7 @@
+ import net.violet.platform.datamodel.User;
+ import net.violet.platform.datamodel.VObject;
+ import net.violet.platform.datamodel.Hardware.HARDWARE;
++import net.violet.platform.datamodel.Notification.NOTIFICATION_STATUS;
+ import net.violet.platform.datamodel.factories.Factories;
+ import net.violet.platform.datamodel.mock.MessengerMock;
+ import net.violet.platform.datamodel.mock.NotificationMock;
+@@ -53,11 +54,11 @@
+ 
+ 		final Map<String, Object> settings = new HashMap<String, Object>();
+ 		settings.put(EarsCommunionHandler.FRIEND_OBJECT_ID, theObjectRecipient.getId());
+-		settings.put(EarsCommunionHandler.STATUS, EarsCommunionHandler.Status.REQUEST);
++		settings.put(EarsCommunionHandler.STATUS, NOTIFICATION_STATUS.PENDING.toString());
+ 
+ 		new SubscriptionMock(0, theEarApplication, theObjectSender, settings);
+ 
+-		final Notification theNotification = new NotificationMock(0, theObjectSender, theObjectRecipient, theEarApplication, Notification.NOTIFICATION_STATUS.PENDING);
++		final Notification theNotification = new NotificationMock(0, theObjectSender, theObjectRecipient, theEarApplication, NOTIFICATION_STATUS.PENDING);
+ 
+ 		final Action theAction = new Retract();
+ 		final ApplicationAPICaller caller = getPublicApplicationAPICaller();
+@@ -81,7 +82,7 @@
+ 		Assert.assertTrue(NotificationData.getSent(VObjectData.getData(theObjectRecipient), 0, 0).isEmpty());
+ 		final List<NotificationData> theReceivedList = NotificationData.getReceived(VObjectData.getData(theObjectRecipient), 0, 0);
+ 		Assert.assertEquals(1, theReceivedList.size());
+-		Assert.assertEquals(Notification.NOTIFICATION_STATUS.CANCELLED.toString(), theReceivedList.get(0).getStatus());
++		Assert.assertEquals(NOTIFICATION_STATUS.CANCELLED.toString(), theReceivedList.get(0).getStatus());
+ 		Assert.assertTrue(theReceivedList.get(0).getSender().equals(VObjectData.getData(theObjectSender)));
+ 		Assert.assertTrue(theReceivedList.get(0).getApplication().equals(ApplicationData.getData(theEarApplication)));
+ 
+@@ -93,7 +94,7 @@
+ 	@Test(expected = InvalidNotificationException.class)
+ 	public void invalidNotification() throws APIException {
+ 		final Application theEarApplication = Factories.APPLICATION.findByName(Application.NativeApplication.EARS_COMMUNION.getName());
+-		final Notification theNotification = new NotificationMock(0, getKowalskyObject(), getPrivateObject(), theEarApplication, Notification.NOTIFICATION_STATUS.PENDING);
++		final Notification theNotification = new NotificationMock(0, getKowalskyObject(), getPrivateObject(), theEarApplication, NOTIFICATION_STATUS.PENDING);
+ 
+ 		final Action theAction = new Retract();
+ 		final ApplicationAPICaller caller = getPublicApplicationAPICaller();
+@@ -114,7 +115,7 @@
+ 	@Test(expected = UnsupportedException.class)
+ 	public void unsupportedRequest() throws APIException {
+ 		final Application theEarApplication = Factories.APPLICATION.findByName(Application.NativeApplication.EARS_COMMUNION.getName());
+-		final Notification theNotification = new NotificationMock(0, getKowalskyObject(), getPrivateObject(), theEarApplication, Notification.NOTIFICATION_STATUS.REJECTED);
++		final Notification theNotification = new NotificationMock(0, getKowalskyObject(), getPrivateObject(), theEarApplication, NOTIFICATION_STATUS.REJECTED);
+ 
+ 		final Action theAction = new Retract();
+ 		final ApplicationAPICaller caller = getPublicApplicationAPICaller();
+@@ -135,7 +136,7 @@
+ 	@Test(expected = UnsupportedException.class)
+ 	public void unsupportedApplication() throws APIException {
+ 		final Application theMailApplication = Factories.APPLICATION.findByName(Application.NativeApplication.MAIL.getName());
+-		final Notification theNotification = new NotificationMock(0, getKowalskyObject(), getPrivateObject(), theMailApplication, Notification.NOTIFICATION_STATUS.PENDING);
++		final Notification theNotification = new NotificationMock(0, getKowalskyObject(), getPrivateObject(), theMailApplication, NOTIFICATION_STATUS.PENDING);
+ 
+ 		final Action theAction = new Retract();
+ 		final ApplicationAPICaller caller = getPublicApplicationAPICaller();
+@@ -156,7 +157,7 @@
+ 	@Test(expected = NoSuchSubscriptionException.class)
+ 	public void noSubscription() throws APIException {
+ 		final Application theMailApplication = Factories.APPLICATION.findByName(Application.NativeApplication.EARS_COMMUNION.getName());
+-		final Notification theNotification = new NotificationMock(0, getKowalskyObject(), getPrivateObject(), theMailApplication, Notification.NOTIFICATION_STATUS.PENDING);
++		final Notification theNotification = new NotificationMock(0, getKowalskyObject(), getPrivateObject(), theMailApplication, NOTIFICATION_STATUS.PENDING);
+ 
+ 		final Action theAction = new Retract();
+ 		final ApplicationAPICaller caller = getPublicApplicationAPICaller();
+Index: test/net/violet/platform/api/actions/notifications/GetReceivedTest.java
+===================================================================
+--- test/net/violet/platform/api/actions/notifications/GetReceivedTest.java	(révision 21722)
++++ test/net/violet/platform/api/actions/notifications/GetReceivedTest.java	(copie de travail)
+@@ -16,10 +16,10 @@
+ import net.violet.platform.api.exceptions.NoSuchObjectException;
+ import net.violet.platform.datamodel.Annu;
+ import net.violet.platform.datamodel.Application;
+-import net.violet.platform.datamodel.Notification;
+ import net.violet.platform.datamodel.User;
+ import net.violet.platform.datamodel.VObject;
+ import net.violet.platform.datamodel.Hardware.HARDWARE;
++import net.violet.platform.datamodel.Notification.NOTIFICATION_STATUS;
+ import net.violet.platform.datamodel.factories.Factories;
+ import net.violet.platform.datamodel.mock.NotificationMock;
+ import net.violet.platform.datamodel.mock.UserMock;
+@@ -41,10 +41,10 @@
+ 		final VObject theObjectSender = new VObjectMock(0, "F00000300001", "sender", theUserSender, HARDWARE.V2, getParisTimezone(), getFrLang());
+ 		final VObject theObjectRecipient = new VObjectMock(0, "F00000300002", "recipient", theUserRecipient, HARDWARE.V2, getParisTimezone(), getFrLang());
+ 
+-		new NotificationMock(0, theObjectSender, theObjectRecipient, theEarApplication, Notification.NOTIFICATION_STATUS.PENDING);
+-		new NotificationMock(0, getBrewsterObject(), theObjectRecipient, theEarApplication, Notification.NOTIFICATION_STATUS.CANCELLED);
+-		new NotificationMock(0, getKowalskyObject(), theObjectRecipient, theEarApplication, Notification.NOTIFICATION_STATUS.REJECTED);
+-		new NotificationMock(0, theObjectRecipient, getPrivateObject(), theEarApplication, Notification.NOTIFICATION_STATUS.PENDING);
++		new NotificationMock(0, theObjectSender, theObjectRecipient, theEarApplication, NOTIFICATION_STATUS.PENDING);
++		new NotificationMock(0, getBrewsterObject(), theObjectRecipient, theEarApplication, NOTIFICATION_STATUS.CANCELLED);
++		new NotificationMock(0, getKowalskyObject(), theObjectRecipient, theEarApplication, NOTIFICATION_STATUS.REJECTED);
++		new NotificationMock(0, theObjectRecipient, getPrivateObject(), theEarApplication, NOTIFICATION_STATUS.PENDING);
+ 
+ 		final Action theAction = new GetReceived();
+ 		final ApplicationAPICaller caller = getPublicApplicationAPICaller();
+Index: test/net/violet/platform/api/actions/notifications/AddTest.java
+===================================================================
+--- test/net/violet/platform/api/actions/notifications/AddTest.java	(révision 21722)
++++ test/net/violet/platform/api/actions/notifications/AddTest.java	(copie de travail)
+@@ -21,10 +21,10 @@
+ import net.violet.platform.applications.EarsCommunionHandler;
+ import net.violet.platform.datamodel.Annu;
+ import net.violet.platform.datamodel.Application;
+-import net.violet.platform.datamodel.Notification;
+ import net.violet.platform.datamodel.User;
+ import net.violet.platform.datamodel.VObject;
+ import net.violet.platform.datamodel.Hardware.HARDWARE;
++import net.violet.platform.datamodel.Notification.NOTIFICATION_STATUS;
+ import net.violet.platform.datamodel.factories.Factories;
+ import net.violet.platform.datamodel.mock.MessengerMock;
+ import net.violet.platform.datamodel.mock.NotificationMock;
+@@ -55,7 +55,7 @@
+ 
+ 		final Map<String, Object> settings = new HashMap<String, Object>();
+ 		settings.put(EarsCommunionHandler.FRIEND_OBJECT_ID, theObjectRecipient.getId());
+-		settings.put(EarsCommunionHandler.STATUS, EarsCommunionHandler.Status.REQUEST.getLabel());
++		settings.put(EarsCommunionHandler.STATUS, NOTIFICATION_STATUS.PENDING.toString());
+ 
+ 		new SubscriptionMock(0, theEarApplication, theObjectSender, settings);
+ 
+@@ -82,13 +82,13 @@
+ 		Assert.assertEquals(1, NotificationData.getSent(VObjectData.getData(theObjectSender), 0, 0).size());
+ 		final List<NotificationData> theReceivedList = NotificationData.getReceived(VObjectData.getData(theObjectRecipient), 0, 0);
+ 		Assert.assertEquals(1, theReceivedList.size());
+-		Assert.assertEquals(Notification.NOTIFICATION_STATUS.PENDING.toString(), theReceivedList.get(0).getStatus());
++		Assert.assertEquals(NOTIFICATION_STATUS.PENDING.toString(), theReceivedList.get(0).getStatus());
+ 		Assert.assertTrue(theReceivedList.get(0).getSender().equals(VObjectData.getData(theObjectSender)));
+ 		Assert.assertTrue(theReceivedList.get(0).getRecipient().equals(VObjectData.getData(theObjectRecipient)));
+ 		Assert.assertTrue(theReceivedList.get(0).getApplication().equals(ApplicationData.getData(theEarApplication)));
+ 
+ 		final Map<String, Object> settingsEar = Factories.SUBSCRIPTION.findByApplicationAndObject(theEarApplication, theObjectSender).get(0).getSettings();
+-		Assert.assertEquals(EarsCommunionHandler.Status.REQUEST.getLabel(), settingsEar.get(EarsCommunionHandler.STATUS));
++		Assert.assertEquals(NOTIFICATION_STATUS.PENDING.toString(), settingsEar.get(EarsCommunionHandler.STATUS));
+ 		Assert.assertEquals(theObjectRecipient.getId(), settingsEar.get(EarsCommunionHandler.FRIEND_OBJECT_ID));
+ 
+ 		Assert.assertTrue(Factories.SUBSCRIPTION.findByApplicationAndObject(theEarApplication, theObjectRecipient).isEmpty());
+@@ -110,11 +110,11 @@
+ 
+ 		final Map<String, Object> recipientSettings = new HashMap<String, Object>();
+ 		recipientSettings.put(EarsCommunionHandler.FRIEND_OBJECT_ID, theObjectSender.getId());
+-		recipientSettings.put(EarsCommunionHandler.STATUS, EarsCommunionHandler.Status.REQUEST.getLabel());
++		recipientSettings.put(EarsCommunionHandler.STATUS, NOTIFICATION_STATUS.PENDING.toString());
+ 
+ 		new SubscriptionMock(0, theEarApplication, theObjectRecipient, recipientSettings);
+ 
+-		new NotificationMock(0, theObjectRecipient, theObjectSender, theEarApplication, Notification.NOTIFICATION_STATUS.PENDING);
++		new NotificationMock(0, theObjectRecipient, theObjectSender, theEarApplication, NOTIFICATION_STATUS.PENDING);
+ 
+ 		final Map<String, Object> senderSettings = new HashMap<String, Object>();
+ 		senderSettings.put(EarsCommunionHandler.FRIEND_OBJECT_ID, theObjectRecipient.getId());
+@@ -142,17 +142,17 @@
+ 		Assert.assertEquals(0, NotificationData.getSent(VObjectData.getData(theObjectSender), 0, 0).size());
+ 		final List<NotificationData> theReceivedList = NotificationData.getReceived(VObjectData.getData(theObjectRecipient), 0, 0);
+ 		Assert.assertEquals(1, theReceivedList.size());
+-		Assert.assertEquals(Notification.NOTIFICATION_STATUS.ACCEPTED.toString(), theReceivedList.get(0).getStatus());
++		Assert.assertEquals(NOTIFICATION_STATUS.ACCEPTED.toString(), theReceivedList.get(0).getStatus());
+ 		Assert.assertTrue(theReceivedList.get(0).getSender().equals(VObjectData.getData(theObjectSender)));
+ 		Assert.assertTrue(theReceivedList.get(0).getRecipient().equals(VObjectData.getData(theObjectRecipient)));
+ 		Assert.assertTrue(theReceivedList.get(0).getApplication().equals(ApplicationData.getData(theEarApplication)));
+ 
+ 		Map<String, Object> settingsEar = Factories.SUBSCRIPTION.findByApplicationAndObject(theEarApplication, theObjectSender).get(0).getSettings();
+-		Assert.assertEquals(EarsCommunionHandler.Status.OK.getLabel(), settingsEar.get(EarsCommunionHandler.STATUS));
++		Assert.assertEquals(NOTIFICATION_STATUS.ACCEPTED.toString(), settingsEar.get(EarsCommunionHandler.STATUS));
+ 		Assert.assertEquals(theObjectRecipient.getId(), settingsEar.get(EarsCommunionHandler.FRIEND_OBJECT_ID));
+ 
+ 		settingsEar = Factories.SUBSCRIPTION.findByApplicationAndObject(theEarApplication, theObjectRecipient).get(0).getSettings();
+-		Assert.assertEquals(EarsCommunionHandler.Status.OK.getLabel(), settingsEar.get(EarsCommunionHandler.STATUS));
++		Assert.assertEquals(NOTIFICATION_STATUS.ACCEPTED.toString(), settingsEar.get(EarsCommunionHandler.STATUS));
+ 		Assert.assertEquals(theObjectSender.getId(), settingsEar.get(EarsCommunionHandler.FRIEND_OBJECT_ID));
+ 
+ 		Assert.assertEquals(1, Factories.MESSAGE_RECEIVED.findMessageReceivedByRecipient(Factories.MESSENGER.getByObject(theObjectRecipient), 0, 0).size());
+@@ -161,7 +161,7 @@
+ 	@Test(expected = NotificationAlreadyExistsException.class)
+ 	public void alreadyExists() throws APIException {
+ 		final Application theEarApplication = Factories.APPLICATION.findByName(Application.NativeApplication.EARS_COMMUNION.getName());
+-		new NotificationMock(0, getKowalskyObject(), getPrivateObject(), theEarApplication, Notification.NOTIFICATION_STATUS.PENDING);
++		new NotificationMock(0, getKowalskyObject(), getPrivateObject(), theEarApplication, NOTIFICATION_STATUS.PENDING);
+ 
+ 		final Action theAction = new Add();
+ 		final Map<String, Object> theParams = new HashMap<String, Object>();
+Index: test/net/violet/platform/api/actions/notifications/GetSentTest.java
+===================================================================
+--- test/net/violet/platform/api/actions/notifications/GetSentTest.java	(révision 21722)
++++ test/net/violet/platform/api/actions/notifications/GetSentTest.java	(copie de travail)
+@@ -16,10 +16,10 @@
+ import net.violet.platform.api.exceptions.NoSuchObjectException;
+ import net.violet.platform.datamodel.Annu;
+ import net.violet.platform.datamodel.Application;
+-import net.violet.platform.datamodel.Notification;
+ import net.violet.platform.datamodel.User;
+ import net.violet.platform.datamodel.VObject;
+ import net.violet.platform.datamodel.Hardware.HARDWARE;
++import net.violet.platform.datamodel.Notification.NOTIFICATION_STATUS;
+ import net.violet.platform.datamodel.factories.Factories;
+ import net.violet.platform.datamodel.mock.NotificationMock;
+ import net.violet.platform.datamodel.mock.UserMock;
+@@ -41,10 +41,10 @@
+ 		final VObject theObjectSender = new VObjectMock(0, "F00000300001", "sender", theUserSender, HARDWARE.V2, getParisTimezone(), getFrLang());
+ 		final VObject theObjectRecipient = new VObjectMock(0, "F00000300002", "recipient", theUserRecipient, HARDWARE.V2, getParisTimezone(), getFrLang());
+ 
+-		new NotificationMock(0, theObjectSender, theObjectRecipient, theEarApplication, Notification.NOTIFICATION_STATUS.PENDING);
+-		new NotificationMock(0, getBrewsterObject(), theObjectRecipient, theEarApplication, Notification.NOTIFICATION_STATUS.CANCELLED);
+-		new NotificationMock(0, getKowalskyObject(), theObjectRecipient, theEarApplication, Notification.NOTIFICATION_STATUS.REJECTED);
+-		new NotificationMock(0, theObjectRecipient, getPrivateObject(), theEarApplication, Notification.NOTIFICATION_STATUS.PENDING);
++		new NotificationMock(0, theObjectSender, theObjectRecipient, theEarApplication, NOTIFICATION_STATUS.PENDING);
++		new NotificationMock(0, getBrewsterObject(), theObjectRecipient, theEarApplication, NOTIFICATION_STATUS.CANCELLED);
++		new NotificationMock(0, getKowalskyObject(), theObjectRecipient, theEarApplication, NOTIFICATION_STATUS.REJECTED);
++		new NotificationMock(0, theObjectRecipient, getPrivateObject(), theEarApplication, NOTIFICATION_STATUS.PENDING);
+ 
+ 		final Action theAction = new GetSent();
+ 		final ApplicationAPICaller caller = getPublicApplicationAPICaller();
+Index: test/net/violet/platform/api/actions/notifications/RejectTest.java
+===================================================================
+--- test/net/violet/platform/api/actions/notifications/RejectTest.java	(révision 21722)
++++ test/net/violet/platform/api/actions/notifications/RejectTest.java	(copie de travail)
+@@ -23,6 +23,7 @@
+ import net.violet.platform.datamodel.User;
+ import net.violet.platform.datamodel.VObject;
+ import net.violet.platform.datamodel.Hardware.HARDWARE;
++import net.violet.platform.datamodel.Notification.NOTIFICATION_STATUS;
+ import net.violet.platform.datamodel.factories.Factories;
+ import net.violet.platform.datamodel.mock.MessengerMock;
+ import net.violet.platform.datamodel.mock.NotificationMock;
+@@ -53,11 +54,11 @@
+ 
+ 		final Map<String, Object> settings = new HashMap<String, Object>();
+ 		settings.put(EarsCommunionHandler.FRIEND_OBJECT_ID, theObjectRecipient.getId());
+-		settings.put(EarsCommunionHandler.STATUS, EarsCommunionHandler.Status.REQUEST);
++		settings.put(EarsCommunionHandler.STATUS, NOTIFICATION_STATUS.PENDING.toString());
+ 
+ 		new SubscriptionMock(0, theEarApplication, theObjectSender, settings);
+ 
+-		final Notification theNotification = new NotificationMock(0, theObjectSender, theObjectRecipient, theEarApplication, Notification.NOTIFICATION_STATUS.PENDING);
++		final Notification theNotification = new NotificationMock(0, theObjectSender, theObjectRecipient, theEarApplication, NOTIFICATION_STATUS.PENDING);
+ 
+ 		final Action theAction = new Reject();
+ 		final ApplicationAPICaller caller = getPublicApplicationAPICaller();
+@@ -81,7 +82,7 @@
+ 		Assert.assertTrue(NotificationData.getReceived(VObjectData.getData(theObjectRecipient), 0, 0).isEmpty());
+ 		final List<NotificationData> theReceivedList = NotificationData.getReceived(VObjectData.getData(theObjectSender), 0, 0);
+ 		Assert.assertEquals(1, theReceivedList.size());
+-		Assert.assertEquals(Notification.NOTIFICATION_STATUS.REJECTED.toString(), theReceivedList.get(0).getStatus());
++		Assert.assertEquals(NOTIFICATION_STATUS.REJECTED.toString(), theReceivedList.get(0).getStatus());
+ 		Assert.assertTrue(theReceivedList.get(0).getSender().equals(VObjectData.getData(theObjectRecipient)));
+ 		Assert.assertTrue(theReceivedList.get(0).getApplication().equals(ApplicationData.getData(theEarApplication)));
+ 
+@@ -94,7 +95,7 @@
+ 	@Test(expected = InvalidNotificationException.class)
+ 	public void invalidNotification() throws APIException {
+ 		final Application theEarApplication = Factories.APPLICATION.findByName(Application.NativeApplication.EARS_COMMUNION.getName());
+-		final Notification theNotification = new NotificationMock(0, getKowalskyObject(), getPrivateObject(), theEarApplication, Notification.NOTIFICATION_STATUS.PENDING);
++		final Notification theNotification = new NotificationMock(0, getKowalskyObject(), getPrivateObject(), theEarApplication, NOTIFICATION_STATUS.PENDING);
+ 
+ 		final Action theAction = new Reject();
+ 		final ApplicationAPICaller caller = getPublicApplicationAPICaller();
+@@ -115,7 +116,7 @@
+ 	@Test(expected = UnsupportedException.class)
+ 	public void unsupportedRequest() throws APIException {
+ 		final Application theEarApplication = Factories.APPLICATION.findByName(Application.NativeApplication.EARS_COMMUNION.getName());
+-		final Notification theNotification = new NotificationMock(0, getKowalskyObject(), getPrivateObject(), theEarApplication, Notification.NOTIFICATION_STATUS.REJECTED);
++		final Notification theNotification = new NotificationMock(0, getKowalskyObject(), getPrivateObject(), theEarApplication, NOTIFICATION_STATUS.REJECTED);
+ 
+ 		final Action theAction = new Reject();
+ 		final ApplicationAPICaller caller = getPublicApplicationAPICaller();
+@@ -136,7 +137,7 @@
+ 	@Test(expected = UnsupportedException.class)
+ 	public void unsupportedApplication() throws APIException {
+ 		final Application theMailApplication = Factories.APPLICATION.findByName(Application.NativeApplication.MAIL.getName());
+-		final Notification theNotification = new NotificationMock(0, getKowalskyObject(), getPrivateObject(), theMailApplication, Notification.NOTIFICATION_STATUS.PENDING);
++		final Notification theNotification = new NotificationMock(0, getKowalskyObject(), getPrivateObject(), theMailApplication, NOTIFICATION_STATUS.PENDING);
+ 
+ 		final Action theAction = new Reject();
+ 		final ApplicationAPICaller caller = getPublicApplicationAPICaller();
+@@ -157,7 +158,7 @@
+ 	@Test(expected = NoSuchSubscriptionException.class)
+ 	public void noSubscription() throws APIException {
+ 		final Application theMailApplication = Factories.APPLICATION.findByName(Application.NativeApplication.EARS_COMMUNION.getName());
+-		final Notification theNotification = new NotificationMock(0, getKowalskyObject(), getPrivateObject(), theMailApplication, Notification.NOTIFICATION_STATUS.PENDING);
++		final Notification theNotification = new NotificationMock(0, getKowalskyObject(), getPrivateObject(), theMailApplication, NOTIFICATION_STATUS.PENDING);
+ 
+ 		final Action theAction = new Reject();
+ 		final ApplicationAPICaller caller = getPublicApplicationAPICaller();
+Index: test/net/violet/platform/api/actions/subscriptions/DeleteTest.java
+===================================================================
+--- test/net/violet/platform/api/actions/subscriptions/DeleteTest.java	(révision 21722)
++++ test/net/violet/platform/api/actions/subscriptions/DeleteTest.java	(copie de travail)
+@@ -11,9 +11,9 @@
+ import net.violet.platform.api.exceptions.APIException;
+ import net.violet.platform.applications.EarsCommunionHandler;
+ import net.violet.platform.datamodel.Application;
+-import net.violet.platform.datamodel.Notification;
+ import net.violet.platform.datamodel.Subscription;
+ import net.violet.platform.datamodel.VObject;
++import net.violet.platform.datamodel.Notification.NOTIFICATION_STATUS;
+ import net.violet.platform.datamodel.factories.Factories;
+ import net.violet.platform.datamodel.mock.MessengerMock;
+ import net.violet.platform.datamodel.mock.NotificationMock;
+@@ -41,11 +41,11 @@
+ 
+ 		final Map<String, Object> theObjectSettings = new HashMap<String, Object>();
+ 		theObjectSettings.put(EarsCommunionHandler.FRIEND_OBJECT_ID, theObjectRecipient.getId());
+-		theObjectSettings.put(EarsCommunionHandler.STATUS, EarsCommunionHandler.Status.REQUEST.getLabel());
++		theObjectSettings.put(EarsCommunionHandler.STATUS, NOTIFICATION_STATUS.PENDING.toString());
+ 
+ 		final Subscription subscription = new SubscriptionMock(0, theEarApplication, theObjectSender, theObjectSettings);
+ 
+-		new NotificationMock(0, theObjectSender, theObjectRecipient, theEarApplication, Notification.NOTIFICATION_STATUS.PENDING);
++		new NotificationMock(0, theObjectSender, theObjectRecipient, theEarApplication, NOTIFICATION_STATUS.PENDING);
+ 
+ 		final Action theAction = new Delete();
+ 		final APICaller caller = getPublicApplicationAPICaller();
+@@ -63,7 +63,7 @@
+ 		Assert.assertEquals(0, NotificationData.getSent(VObjectData.getData(theObjectSender), 0, 0).size());
+ 		final List<NotificationData> theReceivedList = NotificationData.getReceived(VObjectData.getData(theObjectRecipient), 0, 0);
+ 		Assert.assertEquals(1, theReceivedList.size());
+-		Assert.assertEquals(Notification.NOTIFICATION_STATUS.CANCELLED.toString(), theReceivedList.get(0).getStatus());
++		Assert.assertEquals(NOTIFICATION_STATUS.CANCELLED.toString(), theReceivedList.get(0).getStatus());
+ 		Assert.assertTrue(theReceivedList.get(0).getSender().equals(VObjectData.getData(theObjectSender)));
+ 		Assert.assertTrue(theReceivedList.get(0).getRecipient().equals(VObjectData.getData(theObjectRecipient)));
+ 		Assert.assertTrue(theReceivedList.get(0).getApplication().equals(ApplicationData.getData(theEarApplication)));
+@@ -88,13 +88,13 @@
+ 
+ 		final Map<String, Object> theObjectSenderSettings = new HashMap<String, Object>();
+ 		theObjectSenderSettings.put(EarsCommunionHandler.FRIEND_OBJECT_ID, theObjectRecipient.getId());
+-		theObjectSenderSettings.put(EarsCommunionHandler.STATUS, EarsCommunionHandler.Status.OK.getLabel());
++		theObjectSenderSettings.put(EarsCommunionHandler.STATUS, NOTIFICATION_STATUS.ACCEPTED.toString());
+ 
+ 		final Subscription subscription = new SubscriptionMock(0, theEarApplication, theObjectSender, theObjectSenderSettings);
+ 
+ 		final Map<String, Object> theObjectRecipientSettings = new HashMap<String, Object>();
+ 		theObjectRecipientSettings.put(EarsCommunionHandler.FRIEND_OBJECT_ID, theObjectSender.getId());
+-		theObjectRecipientSettings.put(EarsCommunionHandler.STATUS, EarsCommunionHandler.Status.OK.getLabel());
++		theObjectRecipientSettings.put(EarsCommunionHandler.STATUS, NOTIFICATION_STATUS.ACCEPTED.toString());
+ 
+ 		new SubscriptionMock(0, theEarApplication, theObjectRecipient, theObjectRecipientSettings);
+ 
+@@ -114,7 +114,7 @@
+ 		Assert.assertEquals(0, NotificationData.getSent(VObjectData.getData(theObjectSender), 0, 0).size());
+ 		final List<NotificationData> theReceivedList = NotificationData.getReceived(VObjectData.getData(theObjectRecipient), 0, 0);
+ 		Assert.assertEquals(1, theReceivedList.size());
+-		Assert.assertEquals(Notification.NOTIFICATION_STATUS.FINISHED.toString(), theReceivedList.get(0).getStatus());
++		Assert.assertEquals(NOTIFICATION_STATUS.FINISHED.toString(), theReceivedList.get(0).getStatus());
+ 		Assert.assertTrue(theReceivedList.get(0).getSender().equals(VObjectData.getData(theObjectSender)));
+ 		Assert.assertTrue(theReceivedList.get(0).getRecipient().equals(VObjectData.getData(theObjectRecipient)));
+ 		Assert.assertTrue(theReceivedList.get(0).getApplication().equals(ApplicationData.getData(theEarApplication)));
+Index: test/net/violet/platform/api/actions/subscriptions/CreateTest.java
+===================================================================
+--- test/net/violet/platform/api/actions/subscriptions/CreateTest.java	(révision 21722)
++++ test/net/violet/platform/api/actions/subscriptions/CreateTest.java	(copie de travail)
+@@ -19,6 +19,7 @@
+ import net.violet.platform.datamodel.SubscriptionScheduling;
+ import net.violet.platform.datamodel.SubscriptionSchedulingSettings;
+ import net.violet.platform.datamodel.VObject;
++import net.violet.platform.datamodel.Notification.NOTIFICATION_STATUS;
+ import net.violet.platform.datamodel.SchedulingType.SCHEDULING_TYPE;
+ import net.violet.platform.datamodel.factories.Factories;
+ import net.violet.platform.datamodel.mock.MessengerMock;
+@@ -411,7 +412,7 @@
+ 
+ 		final Map<String, Object> getSettings = (Map<String, Object>) theResultAsMap.get("settings");
+ 		Assert.assertEquals(theFriendApiId, getSettings.get(EarsCommunionHandler.FRIEND_OBJECT_ID).toString());
+-		Assert.assertEquals(EarsCommunionHandler.Status.REQUEST.getLabel(), getSettings.get(EarsCommunionHandler.STATUS).toString());
++		Assert.assertEquals(NOTIFICATION_STATUS.PENDING.toString(), getSettings.get(EarsCommunionHandler.STATUS).toString());
+ 
+ 		final List<SubscriptionScheduling> theResultList = Factories.SUBSCRIPTION_SCHEDULING.findAllBySubscription(theSubscription);
+ 
+Index: test/net/violet/platform/api/actions/subscriptions/SetSettingsTest.java
+===================================================================
+--- test/net/violet/platform/api/actions/subscriptions/SetSettingsTest.java	(révision 21722)
++++ test/net/violet/platform/api/actions/subscriptions/SetSettingsTest.java	(copie de travail)
+@@ -14,11 +14,11 @@
+ import net.violet.platform.datamodel.Annu;
+ import net.violet.platform.datamodel.Application;
+ import net.violet.platform.datamodel.Lang;
+-import net.violet.platform.datamodel.Notification;
+ import net.violet.platform.datamodel.Subscription;
+ import net.violet.platform.datamodel.User;
+ import net.violet.platform.datamodel.VObject;
+ import net.violet.platform.datamodel.Hardware.HARDWARE;
++import net.violet.platform.datamodel.Notification.NOTIFICATION_STATUS;
+ import net.violet.platform.datamodel.factories.Factories;
+ import net.violet.platform.datamodel.mock.ApplicationMock;
+ import net.violet.platform.datamodel.mock.MessengerMock;
+@@ -136,11 +136,11 @@
+ 
+ 		final Map<String, Object> theObjectSettings = new HashMap<String, Object>();
+ 		theObjectSettings.put(EarsCommunionHandler.FRIEND_OBJECT_ID, theObjectRecipient.getId());
+-		theObjectSettings.put(EarsCommunionHandler.STATUS, EarsCommunionHandler.Status.REQUEST.getLabel());
++		theObjectSettings.put(EarsCommunionHandler.STATUS, NOTIFICATION_STATUS.PENDING.toString());
+ 
+ 		final Subscription subscription = new SubscriptionMock(0, theEarApplication, theObjectSender, theObjectSettings);
+ 
+-		new NotificationMock(0, theObjectSender, theObjectRecipient, theEarApplication, Notification.NOTIFICATION_STATUS.PENDING);
++		new NotificationMock(0, theObjectSender, theObjectRecipient, theEarApplication, NOTIFICATION_STATUS.PENDING);
+ 
+ 		final Action theAction = new SetSettings();
+ 		final APICaller caller = getPublicApplicationAPICaller();
+@@ -163,7 +163,7 @@
+ 		Assert.assertEquals(1, NotificationData.getSent(VObjectData.getData(theObjectSender), 0, 0).size());
+ 		final List<NotificationData> theReceivedList = NotificationData.getReceived(VObjectData.getData(theObjectRecipient), 0, 0);
+ 		Assert.assertEquals(1, theReceivedList.size());
+-		Assert.assertEquals(Notification.NOTIFICATION_STATUS.PENDING.toString(), theReceivedList.get(0).getStatus());
++		Assert.assertEquals(NOTIFICATION_STATUS.PENDING.toString(), theReceivedList.get(0).getStatus());
+ 		Assert.assertTrue(theReceivedList.get(0).getSender().equals(VObjectData.getData(theObjectSender)));
+ 		Assert.assertTrue(theReceivedList.get(0).getRecipient().equals(VObjectData.getData(theObjectRecipient)));
+ 		Assert.assertTrue(theReceivedList.get(0).getApplication().equals(ApplicationData.getData(theEarApplication)));
+@@ -171,7 +171,7 @@
+ 		Assert.assertEquals(subscription.getId(), Factories.SUBSCRIPTION.findByApplicationAndObject(theEarApplication, theObjectSender).get(0).getId());
+ 
+ 		final Map<String, Object> settingsEar = Factories.SUBSCRIPTION.findByApplicationAndObject(theEarApplication, theObjectSender).get(0).getSettings();
+-		Assert.assertEquals(EarsCommunionHandler.Status.REQUEST.getLabel(), settingsEar.get(EarsCommunionHandler.STATUS));
++		Assert.assertEquals(NOTIFICATION_STATUS.PENDING.toString(), settingsEar.get(EarsCommunionHandler.STATUS));
+ 		Assert.assertEquals(theObjectRecipient.getId(), settingsEar.get(EarsCommunionHandler.FRIEND_OBJECT_ID));
+ 
+ 		Assert.assertTrue(Factories.SUBSCRIPTION.findByApplicationAndObject(theEarApplication, theObjectRecipient).isEmpty());
+@@ -198,11 +198,11 @@
+ 
+ 		final Map<String, Object> theObjectSettings = new HashMap<String, Object>();
+ 		theObjectSettings.put(EarsCommunionHandler.FRIEND_OBJECT_ID, theObjectRecipient.getId());
+-		theObjectSettings.put(EarsCommunionHandler.STATUS, EarsCommunionHandler.Status.REQUEST.getLabel());
++		theObjectSettings.put(EarsCommunionHandler.STATUS, NOTIFICATION_STATUS.PENDING.toString());
+ 
+ 		final Subscription subscription = new SubscriptionMock(0, theEarApplication, theObjectSender, theObjectSettings);
+ 
+-		new NotificationMock(0, theObjectSender, theObjectRecipient, theEarApplication, Notification.NOTIFICATION_STATUS.PENDING);
++		new NotificationMock(0, theObjectSender, theObjectRecipient, theEarApplication, NOTIFICATION_STATUS.PENDING);
+ 
+ 		final Action theAction = new SetSettings();
+ 		final APICaller caller = getPublicApplicationAPICaller();
+@@ -225,14 +225,14 @@
+ 		Assert.assertEquals(1, NotificationData.getSent(VObjectData.getData(theObjectSender), 0, 0).size());
+ 		List<NotificationData> theReceivedList = NotificationData.getReceived(VObjectData.getData(theObjectRecipient), 0, 0);
+ 		Assert.assertEquals(1, theReceivedList.size());
+-		Assert.assertEquals(Notification.NOTIFICATION_STATUS.CANCELLED.toString(), theReceivedList.get(0).getStatus());
++		Assert.assertEquals(NOTIFICATION_STATUS.CANCELLED.toString(), theReceivedList.get(0).getStatus());
+ 		Assert.assertTrue(theReceivedList.get(0).getSender().equals(VObjectData.getData(theObjectSender)));
+ 		Assert.assertTrue(theReceivedList.get(0).getRecipient().equals(VObjectData.getData(theObjectRecipient)));
+ 		Assert.assertTrue(theReceivedList.get(0).getApplication().equals(ApplicationData.getData(theEarApplication)));
+ 
+ 		theReceivedList = NotificationData.getReceived(VObjectData.getData(theAnotherObjectRecipient), 0, 0);
+ 		Assert.assertEquals(1, theReceivedList.size());
+-		Assert.assertEquals(Notification.NOTIFICATION_STATUS.PENDING.toString(), theReceivedList.get(0).getStatus());
++		Assert.assertEquals(NOTIFICATION_STATUS.PENDING.toString(), theReceivedList.get(0).getStatus());
+ 		Assert.assertTrue(theReceivedList.get(0).getSender().equals(VObjectData.getData(theObjectSender)));
+ 		Assert.assertTrue(theReceivedList.get(0).getRecipient().equals(VObjectData.getData(theAnotherObjectRecipient)));
+ 		Assert.assertTrue(theReceivedList.get(0).getApplication().equals(ApplicationData.getData(theEarApplication)));
+@@ -242,7 +242,7 @@
+ 		Assert.assertTrue(Factories.SUBSCRIPTION.findByApplicationAndObject(theEarApplication, theAnotherObjectRecipient).isEmpty());
+ 
+ 		final Map<String, Object> settingsEar = Factories.SUBSCRIPTION.findByApplicationAndObject(theEarApplication, theObjectSender).get(0).getSettings();
+-		Assert.assertEquals(EarsCommunionHandler.Status.REQUEST.getLabel(), settingsEar.get(EarsCommunionHandler.STATUS));
++		Assert.assertEquals(NOTIFICATION_STATUS.PENDING.toString(), settingsEar.get(EarsCommunionHandler.STATUS));
+ 		Assert.assertEquals(theAnotherObjectRecipient.getId(), settingsEar.get(EarsCommunionHandler.FRIEND_OBJECT_ID));
+ 
+ 		Assert.assertEquals(1, Factories.MESSAGE_RECEIVED.findMessageReceivedByRecipient(Factories.MESSENGER.getByObject(theAnotherObjectRecipient), 0, 0).size());
+@@ -266,13 +266,13 @@
+ 
+ 		final Map<String, Object> theObjectSenderSettings = new HashMap<String, Object>();
+ 		theObjectSenderSettings.put(EarsCommunionHandler.FRIEND_OBJECT_ID, theObjectRecipient.getId());
+-		theObjectSenderSettings.put(EarsCommunionHandler.STATUS, EarsCommunionHandler.Status.OK.getLabel());
++		theObjectSenderSettings.put(EarsCommunionHandler.STATUS, NOTIFICATION_STATUS.ACCEPTED.toString());
+ 
+ 		final Subscription subscription = new SubscriptionMock(0, theEarApplication, theObjectSender, theObjectSenderSettings);
+ 
+ 		final Map<String, Object> theObjectRecipientSettings = new HashMap<String, Object>();
+ 		theObjectRecipientSettings.put(EarsCommunionHandler.FRIEND_OBJECT_ID, theObjectSender.getId());
+-		theObjectRecipientSettings.put(EarsCommunionHandler.STATUS, EarsCommunionHandler.Status.OK.getLabel());
++		theObjectRecipientSettings.put(EarsCommunionHandler.STATUS, NOTIFICATION_STATUS.ACCEPTED.toString());
+ 
+ 		new SubscriptionMock(0, theEarApplication, theObjectRecipient, theObjectRecipientSettings);
+ 
+@@ -297,14 +297,14 @@
+ 		Assert.assertEquals(1, NotificationData.getSent(VObjectData.getData(theObjectSender), 0, 0).size());
+ 		List<NotificationData> theReceivedList = NotificationData.getReceived(VObjectData.getData(theObjectRecipient), 0, 0);
+ 		Assert.assertEquals(1, theReceivedList.size());
+-		Assert.assertEquals(Notification.NOTIFICATION_STATUS.FINISHED.toString(), theReceivedList.get(0).getStatus());
++		Assert.assertEquals(NOTIFICATION_STATUS.FINISHED.toString(), theReceivedList.get(0).getStatus());
+ 		Assert.assertTrue(theReceivedList.get(0).getSender().equals(VObjectData.getData(theObjectSender)));
+ 		Assert.assertTrue(theReceivedList.get(0).getRecipient().equals(VObjectData.getData(theObjectRecipient)));
+ 		Assert.assertTrue(theReceivedList.get(0).getApplication().equals(ApplicationData.getData(theEarApplication)));
+ 
+ 		theReceivedList = NotificationData.getReceived(VObjectData.getData(theAnotherObjectRecipient), 0, 0);
+ 		Assert.assertEquals(1, theReceivedList.size());
+-		Assert.assertEquals(Notification.NOTIFICATION_STATUS.PENDING.toString(), theReceivedList.get(0).getStatus());
++		Assert.assertEquals(NOTIFICATION_STATUS.PENDING.toString(), theReceivedList.get(0).getStatus());
+ 		Assert.assertTrue(theReceivedList.get(0).getSender().equals(VObjectData.getData(theObjectSender)));
+ 		Assert.assertTrue(theReceivedList.get(0).getRecipient().equals(VObjectData.getData(theAnotherObjectRecipient)));
+ 		Assert.assertTrue(theReceivedList.get(0).getApplication().equals(ApplicationData.getData(theEarApplication)));
+@@ -314,7 +314,7 @@
+ 		Assert.assertTrue(Factories.SUBSCRIPTION.findByApplicationAndObject(theEarApplication, theAnotherObjectRecipient).isEmpty());
+ 
+ 		final Map<String, Object> settingsEar = Factories.SUBSCRIPTION.findByApplicationAndObject(theEarApplication, theObjectSender).get(0).getSettings();
+-		Assert.assertEquals(EarsCommunionHandler.Status.REQUEST.getLabel(), settingsEar.get(EarsCommunionHandler.STATUS));
++		Assert.assertEquals(NOTIFICATION_STATUS.PENDING.toString(), settingsEar.get(EarsCommunionHandler.STATUS));
+ 		Assert.assertEquals(theAnotherObjectRecipient.getId(), settingsEar.get(EarsCommunionHandler.FRIEND_OBJECT_ID));
+ 
+ 		Assert.assertEquals(1, Factories.MESSAGE_RECEIVED.findMessageReceivedByRecipient(Factories.MESSENGER.getByObject(theAnotherObjectRecipient), 0, 0).size());
+Index: net/violet/platform/dataobjects/NotificationData.java
+===================================================================
+--- net/violet/platform/dataobjects/NotificationData.java	(révision 21722)
++++ net/violet/platform/dataobjects/NotificationData.java	(copie de travail)
+@@ -51,6 +51,18 @@
+ 		return theResult;
+ 	}
+ 
++	/**
++	 * @return the attribute id
++	 */
++	public long getId() {
++		final Notification theRecord = getRecord();
++		if (theRecord != null) {
++			return theRecord.getId();
++		}
++
++		return 0;
++	}
++
+ 	public static List<NotificationData> getReceived(VObjectData inRecipient, int inSkip, int inGetCount) {
+ 		final List<NotificationData> theResult = new ArrayList<NotificationData>();
+ 		for (final Notification theNotification : Factories.NOTIFICATION.findAllReceived(inRecipient.getRecord(), inSkip, inGetCount)) {
+@@ -82,7 +94,7 @@
+ 		return ObjectClass.NOTIFICATION;
+ 	}
+ 
+-	private static NotificationData create(VObjectData inSender, VObjectData inRecipient, ApplicationData inApplication, Notification.NOTIFICATION_STATUS inStatus) {
++	private static NotificationData create(VObjectData inSender, VObjectData inRecipient, ApplicationData inApplication, NOTIFICATION_STATUS inStatus) {
+ 		return NotificationData.getData(Factories.NOTIFICATION.create(inSender.getRecord(), inRecipient.getRecord(), inApplication.getRecord(), inStatus));
+ 	}
+ 
+Index: net/violet/platform/dataobjects/SrvDialogData.java
+===================================================================
+--- net/violet/platform/dataobjects/SrvDialogData.java	(révision 21722)
++++ net/violet/platform/dataobjects/SrvDialogData.java	(copie de travail)
+@@ -1,32 +1,24 @@
+ package net.violet.platform.dataobjects;
+ 
+-import java.util.List;
+-
+-import net.violet.platform.applications.EarsCommunionHandler;
+-import net.violet.platform.datamodel.Application;
+ import net.violet.platform.datamodel.VObject;
+ 
+ public final class SrvDialogData {
+ 
+-	// private final SrvDialog srvDialogRef;
+ 	private final VObjectData friend;
+ 	private final VObjectData initiator;
+-	private final long state;
+-	private final SubscriptionData subscription;
++	private final NotificationData notification;
+ 
+-	public SrvDialogData(SubscriptionData inSubscription, VObject inInitiator, VObject inFriend, long inState) {
++	public SrvDialogData(VObject inInitiator, VObject inFriend, NotificationData inNotificationData) {
+ 		this.initiator = VObjectData.getData(inInitiator);
+ 		this.friend = VObjectData.getData(inFriend);
+-		this.state = inState;
+-		this.subscription = inSubscription;
++		this.notification = inNotificationData;
++
+ 	}
+ 
+ 	@Override
+ 	public String toString() {
+ 		String string = "Initiator : " + this.initiator.getReference().getId() + "\n";
+ 		string += "Friend : " + this.friend.getReference().getId() + "\n";
+-		string += "State : " + this.state + "\n";
+-		string += "Subscription : " + this.subscription.getId();
+ 		return string;
+ 	}
+ 
+@@ -55,6 +47,10 @@
+ 		return this.friend;
+ 	}
+ 
++	public NotificationData getNotification() {
++		return this.notification;
++	}
++
+ 	/**
+ 	 * @return the object attribute
+ 	 */
+@@ -62,27 +58,7 @@
+ 		return this.initiator;
+ 	}
+ 
+-	/**
+-	 * @return the attribue state
+-	 */
+-	public long getSrvdialog_state() {
+-		return this.state;
+-	}
+-
+-	public SubscriptionData getSuscription() {
+-		return this.subscription;
+-	}
+-
+ 	public static final long hasSomethingToDisplay(VObject object) {
+-		final Application earsCommunion = Application.NativeApplication.EARS_COMMUNION.getApplication();
+-		final List<SubscriptionData> subscriptions = SubscriptionData.findByApplicationAndObject(earsCommunion, object);
+-
+-		for (final SubscriptionData aSubscription : subscriptions) {
+-			final Object objectStateSetting = aSubscription.getSettings().get(EarsCommunionHandler.STATUS);
+-			if (EarsCommunionHandler.Status.ANSWER.getLabel().equals(objectStateSetting.toString()) || EarsCommunionHandler.Status.REFUSED.getLabel().equals(objectStateSetting.toString()) || EarsCommunionHandler.Status.SEPARATED.getLabel().equals(objectStateSetting.toString())) {
+-				return 1;
+-			}
+-		}
+-		return 0;
++		return NotificationData.getReceived(VObjectData.getData(object), 0, 0).size() > 0 ? 1 : 0;
+ 	}
+ }
+Index: net/violet/platform/applications/SettingsEditor.java
+===================================================================
+--- net/violet/platform/applications/SettingsEditor.java	(révision 21722)
++++ net/violet/platform/applications/SettingsEditor.java	(copie de travail)
+@@ -7,5 +7,5 @@
+ 
+ public interface SettingsEditor {
+ 
+-	void editSettings(VObjectData object, Map<String, Object> settings, List<Map<String, Object>> originalSchedulings, String callerKey);
++	void editSettings(VObjectData object, Map<String, Object> settings, List<Map<String, Object>> originalSchedulings, String callerKey, boolean updateSubscription);
+ }
+Index: net/violet/platform/applications/MailAlertHandler.java
+===================================================================
+--- net/violet/platform/applications/MailAlertHandler.java	(révision 21722)
++++ net/violet/platform/applications/MailAlertHandler.java	(copie de travail)
+@@ -171,7 +171,7 @@
+ 	 * The MailAlertHandler has two specific scheduling types. However, it is very lenient and can perform some operations to 
+ 	 * edit invalid schedulings and make them correct.
+ 	 */
+-	public void editSettings(VObjectData object, Map<String, Object> settings, List<Map<String, Object>> schedulings, String callerApiKey) {
++	public void editSettings(VObjectData object, Map<String, Object> settings, List<Map<String, Object>> schedulings, String callerApiKey, boolean updateSubscription) {
+ 		if ((schedulings != null) && !schedulings.isEmpty()) {
+ 
+ 			for (final Map<String, Object> aScheduling : schedulings) {
+Index: net/violet/platform/applications/EarsCommunionHandler.java
+===================================================================
+--- net/violet/platform/applications/EarsCommunionHandler.java	(révision 21722)
++++ net/violet/platform/applications/EarsCommunionHandler.java	(copie de travail)
+@@ -1,10 +1,10 @@
+ package net.violet.platform.applications;
+ 
+-import java.util.Collections;
+ import java.util.HashMap;
+ import java.util.List;
+ import java.util.Map;
+ 
++import net.violet.common.StringShop;
+ import net.violet.platform.api.callers.APICaller;
+ import net.violet.platform.api.exceptions.InvalidParameterException;
+ import net.violet.platform.api.exceptions.InvalidSettingException;
+@@ -14,6 +14,7 @@
+ import net.violet.platform.datamodel.Application;
+ import net.violet.platform.datamodel.Subscription;
+ import net.violet.platform.datamodel.VObject;
++import net.violet.platform.datamodel.Notification.NOTIFICATION_STATUS;
+ import net.violet.platform.datamodel.factories.Factories;
+ import net.violet.platform.dataobjects.ApplicationData;
+ import net.violet.platform.dataobjects.NotificationData;
+@@ -31,203 +32,54 @@
+ 	private static final ApplicationData EAR_APPLICATION = ApplicationData.getData(Application.NativeApplication.EARS_COMMUNION.getApplication());
+ 
+ 	public static final String FRIEND_OBJECT_ID = "friend_object_id";
+-
+ 	public static final String STATUS = "status";
+-	public static final String FRIEND = "friend";
+ 
+ 	private static final String ACCEPT_MESSAGE = "accept";
+ 	private static final String ASK_MESSAGE = "ask";
+-	private static final String CANCEL_MESSAGE = "cancel";
++	private static final String CANCEL_MESSAGE = "cancel"; // separation
+ 	private static final String REJECT_MESSAGE = "reject";
+ 
+-	//TODO change enum
+-	public static enum Status {
++	public void askForFriendship(VObjectData inObject, VObjectData friend) {
+ 
+-		REQUEST("request", 1), REFUSED("refused", 2), SEPARATED("separated", 3), CANCEL("cancel", 4), OK("ok", 5), ANSWER("answer", 6);
+-
+-		private static final Map<String, Status> STATES_MAP;
+-
+-		static {
+-			final Map<String, Status> theMap = new HashMap<String, Status>();
+-			for (final Status aState : EarsCommunionHandler.Status.values()) {
+-				theMap.put(aState.getLabel(), aState);
+-			}
+-			STATES_MAP = Collections.unmodifiableMap(theMap);
+-		}
+-
+-		public static Status findByLabel(String inLabel) {
+-			return Status.STATES_MAP.get(inLabel);
+-		}
+-
+-		private final String label;
+-		private final int id;
+-
+-		private Status(String inLabel, int id) {
+-			this.label = inLabel;
+-			this.id = id;
+-		}
+-
+-		public String getLabel() {
+-			return this.label;
+-		}
+-
+-		public int getId() {
+-			return this.id;
+-		}
+-
+-	}
+-
+-	public void askForFriendship(VObjectData inObject, String friendName) {
+-		final VObjectData theFriend = VObjectData.findByName(friendName);
+-
+ 		final Map<String, Object> askerSettings = new HashMap<String, Object>();
+-		askerSettings.put(EarsCommunionHandler.STATUS, Status.REQUEST.getLabel());
+-		askerSettings.put(EarsCommunionHandler.FRIEND, String.valueOf(theFriend.getId()));
++		askerSettings.put(EarsCommunionHandler.STATUS, NOTIFICATION_STATUS.PENDING.toString());
++		askerSettings.put(EarsCommunionHandler.FRIEND_OBJECT_ID, friend.getId());
+ 		SubscriptionData.create(EarsCommunionHandler.EAR_APPLICATION, inObject, askerSettings);
+-
+-		final Map<String, Object> askedSettings = new HashMap<String, Object>();
+-		askedSettings.put(EarsCommunionHandler.STATUS, Status.ANSWER.getLabel());
+-		askedSettings.put(EarsCommunionHandler.FRIEND, String.valueOf(inObject.getId()));
+-		SubscriptionData.create(EarsCommunionHandler.EAR_APPLICATION, theFriend, askedSettings);
+-
+ 		try {
+-			MessageServices.sendDialogMessage(inObject.getReference().getOwner(), EarsCommunionHandler.ASK_MESSAGE, theFriend.getReference(), inObject.getObject_login() + net.violet.common.StringShop.SPACE + DicoTools.dico(theFriend.getReference().getPreferences().getLangPreferences(), "srv_communion/message_request"));
+-		} catch (final Exception e) {
++			this.add(inObject);
++		} catch (final NoSuchSubscriptionException e) {
+ 			EarsCommunionHandler.LOGGER.fatal(e, e);
+ 		}
+ 
+ 	}
+ 
+-	public void cancelRequest(SubscriptionData inSubscription) {
+-
+-		final Map<String, Object> theSettings = inSubscription.getSettings();
+-
+-		final VObject theFriend = Factories.VOBJECT.find(Long.parseLong(theSettings.get(EarsCommunionHandler.FRIEND).toString()));
+-		final Status theStatus = EarsCommunionHandler.Status.findByLabel(theSettings.get(EarsCommunionHandler.STATUS).toString());
+-
+-		if (EarsCommunionHandler.Status.REQUEST == theStatus) {
+-
+-			for (final SubscriptionData friendSubscription : SubscriptionData.findByApplicationAndObject(EarsCommunionHandler.EAR_APPLICATION, VObjectData.getData(theFriend))) {
+-				final String friendId = theSettings.get(EarsCommunionHandler.FRIEND).toString();
+-				if (String.valueOf(inSubscription.getObject().getId()).equals(friendId)) {
+-					friendSubscription.delete();
+-					break;
+-				}
+-			}
+-
+-			inSubscription.delete();
+-
+-		}
+-
+-	}
+-
+ 	public void denyAllRequests(VObjectData inObject) {
+ 
+-		for (final SubscriptionData aSubscription : SubscriptionData.findByApplicationAndObject(EarsCommunionHandler.EAR_APPLICATION, inObject)) {
+-
+-			final Map<String, Object> theSettings = aSubscription.getSettings();
+-			if (EarsCommunionHandler.Status.ANSWER == EarsCommunionHandler.Status.findByLabel(theSettings.get(EarsCommunionHandler.STATUS).toString())) {
+-				denyRequest(aSubscription);
+-			}
+-		}
+-
+-	}
+-
+-	private void denyRequest(SubscriptionData inSubscription) {
+-
+-		final Map<String, Object> theSettings = inSubscription.getSettings();
+-		final VObject theAsker = Factories.VOBJECT.find(Long.parseLong(theSettings.get(EarsCommunionHandler.FRIEND).toString()));
+-		final VObject theObject = inSubscription.getObject().getReference();
+-
+-		for (final SubscriptionData friendSubscription : SubscriptionData.findByApplicationAndObject(EarsCommunionHandler.EAR_APPLICATION, VObjectData.getData(theAsker))) {
+-
+-			final Map<String, Object> theFriendSettings = friendSubscription.getSettings();
+-
+-			if (theObject.getId().toString().equals(theFriendSettings.get(EarsCommunionHandler.FRIEND).toString())) {
+-
+-				theFriendSettings.put(EarsCommunionHandler.STATUS, Status.REFUSED.getLabel());
+-				friendSubscription.setSettings(theFriendSettings);
+-
++		for (final NotificationData aNotification : NotificationData.getReceived(inObject, 0, 0)) {
++			if (NOTIFICATION_STATUS.PENDING.toString().equals(aNotification.getStatus())) {
+ 				try {
+-					MessageServices.sendDialogMessage(theObject.getOwner(), EarsCommunionHandler.REJECT_MESSAGE, theAsker, theObject.getObject_login() + net.violet.common.StringShop.SPACE + DicoTools.dico(theAsker.getPreferences().getLangPreferences(), "srv_communion/refused_your_demand"));
+-				} catch (final IllegalArgumentException e) {
++					this.reject(aNotification.getSender());
++				} catch (final NoSuchSubscriptionException e) {
+ 					EarsCommunionHandler.LOGGER.fatal(e, e);
+ 				}
+-
+-				break;
+ 			}
+ 		}
+-
+-		inSubscription.delete();
+ 	}
+ 
+-	public void acceptRequest(VObject inObject, int friendId) {
++	public void acceptRequest(VObjectData inObject, int friendId) {
+ 
+-		final VObject theFriend = Factories.VOBJECT.find(friendId);
++		final VObjectData theFriend = VObjectData.getData(Factories.VOBJECT.find(friendId));
+ 
+-		// The object accepts the request, so we have to refuse and/or cancel the other communions
+-		for (final SubscriptionData aSubscription : SubscriptionData.findByApplicationAndObject(EarsCommunionHandler.EAR_APPLICATION, VObjectData.getData(inObject))) {
+-
+-			final Map<String, Object> theSettings = aSubscription.getSettings();
+-
+-			final long otherId = Long.parseLong(theSettings.get(EarsCommunionHandler.FRIEND).toString());
+-			final Status theStatus = EarsCommunionHandler.Status.findByLabel(theSettings.get(EarsCommunionHandler.STATUS).toString());
+-
+-			if (otherId != theFriend.getId().longValue()) {
+-				if (theStatus == EarsCommunionHandler.Status.OK) {
+-					endCommunion(aSubscription);
+-				} else if (theStatus == EarsCommunionHandler.Status.ANSWER) {
+-					denyRequest(aSubscription);
+-				}
+-			} else {
+-
+-				theSettings.put(EarsCommunionHandler.STATUS, EarsCommunionHandler.Status.OK.getLabel());
+-				aSubscription.setSettings(theSettings);
+-
+-				for (final SubscriptionData askerSubscription : SubscriptionData.findByApplicationAndObject(EarsCommunionHandler.EAR_APPLICATION, VObjectData.getData(theFriend))) {
+-
+-					final Map<String, Object> friendSettings = askerSubscription.getSettings();
+-
+-					if (friendSettings.get(EarsCommunionHandler.FRIEND).toString().equals(inObject.getId().toString())) {
+-						friendSettings.put(EarsCommunionHandler.STATUS, EarsCommunionHandler.Status.OK.getLabel());
+-						askerSubscription.setSettings(friendSettings);
+-						try {
+-							MessageServices.sendDialogMessage(inObject.getOwner(), EarsCommunionHandler.ACCEPT_MESSAGE, theFriend, theFriend.getObject_login() + net.violet.common.StringShop.SPACE + DicoTools.dico(theFriend.getPreferences().getLangPreferences(), "srv_communion/message_accept"));
+-						} catch (final Exception e) {
+-							EarsCommunionHandler.LOGGER.fatal(e, e);
+-						}
+-					}
+-
+-				}
+-
+-			}
+-
+-		}
+-	}
+-
+-	public void endCommunion(SubscriptionData inSubscription) {
+-
+-		final VObject object = inSubscription.getObject().getReference();
+-		final VObject friendObject = Factories.VOBJECT.find(Long.parseLong(inSubscription.getSettings().get(EarsCommunionHandler.FRIEND).toString()));
+-
+-		for (final SubscriptionData friendSubscription : SubscriptionData.findByApplicationAndObject(EarsCommunionHandler.EAR_APPLICATION, VObjectData.getData(friendObject))) {
+-
+-			final Map<String, Object> friendSettings = friendSubscription.getSettings();
+-
+-			if (friendSettings.get(EarsCommunionHandler.FRIEND).toString().equals(object.getId().toString()) && friendSettings.get(EarsCommunionHandler.STATUS).toString().equals(EarsCommunionHandler.Status.OK.getLabel())) {
+-				friendSettings.put(EarsCommunionHandler.STATUS, EarsCommunionHandler.Status.SEPARATED.getLabel());
+-				friendSubscription.setSettings(friendSettings);
+-
++		for (final NotificationData aNotification : NotificationData.getReceived(inObject, 0, 0)) {
++			if (NOTIFICATION_STATUS.PENDING.toString().equals(aNotification.getStatus()) && aNotification.getSender().equals(theFriend)) {
+ 				try {
+-					MessageServices.sendDialogMessage(object.getOwner(), EarsCommunionHandler.CANCEL_MESSAGE, friendObject, object.getObject_login() + net.violet.common.StringShop.SPACE + DicoTools.dico(friendObject.getPreferences().getLangPreferences(), "srv_communion/message_divorce"));
+-				} catch (final Exception e) {
++					this.accept(theFriend, inObject);
++				} catch (final NoSuchSubscriptionException e) {
+ 					EarsCommunionHandler.LOGGER.fatal(e, e);
+ 				}
+-
++				break;
+ 			}
+ 		}
+-
+-		inSubscription.delete();
+ 	}
+ 
+ 	public void checkSettings(VObjectData object, Map<String, Object> settings) throws InvalidSettingException, MissingSettingException {
+@@ -243,11 +95,23 @@
+ 		} catch (final NumberFormatException e) {
+ 			throw new InvalidSettingException(EarsCommunionHandler.FRIEND_OBJECT_ID, friend_object_id);
+ 		}
+-
++		if (!settings.containsKey(EarsCommunionHandler.STATUS)) {
++			throw new MissingSettingException(EarsCommunionHandler.STATUS);
++		}
+ 	}
+ 
+ 	public SubscriptionData create(VObjectData object, Map<String, Object> settings) {
+-		return SubscriptionData.create(EarsCommunionHandler.EAR_APPLICATION, object, settings);
++		boolean create = true;
++		//temporary : when webui will be changed,remove this code
++		final List<Subscription> theSubscription = Factories.SUBSCRIPTION.findByApplicationAndObject(EarsCommunionHandler.EAR_APPLICATION.getReference(), object.getReference());
++		if (!theSubscription.isEmpty()) {
++			final PojoMap theOldSettings = theSubscription.get(0).getSettings();
++			final String theOldFriendObjectId = theOldSettings.get(EarsCommunionHandler.FRIEND_OBJECT_ID).toString();
++			if (theOldFriendObjectId.equals(settings.get(EarsCommunionHandler.FRIEND_OBJECT_ID).toString())) {
++				create = false;
++			}
++		}
++		return create ? SubscriptionData.create(EarsCommunionHandler.EAR_APPLICATION, object, settings) : SubscriptionData.getData(theSubscription.get(0));
+ 	}
+ 
+ 	public void delete(SubscriptionData subscription) {
+@@ -260,7 +124,7 @@
+ 
+ 	public Map<String, Object> getUISettings(SubscriptionData subscription, APICaller inApiCaller) {
+ 		final Map<String, Object> settings = subscription.getSettings();
+-		final Long friend_object_id = (Long) settings.get(EarsCommunionHandler.FRIEND_OBJECT_ID);
++		final Long friend_object_id = Long.parseLong(settings.get(EarsCommunionHandler.FRIEND_OBJECT_ID).toString());
+ 		settings.put(EarsCommunionHandler.FRIEND_OBJECT_ID, VObjectData.find(friend_object_id).getApiId(inApiCaller));
+ 		return settings;
+ 	}
+@@ -269,9 +133,9 @@
+ 		subscription.setSettings(settings);
+ 	}
+ 
+-	public void editSettings(VObjectData object, Map<String, Object> settings, List<Map<String, Object>> originalSchedulings, String callerKey) {
++	public void editSettings(VObjectData object, Map<String, Object> settings, List<Map<String, Object>> originalSchedulings, String callerKey, boolean updateSubscription) {
+ 		originalSchedulings.clear(); // we haven't need this information for this application
+-		final String friend_object_id = (String) settings.get(EarsCommunionHandler.FRIEND_OBJECT_ID);
++		final String friend_object_id = settings.get(EarsCommunionHandler.FRIEND_OBJECT_ID).toString();
+ 		final VObjectData theFriend = VObjectData.findByAPIId(friend_object_id, callerKey);
+ 		if (theFriend != null) {
+ 			settings.put(EarsCommunionHandler.FRIEND_OBJECT_ID, theFriend.getId());
+@@ -280,23 +144,19 @@
+ 			if (!theSubscription.isEmpty()) { // updating subscription
+ 				final PojoMap theOldSettings = theSubscription.get(0).getSettings();
+ 				final String status = (String) theOldSettings.get(EarsCommunionHandler.STATUS);
+-				final Long theOldFriendObjectId = (Long) theOldSettings.get(EarsCommunionHandler.FRIEND_OBJECT_ID);
++				final Long theOldFriendObjectId = Long.parseLong(theOldSettings.get(EarsCommunionHandler.FRIEND_OBJECT_ID).toString());
+ 				if (!theOldFriendObjectId.equals(theFriend.getId())) { // he wants change partner
+ 					try {
+-						if (Status.OK.getLabel().equals(status)) {
+-							this.remove(object);
+-						} else {
+-							this.cancel(object, false);
+-						}
++						this.remove(object, !updateSubscription);
+ 					} catch (final NoSuchSubscriptionException e) {
+ 						EarsCommunionHandler.LOGGER.fatal(e, e);
+ 					}
+-					settings.put(EarsCommunionHandler.STATUS, Status.REQUEST.getLabel());
++					settings.put(EarsCommunionHandler.STATUS, NOTIFICATION_STATUS.PENDING.toString());
+ 				} else { // nothing to do
+ 					settings.put(EarsCommunionHandler.STATUS, status);
+ 				}
+-			} else {
+-				settings.put(EarsCommunionHandler.STATUS, Status.REQUEST.getLabel());
++			} else { // adding subscription
++				settings.put(EarsCommunionHandler.STATUS, NOTIFICATION_STATUS.PENDING.toString());
+ 			}
+ 		}
+ 	}
+@@ -305,7 +165,7 @@
+ 		List<Subscription> theSubscription = Factories.SUBSCRIPTION.findByApplicationAndObject(EarsCommunionHandler.EAR_APPLICATION.getReference(), inSender.getReference());
+ 		if (!theSubscription.isEmpty()) {
+ 			final Map<String, Object> theSettings = theSubscription.get(0).getSettings();
+-			theSettings.put(EarsCommunionHandler.STATUS, Status.OK.getLabel());
++			theSettings.put(EarsCommunionHandler.STATUS, NOTIFICATION_STATUS.ACCEPTED.toString());
+ 
+ 			this.update(SubscriptionData.getData(theSubscription.get(0)), theSettings);
+ 
+@@ -317,7 +177,8 @@
+ 				this.create(inRecipient, theSettings);
+ 			}
+ 			NotificationData.sendAcceptNotification(inSender, EarsCommunionHandler.EAR_APPLICATION);
+-			MessageServices.sendDialogMessage(inRecipient.getOwner().getReference(), EarsCommunionHandler.ACCEPT_MESSAGE, inSender.getReference(), inSender.getObject_login() + net.violet.common.StringShop.SPACE + DicoTools.dico(inSender.getPreferences().getLang().getReference(), "srv_communion/message_accept"));
++			MessageServices.sendDialogMessage(inRecipient.getOwner().getReference(), EarsCommunionHandler.ACCEPT_MESSAGE, inSender.getReference(),
++				inRecipient.getObject_login() + StringShop.SPACE + DicoTools.dico(inSender.getPreferences().getLang().getReference(), "srv_communion/message_accept"));
+ 		} else {
+ 			throw new NoSuchSubscriptionException();
+ 		}
+@@ -333,9 +194,10 @@
+ 					this.accept(theFriendObject, inObject);
+ 				} else {
+ 					theNotificationData = NotificationData.findPending(inObject, EarsCommunionHandler.EAR_APPLICATION);
+-					if (theNotificationData.isEmpty()) { // sends just one time a pending notification (updating case)
++					if (theNotificationData.isEmpty() && NOTIFICATION_STATUS.PENDING.toString().equals(theSubscription.get(0).getSettings().getString(EarsCommunionHandler.STATUS))) { // sends just one time a pending notification (updating case)
+ 						NotificationData.sendPendingNotification(inObject, theFriendObject, EarsCommunionHandler.EAR_APPLICATION);
+-						MessageServices.sendDialogMessage(inObject.getOwner().getReference(), EarsCommunionHandler.ASK_MESSAGE, theFriendObject.getReference(), theFriendObject.getObject_login() + net.violet.common.StringShop.SPACE + DicoTools.dico(theFriendObject.getPreferences().getLang().getReference(), "srv_communion/message_request"));
++		//				MessageServices.sendDialogMessage(inObject.getOwner().getReference(), EarsCommunionHandler.ASK_MESSAGE, theFriendObject.getReference(),
++		//					inObject.getObject_login() + StringShop.SPACE + DicoTools.dico(theFriendObject.getPreferences().getLang().getReference(), "srv_communion/message_request"));
+ 					}
+ 				}
+ 			} catch (final InvalidParameterException e) {
+@@ -353,7 +215,8 @@
+ 				final VObjectData theFriendObject = VObjectData.find(theSubscription.get(0).getSettings().getLong(EarsCommunionHandler.FRIEND_OBJECT_ID));
+ 				this.delete(SubscriptionData.getData(theSubscription.get(0)));
+ 				NotificationData.sendRejectNotification(inSender, EarsCommunionHandler.EAR_APPLICATION);
+-				MessageServices.sendDialogMessage(theFriendObject.getOwner().getReference(), EarsCommunionHandler.REJECT_MESSAGE, inSender.getReference(), inSender.getObject_login() + net.violet.common.StringShop.SPACE + DicoTools.dico(inSender.getPreferences().getLang().getReference(), "srv_communion/refused_your_demand"));
++				MessageServices.sendDialogMessage(theFriendObject.getOwner().getReference(), EarsCommunionHandler.REJECT_MESSAGE, inSender.getReference(),
++					theFriendObject.getObject_login() + StringShop.SPACE + DicoTools.dico(inSender.getPreferences().getLang().getReference(), "srv_communion/refused_your_demand"));
+ 			} catch (final InvalidParameterException e) {
+ 				EarsCommunionHandler.LOGGER.fatal(e, e);
+ 			}
+@@ -362,23 +225,27 @@
+ 		}
+ 	}
+ 
+-	public void remove(VObjectData inSender) throws NoSuchSubscriptionException {
++	public void remove(VObjectData inSender, boolean delete) throws NoSuchSubscriptionException {
+ 		List<Subscription> theSubscription = Factories.SUBSCRIPTION.findByApplicationAndObject(EarsCommunionHandler.EAR_APPLICATION.getReference(), inSender.getReference());
+ 		if (!theSubscription.isEmpty()) {
+ 			final Map<String, Object> theSettings = theSubscription.get(0).getSettings();
+ 
+-			final VObjectData theFriendObject = VObjectData.find((Long) theSettings.get(EarsCommunionHandler.FRIEND_OBJECT_ID));
++			if (theSettings.get(EarsCommunionHandler.STATUS).equals(NOTIFICATION_STATUS.ACCEPTED.toString())) {
++				final VObjectData theFriendObject = VObjectData.find(Long.parseLong(theSettings.get(EarsCommunionHandler.FRIEND_OBJECT_ID).toString()));
++				if (delete) {
++					this.delete(SubscriptionData.getData(theSubscription.get(0)));
++				}
+ 
+-			theSubscription = Factories.SUBSCRIPTION.findByApplicationAndObject(EarsCommunionHandler.EAR_APPLICATION.getReference(), theFriendObject.getReference());
+-			if (!theSubscription.isEmpty()) {
+-				this.delete(SubscriptionData.getData(theSubscription.get(0)));
+-			}
++				theSubscription = Factories.SUBSCRIPTION.findByApplicationAndObject(EarsCommunionHandler.EAR_APPLICATION.getReference(), theFriendObject.getReference());
++				if (!theSubscription.isEmpty()) { //delete friend subscription
++					this.delete(SubscriptionData.getData(theSubscription.get(0)));
++				}
+ 
+-			if (theSettings.get(EarsCommunionHandler.STATUS).equals(Status.OK.getLabel())) {
+ 				NotificationData.sendFinishNotification(inSender, theFriendObject, EarsCommunionHandler.EAR_APPLICATION);
+-				MessageServices.sendDialogMessage(inSender.getOwner().getReference(), EarsCommunionHandler.CANCEL_MESSAGE, theFriendObject.getReference(), theFriendObject.getObject_login() + net.violet.common.StringShop.SPACE + DicoTools.dico(theFriendObject.getPreferences().getLang().getReference(), "srv_communion/message_divorce"));
++				MessageServices.sendDialogMessage(inSender.getOwner().getReference(), EarsCommunionHandler.CANCEL_MESSAGE, theFriendObject.getReference(),
++					inSender.getObject_login() + StringShop.SPACE + DicoTools.dico(theFriendObject.getPreferences().getLang().getReference(), "srv_communion/message_divorce"));
+ 			} else {
+-				this.cancel(inSender, false);
++				this.cancel(inSender, delete);
+ 			}
+ 		} else {
+ 			throw new NoSuchSubscriptionException();
+Index: net/violet/platform/applications/SubscriptionManager.java
+===================================================================
+--- net/violet/platform/applications/SubscriptionManager.java	(révision 21722)
++++ net/violet/platform/applications/SubscriptionManager.java	(copie de travail)
+@@ -54,7 +54,7 @@
+ 		if (handler instanceof SettingsEditor) {
+ 			theActualSchedulings = new ArrayList<Map<String, Object>>(schedulings);
+ 			theActualSettings = new HashMap<String, Object>(settings);
+-			((SettingsEditor) handler).editSettings(object, theActualSettings, theActualSchedulings, callerKey);
++			((SettingsEditor) handler).editSettings(object, theActualSettings, theActualSchedulings, callerKey, false);
+ 		} else {
+ 			theActualSettings = settings;
+ 			theActualSchedulings = schedulings;
+@@ -90,7 +90,7 @@
+ 		if (handler instanceof SettingsEditor) {
+ 			theActualSchedulings = new ArrayList<Map<String, Object>>(theSchedulings);
+ 			theActualSettings = new HashMap<String, Object>(theSettings);
+-			((SettingsEditor) handler).editSettings(subscription.getObject(), theActualSettings, theActualSchedulings, callerKey);
++			((SettingsEditor) handler).editSettings(subscription.getObject(), theActualSettings, theActualSchedulings, callerKey, true);
+ 		} else {
+ 			theActualSettings = theSettings;
+ 			theActualSchedulings = theSchedulings;
+@@ -113,7 +113,7 @@
+ 		final ApplicationHandler handler = ApplicationHandlerManager.getHandler(subscription.getApplication());
+ 		if (handler instanceof Notifier) {
+ 			try {
+-				((Notifier) handler).remove(subscription.getObject());
++				((Notifier) handler).remove(subscription.getObject(), false);
+ 			} catch (final NoSuchSubscriptionException e) {
+ 				// normally, subscription is created
+ 				SubscriptionManager.LOGGER.fatal(e, e);
+Index: net/violet/platform/applications/Notifier.java
+===================================================================
+--- net/violet/platform/applications/Notifier.java	(révision 21722)
++++ net/violet/platform/applications/Notifier.java	(copie de travail)
+@@ -14,7 +14,7 @@
+ 
+ 	void reject(VObjectData inSender) throws NoSuchSubscriptionException;
+ 
+-	void remove(VObjectData inSender) throws NoSuchSubscriptionException;
++	void remove(VObjectData inSender, boolean delete) throws NoSuchSubscriptionException;
+ 
+ 	void cancel(VObjectData inSender, boolean delete) throws NoSuchSubscriptionException;
+ 
+Index: net/violet/platform/applications/ClockHandler.java
+===================================================================
+--- net/violet/platform/applications/ClockHandler.java	(révision 21722)
++++ net/violet/platform/applications/ClockHandler.java	(copie de travail)
+@@ -87,7 +87,7 @@
+ 	 * The ClockHandler is allowed to edit the given schedulings. It clears it and fills it up with a proper hourly-frequency scheduling
+ 	 * with a correct time reference.
+ 	 */
+-	public void editSettings(VObjectData object, Map<String, Object> settings, List<Map<String, Object>> schedulings, String callerKey) {
++	public void editSettings(VObjectData object, Map<String, Object> settings, List<Map<String, Object>> schedulings, String callerKey, boolean updateSubscription) {
+ 		schedulings.clear();
+ 		final Map<String, Object> theSched = new HashMap<String, Object>();
+ 		theSched.put("type", SchedulingType.SCHEDULING_TYPE.Frequency.getLabel());
+Index: net/violet/platform/applications/ApplicationHandlerManager.java
+===================================================================
+--- net/violet/platform/applications/ApplicationHandlerManager.java	(révision 21722)
++++ net/violet/platform/applications/ApplicationHandlerManager.java	(copie de travail)
+@@ -36,7 +36,7 @@
+ 		theMap.put(Application.NativeApplication.TAICHI, new TaichiHandler());
+ 		theMap.put(Application.NativeApplication.TRAFIC, new TraficHandler());
+ 		theMap.put(Application.NativeApplication.WEATHER, new WeatherHandler());
+-	//	theMap.put(Application.NativeApplication.EARS_COMMUNION, new EarsCommunionHandler());
++		theMap.put(Application.NativeApplication.EARS_COMMUNION, new EarsCommunionHandler());
+ 
+ 		HANDLERS = Collections.unmodifiableMap(theMap);
+ 	}
+Index: net/violet/platform/datamodel/NotificationImpl.java
+===================================================================
+--- net/violet/platform/datamodel/NotificationImpl.java	(révision 21722)
++++ net/violet/platform/datamodel/NotificationImpl.java	(copie de travail)
+@@ -41,7 +41,7 @@
+ 		this.mApplication = new SingleAssociationNotNull<Notification, Application, ApplicationImpl>(this, "application_id", ApplicationImpl.SPECIFICATION);
+ 	}
+ 
+-	public NotificationImpl(VObject inSender, VObject inRecipient, Application inApplication, Notification.NOTIFICATION_STATUS inStatus) throws SQLException {
++	public NotificationImpl(VObject inSender, VObject inRecipient, Application inApplication, NOTIFICATION_STATUS inStatus) throws SQLException {
+ 
+ 		this.sender_id = inSender.getId();
+ 		this.recipient_id = inRecipient.getId();
+Index: net/violet/platform/datamodel/factories/mock/NotificationFactoryMock.java
+===================================================================
+--- net/violet/platform/datamodel/factories/mock/NotificationFactoryMock.java	(révision 21722)
++++ net/violet/platform/datamodel/factories/mock/NotificationFactoryMock.java	(copie de travail)
+@@ -66,7 +66,7 @@
+ 	public Notification findPending(VObject inSender, Application inApplication) {
+ 		Notification theResult = null;
+ 		for (final Notification theNotification : findAllMapped().values()) {
+-			if (theNotification.getSender().equals(inSender) && theNotification.getApplication().equals(inApplication) && theNotification.getStatus().equals(Notification.NOTIFICATION_STATUS.PENDING.toString())) {
++			if (theNotification.getSender().equals(inSender) && theNotification.getApplication().equals(inApplication) && theNotification.getStatus().equals(NOTIFICATION_STATUS.PENDING.toString())) {
+ 				theResult = theNotification;
+ 			}
+ 		}
+Index: net/violet/platform/datamodel/factories/implementations/NotificationFactoryImpl.java
+===================================================================
+--- net/violet/platform/datamodel/factories/implementations/NotificationFactoryImpl.java	(révision 21722)
++++ net/violet/platform/datamodel/factories/implementations/NotificationFactoryImpl.java	(copie de travail)
+@@ -28,7 +28,7 @@
+ 	}
+ 
+ 	public long countSent(VObject inSender) {
+-		return count(null, " sender_id = ? and status = ? ", Arrays.asList(new Object[] { inSender.getId(), Notification.NOTIFICATION_STATUS.PENDING.toString() }), null);
++		return count(null, " sender_id = ? and status = ? ", Arrays.asList(new Object[] { inSender.getId(), NOTIFICATION_STATUS.PENDING.toString() }), null);
+ 	}
+ 
+ 	public Notification create(VObject inSender, VObject inRecipient, Application inApplication, NOTIFICATION_STATUS inStatus) {
+@@ -45,11 +45,11 @@
+ 	}
+ 
+ 	public List<Notification> findAllSent(VObject inSender, int inSkip, int inGetCount) {
+-		return findAll(" sender_id = ? and status = ? ", Arrays.asList(new Object[] { inSender.getId(), Notification.NOTIFICATION_STATUS.PENDING.toString() }), " creation_time ", inSkip, inGetCount);
++		return findAll(" sender_id = ? and status = ? ", Arrays.asList(new Object[] { inSender.getId(), NOTIFICATION_STATUS.PENDING.toString() }), " creation_time ", inSkip, inGetCount);
+ 	}
+ 
+ 	public Notification findPending(VObject inSender, Application inApplication) {
+-		return find(" sender_id = ? and application_id = ? and status = ? ", Arrays.asList(new Object[] { inSender.getId(), inApplication.getId(), Notification.NOTIFICATION_STATUS.PENDING.toString() }));
++		return find(" sender_id = ? and application_id = ? and status = ? ", Arrays.asList(new Object[] { inSender.getId(), inApplication.getId(), NOTIFICATION_STATUS.PENDING.toString() }));
+ 	}
+ 
+ }
+Index: net/violet/platform/datamodel/factories/NotificationFactory.java
+===================================================================
+--- net/violet/platform/datamodel/factories/NotificationFactory.java	(révision 21722)
++++ net/violet/platform/datamodel/factories/NotificationFactory.java	(copie de travail)
+@@ -6,6 +6,7 @@
+ import net.violet.platform.datamodel.Application;
+ import net.violet.platform.datamodel.Notification;
+ import net.violet.platform.datamodel.VObject;
++import net.violet.platform.datamodel.Notification.NOTIFICATION_STATUS;
+ 
+ public interface NotificationFactory extends RecordFactory<Notification> {
+ 
+@@ -47,7 +48,7 @@
+ 	 * @param inApplication : given Application
+ 	 * @param inStatus : given NOTIFICATION_STATUS request
+ 	 */
+-	Notification create(VObject inSender, VObject inRecipient, Application inApplication, Notification.NOTIFICATION_STATUS inStatus);
++	Notification create(VObject inSender, VObject inRecipient, Application inApplication, NOTIFICATION_STATUS inStatus);
+ 
+ 	/**
+ 	 * gets pending notification by sender and application
+Index: net/violet/platform/datamodel/mock/NotificationMock.java
+===================================================================
+--- net/violet/platform/datamodel/mock/NotificationMock.java	(révision 21722)
++++ net/violet/platform/datamodel/mock/NotificationMock.java	(copie de travail)
+@@ -9,13 +9,13 @@
+ 
+ public class NotificationMock extends AbstractMockRecord<Notification, NotificationMock> implements Notification {
+ 
+-	private final Notification.NOTIFICATION_STATUS mStatus;
++	private final NOTIFICATION_STATUS mStatus;
+ 	private final Timestamp mCreation_time;
+ 	private final VObject mSender;
+ 	private final VObject mRecipient;
+ 	private final Application mApplication;
+ 
+-	public NotificationMock(long inId, VObject inSender, VObject inRecipient, Application inApplication, Notification.NOTIFICATION_STATUS inStatus) {
++	public NotificationMock(long inId, VObject inSender, VObject inRecipient, Application inApplication, NOTIFICATION_STATUS inStatus) {
+ 		super(inId);
+ 		this.mSender = inSender;
+ 		this.mRecipient = inRecipient;
+Index: net/violet/platform/object/EarMng.java
+===================================================================
+--- net/violet/platform/object/EarMng.java	(révision 21722)
++++ net/violet/platform/object/EarMng.java	(copie de travail)
+@@ -10,6 +10,7 @@
+ import net.violet.platform.applications.EarsCommunionHandler;
+ import net.violet.platform.datamodel.Application;
+ import net.violet.platform.datamodel.VObject;
++import net.violet.platform.datamodel.Notification.NOTIFICATION_STATUS;
+ import net.violet.platform.datamodel.factories.Factories;
+ import net.violet.platform.dataobjects.SubscriptionData;
+ import net.violet.platform.message.MessageDraft;
+@@ -17,10 +18,6 @@
+ import net.violet.platform.util.Constantes;
+ import net.violet.platform.xmpp.JabberMessageFactory;
+ 
+-/**
+- * @author funfoo TODO To change the template for this generated type comment go
+- *         to Window - Preferences - Java - Code Style - Code Templates
+- */
+ public class EarMng {
+ 
+ 	public static void earNotify(VObject object, int left, int right) {
+@@ -36,9 +33,9 @@
+ 
+ 			for (final SubscriptionData aSubscription : subscriptions) {
+ 				final Object objectSubscriptionSetting = aSubscription.getSettings().get(EarsCommunionHandler.STATUS);
+-				if (EarsCommunionHandler.Status.OK.getLabel().equals(objectSubscriptionSetting.toString())) {
++				if (NOTIFICATION_STATUS.ACCEPTED.toString().equals(objectSubscriptionSetting.toString())) {
+ 
+-					final VObject friendObject = Factories.VOBJECT.find(Long.parseLong(aSubscription.getSettings().get(EarsCommunionHandler.FRIEND).toString()));
++					final VObject friendObject = Factories.VOBJECT.find(Long.parseLong(aSubscription.getSettings().get(EarsCommunionHandler.FRIEND_OBJECT_ID).toString()));
+ 					if (friendObject != null) {
+ 						friendObject.setLeftAndRight(left, right);
+ 
+Index: net/violet/platform/api/actions/notifications/Accept.java
+===================================================================
+--- net/violet/platform/api/actions/notifications/Accept.java	(révision 21722)
++++ net/violet/platform/api/actions/notifications/Accept.java	(copie de travail)
+@@ -16,8 +16,8 @@
+ import net.violet.platform.applications.ApplicationHandlerManager;
+ import net.violet.platform.applications.Notifier;
+ import net.violet.platform.datamodel.Application;
+-import net.violet.platform.datamodel.Notification;
+ import net.violet.platform.datamodel.Application.ApplicationClass;
++import net.violet.platform.datamodel.Notification.NOTIFICATION_STATUS;
+ import net.violet.platform.dataobjects.NotificationData;
+ import net.violet.platform.dataobjects.UserData;
+ import net.violet.platform.util.Constantes;
+@@ -32,7 +32,7 @@
+ 		final NotificationData theNotification = getRequestedNotification(inParam);
+ 
+ 		if (theSessionUser.equals(theNotification.getRecipient().getOwner())) {
+-			if (theNotification.getStatus().equalsIgnoreCase(Notification.NOTIFICATION_STATUS.PENDING.toString())) {
++			if (NOTIFICATION_STATUS.PENDING.toString().equals(theNotification.getStatus())) {
+ 				final ApplicationHandler handler = ApplicationHandlerManager.getHandler(theNotification.getApplication());
+ 				if (handler instanceof Notifier) {
+ 					((Notifier) handler).accept(theNotification.getSender(), theNotification.getRecipient());
+Index: net/violet/platform/api/actions/notifications/Delete.java
+===================================================================
+--- net/violet/platform/api/actions/notifications/Delete.java	(révision 21722)
++++ net/violet/platform/api/actions/notifications/Delete.java	(copie de travail)
+@@ -11,8 +11,8 @@
+ import net.violet.platform.api.exceptions.NoSuchNotificationException;
+ import net.violet.platform.api.exceptions.UnsupportedException;
+ import net.violet.platform.datamodel.Application;
+-import net.violet.platform.datamodel.Notification;
+ import net.violet.platform.datamodel.Application.ApplicationClass;
++import net.violet.platform.datamodel.Notification.NOTIFICATION_STATUS;
+ import net.violet.platform.dataobjects.NotificationData;
+ import net.violet.platform.dataobjects.UserData;
+ import net.violet.platform.util.Constantes;
+@@ -27,7 +27,7 @@
+ 		final NotificationData theNotification = getRequestedNotification(inParam);
+ 
+ 		if (theSessionUser.equals(theNotification.getRecipient().getOwner())) {
+-			if (!theNotification.getStatus().equals(Notification.NOTIFICATION_STATUS.PENDING.toString())) {
++			if (!theNotification.getStatus().equals(NOTIFICATION_STATUS.PENDING.toString())) {
+ 				theNotification.delete();
+ 			} else {
+ 				throw new UnsupportedException(APIErrorMessage.CANNOT_DELETE_PENDING_NOTIFICATION);
+Index: net/violet/platform/api/actions/notifications/Retract.java
+===================================================================
+--- net/violet/platform/api/actions/notifications/Retract.java	(révision 21722)
++++ net/violet/platform/api/actions/notifications/Retract.java	(copie de travail)
+@@ -16,8 +16,8 @@
+ import net.violet.platform.applications.ApplicationHandlerManager;
+ import net.violet.platform.applications.Notifier;
+ import net.violet.platform.datamodel.Application;
+-import net.violet.platform.datamodel.Notification;
+ import net.violet.platform.datamodel.Application.ApplicationClass;
++import net.violet.platform.datamodel.Notification.NOTIFICATION_STATUS;
+ import net.violet.platform.dataobjects.NotificationData;
+ import net.violet.platform.dataobjects.UserData;
+ import net.violet.platform.util.Constantes;
+@@ -32,7 +32,7 @@
+ 		final NotificationData theNotification = getRequestedNotification(inParam);
+ 
+ 		if (theSessionUser.equals(theNotification.getSender().getOwner())) {
+-			if (theNotification.getStatus().equalsIgnoreCase(Notification.NOTIFICATION_STATUS.PENDING.toString())) {
++			if (theNotification.getStatus().equals(NOTIFICATION_STATUS.PENDING.toString())) {
+ 				final ApplicationHandler handler = ApplicationHandlerManager.getHandler(theNotification.getApplication());
+ 				if (handler instanceof Notifier) {
+ 					((Notifier) handler).cancel(theNotification.getSender(), true);
+Index: net/violet/platform/api/actions/notifications/Reject.java
+===================================================================
+--- net/violet/platform/api/actions/notifications/Reject.java	(révision 21722)
++++ net/violet/platform/api/actions/notifications/Reject.java	(copie de travail)
+@@ -16,8 +16,8 @@
+ import net.violet.platform.applications.ApplicationHandlerManager;
+ import net.violet.platform.applications.Notifier;
+ import net.violet.platform.datamodel.Application;
+-import net.violet.platform.datamodel.Notification;
+ import net.violet.platform.datamodel.Application.ApplicationClass;
++import net.violet.platform.datamodel.Notification.NOTIFICATION_STATUS;
+ import net.violet.platform.dataobjects.NotificationData;
+ import net.violet.platform.dataobjects.UserData;
+ import net.violet.platform.util.Constantes;
+@@ -32,7 +32,7 @@
+ 		final NotificationData theNotification = getRequestedNotification(inParam);
+ 
+ 		if (theSessionUser.equals(theNotification.getRecipient().getOwner())) {
+-			if (theNotification.getStatus().equalsIgnoreCase(Notification.NOTIFICATION_STATUS.PENDING.toString())) {
++			if (theNotification.getStatus().equals(NOTIFICATION_STATUS.PENDING.toString())) {
+ 				final ApplicationHandler handler = ApplicationHandlerManager.getHandler(theNotification.getApplication());
+ 				if (handler instanceof Notifier) {
+ 					((Notifier) handler).reject(theNotification.getSender());
+Index: net/violet/platform/web/VoiceHandler.java
+===================================================================
+--- net/violet/platform/web/VoiceHandler.java	(révision 21722)
++++ net/violet/platform/web/VoiceHandler.java	(copie de travail)
+@@ -31,6 +31,7 @@
+ import net.violet.platform.datamodel.VObject;
+ import net.violet.platform.datamodel.ConfigFiles.SERVICES;
+ import net.violet.platform.datamodel.InterruptionLogImpl.WHAT_OPTION;
++import net.violet.platform.datamodel.Notification.NOTIFICATION_STATUS;
+ import net.violet.platform.datamodel.factories.Factories;
+ import net.violet.platform.dataobjects.ObjectType;
+ import net.violet.platform.dataobjects.SubscriptionData;
+@@ -140,9 +141,9 @@
+ 
+ 				for (final SubscriptionData aSubscription : subscriptions) {
+ 					final Object objectSubscriptionSetting = aSubscription.getSettings().get(EarsCommunionHandler.STATUS);
+-					if (EarsCommunionHandler.Status.OK.getLabel().equals(objectSubscriptionSetting.toString())) {
++					if (NOTIFICATION_STATUS.ACCEPTED.toString().equals(objectSubscriptionSetting.toString())) {
+ 
+-						final VObject friendObject = Factories.VOBJECT.find(Long.parseLong(aSubscription.getSettings().get(EarsCommunionHandler.FRIEND).toString()));
++						final VObject friendObject = Factories.VOBJECT.find(Long.parseLong(aSubscription.getSettings().get(EarsCommunionHandler.FRIEND_OBJECT_ID).toString()));
+ 						final User theuser = friendObject.getOwner();
+ 						final boolean needsTreatment = VObjectData.getData(friendObject).getObjectType().instanceOf(ObjectType.NABAZTAG_V1);
+ 						final Files theFile = FilesManagerFactory.FILE_MANAGER.post(inFile, ContentType.WAV, ContentType.MP3_32, Files.CATEGORIES.BROAD, needsTreatment, needsTreatment, MimeType.MIME_TYPES.A_MPEG);
+Index: update_schema.sql
+===================================================================
+--- update_schema.sql	(révision 21722)
++++ update_schema.sql	(copie de travail)
+@@ -174,4 +174,10 @@
+ -- London, UK geocoding
+ update object_profile,annu,object set object_profile.object_longitudeGPS = -0.12623620000000000000, object_profile.object_latitudeGPS = 51.50015240000000000000 where object.object_id = object_profile.object_id AND object_profile.object_longitudeGPS IS NULL AND annu.annu_user = object.object_owner AND annu.annu_country = 'UK' AND annu.annu_city = 'London';
+ 
+-alter table object_has_read_content drop FOREIGN KEY  `object_has_read_content_ibfk_4`;
+\ No newline at end of file
++alter table object_has_read_content drop FOREIGN KEY  `object_has_read_content_ibfk_4`;
++
++create temporary table subscription_ear select id,count(object_id) as c from subscription where application_id=2075 group by object_id having c > 1;
++delete from subscription where application_id=2075 and id in (select id from subscription_ear);
++-- check
++select count(object_id) as c from subscription where application_id=2075 group by object_id having c > 1;
++
+
+Modification de propriétés sur .
+___________________________________________________________________
+Modifié : svnmerge-integrated
+   - /OS/trunk:1-21058,21060-21066,21068-21070,21074,21076-21079,21085,21087-21088,21090,21096,21105,21107,21109-21110,21113-21119,21123-21124,21134-21137,21139,21141-21142,21145-21152,21154,21163,21167,21174,21178,21186,21188,21191-21192,21196,21199-21200,21204,21209,21226,21240,21253
+   + /OS/trunk:1-21058,21060-21071,21074,21076-21079,21081,21083,21085-21088,21090,21095-21096,21098,21105,21107,21109-21110,21113-21119,21123-21124,21134-21137,21139,21141-21142,21145-21152,21154,21163,21167,21174,21178,21186,21188,21191-21192,21196,21199-21200,21204,21209,21226,21240,21253
+

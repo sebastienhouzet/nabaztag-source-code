@@ -1,0 +1,328 @@
+<!DOCTYPE web-app
+    PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+    "http://java.sun.com/dtd/web-app_2_3.dtd">
+
+<web-app>
+
+  <display-name>VAdmin</display-name>
+  <description>This is the VAdmin server application.</description>
+	<listener>
+  		<listener-class>net.violet.platform.management.ShutdownHook</listener-class>
+	</listener>
+
+    <servlet>
+        <servlet-name>action</servlet-name>
+        <servlet-class>org.apache.struts.action.ActionServlet</servlet-class>
+        <init-param>
+            <param-name>config</param-name>
+            <param-value>/WEB-INF/struts-config.xml</param-value>
+        </init-param>
+		<!-- properties-init-file -->
+        <init-param>
+      		<param-name>properties-init-file</param-name>
+      		<param-value>/WEB-INF/constante.properties</param-value>
+   		</init-param>
+        <!-- module configurations -->
+        <init-param>
+            <param-name>debug</param-name>
+            <param-value>2</param-value>
+        </init-param>
+        <init-param>
+            <param-name>detail</param-name>
+            <param-value>2</param-value>
+        </init-param>
+		<!--  Struts Tiles -->
+	    <init-param>
+	    	<param-name>chainConfig</param-name>
+	    	<param-value>org/apache/struts/tiles/chain-config.xml</param-value>
+	    </init-param>
+	    <init-param>
+			<param-name>definitions-parser-validate</param-name>
+			<param-value>true</param-value>
+		</init-param>
+        <load-on-startup>2</load-on-startup>
+    </servlet>
+    <!-- Standard Action Servlet Mapping -->
+    <!-- JSPC servlet mappings start -->
+
+    <servlet>
+        <servlet-name>org.apache.jsp.bookSplitter_jsp</servlet-name>
+        <servlet-class>org.apache.jsp.bookSplitter_jsp</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>org.apache.jsp.nathanadmin_jsp</servlet-name>
+        <servlet-class>org.apache.jsp.nathanadmin_jsp</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>org.apache.jsp.include_005fjsp.admin.navigation_jsp</servlet-name>
+        <servlet-class>org.apache.jsp.include_005fjsp.admin.navigation_jsp</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>org.apache.jsp.include_005fjsp.admin.home_jsp</servlet-name>
+        <servlet-class>org.apache.jsp.include_005fjsp.admin.home_jsp</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>org.apache.jsp.include_005fjsp.admin.authentification_jsp</servlet-name>
+        <servlet-class>org.apache.jsp.include_005fjsp.admin.authentification_jsp</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>org.apache.jsp.include_005fjsp.admin.footer_jsp</servlet-name>
+        <servlet-class>org.apache.jsp.include_005fjsp.admin.footer_jsp</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>org.apache.jsp.include_005fjsp.admin.header_jsp</servlet-name>
+        <servlet-class>org.apache.jsp.include_005fjsp.admin.header_jsp</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>org.apache.jsp.include_005fjsp.admin.adminrefused_jsp</servlet-name>
+        <servlet-class>org.apache.jsp.include_005fjsp.admin.adminrefused_jsp</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>org.apache.jsp.include_005fjsp.admin.application.searchApplication_jsp</servlet-name>
+        <servlet-class>org.apache.jsp.include_005fjsp.admin.application.searchApplication_jsp</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>org.apache.jsp.include_005fjsp.admin.application.listen_jsp</servlet-name>
+        <servlet-class>org.apache.jsp.include_005fjsp.admin.application.listen_jsp</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>org.apache.jsp.include_005fjsp.admin.application.addApplication_jsp</servlet-name>
+        <servlet-class>org.apache.jsp.include_005fjsp.admin.application.addApplication_jsp</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>org.apache.jsp.include_005fjsp.admin.application.rankApplication_jsp</servlet-name>
+        <servlet-class>org.apache.jsp.include_005fjsp.admin.application.rankApplication_jsp</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>org.apache.jsp.include_005fjsp.admin.press.addPress_jsp</servlet-name>
+        <servlet-class>org.apache.jsp.include_005fjsp.admin.press.addPress_jsp</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>org.apache.jsp.include_005fjsp.admin.press.searchPress_jsp</servlet-name>
+        <servlet-class>org.apache.jsp.include_005fjsp.admin.press.searchPress_jsp</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>org.apache.jsp.include_005fjsp.admin.weather.addWeather_jsp</servlet-name>
+        <servlet-class>org.apache.jsp.include_005fjsp.admin.weather.addWeather_jsp</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>org.apache.jsp.include_005fjsp.admin.object.searchObject_jsp</servlet-name>
+        <servlet-class>org.apache.jsp.include_005fjsp.admin.object.searchObject_jsp</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>org.apache.jsp.include_005fjsp.admin.dico.exportDico_jsp</servlet-name>
+        <servlet-class>org.apache.jsp.include_005fjsp.admin.dico.exportDico_jsp</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>org.apache.jsp.include_005fjsp.admin.dico.importDico_jsp</servlet-name>
+        <servlet-class>org.apache.jsp.include_005fjsp.admin.dico.importDico_jsp</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>org.apache.jsp.include_005fjsp.admin.dico.searchDico_jsp</servlet-name>
+        <servlet-class>org.apache.jsp.include_005fjsp.admin.dico.searchDico_jsp</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>org.apache.jsp.include_005fjsp.admin.dico.addDico_jsp</servlet-name>
+        <servlet-class>org.apache.jsp.include_005fjsp.admin.dico.addDico_jsp</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>org.apache.jsp.include_005fjsp.admin.news.addNews_jsp</servlet-name>
+        <servlet-class>org.apache.jsp.include_005fjsp.admin.news.addNews_jsp</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>org.apache.jsp.include_005fjsp.admin.news.searchNews_jsp</servlet-name>
+        <servlet-class>org.apache.jsp.include_005fjsp.admin.news.searchNews_jsp</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>org.apache.jsp.include_005fjsp.admin.store.searchStore_jsp</servlet-name>
+        <servlet-class>org.apache.jsp.include_005fjsp.admin.store.searchStore_jsp</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>org.apache.jsp.include_005fjsp.admin.store.addStore_jsp</servlet-name>
+        <servlet-class>org.apache.jsp.include_005fjsp.admin.store.addStore_jsp</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>org.apache.jsp.WEB_002dINF.profil_jsp</servlet-name>
+        <servlet-class>org.apache.jsp.WEB_002dINF.profil_jsp</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>org.apache.jsp.bookSplitter_jsp</servlet-name>
+        <url-pattern>/bookSplitter.jsp</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>org.apache.jsp.nathanadmin_jsp</servlet-name>
+        <url-pattern>/nathanadmin.jsp</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>org.apache.jsp.include_005fjsp.admin.navigation_jsp</servlet-name>
+        <url-pattern>/include_jsp/admin/navigation.jsp</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>org.apache.jsp.include_005fjsp.admin.home_jsp</servlet-name>
+        <url-pattern>/include_jsp/admin/home.jsp</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>org.apache.jsp.include_005fjsp.admin.authentification_jsp</servlet-name>
+        <url-pattern>/include_jsp/admin/authentification.jsp</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>org.apache.jsp.include_005fjsp.admin.footer_jsp</servlet-name>
+        <url-pattern>/include_jsp/admin/footer.jsp</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>org.apache.jsp.include_005fjsp.admin.header_jsp</servlet-name>
+        <url-pattern>/include_jsp/admin/header.jsp</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>org.apache.jsp.include_005fjsp.admin.adminrefused_jsp</servlet-name>
+        <url-pattern>/include_jsp/admin/adminrefused.jsp</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>org.apache.jsp.include_005fjsp.admin.application.searchApplication_jsp</servlet-name>
+        <url-pattern>/include_jsp/admin/application/searchApplication.jsp</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>org.apache.jsp.include_005fjsp.admin.application.listen_jsp</servlet-name>
+        <url-pattern>/include_jsp/admin/application/listen.jsp</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>org.apache.jsp.include_005fjsp.admin.application.addApplication_jsp</servlet-name>
+        <url-pattern>/include_jsp/admin/application/addApplication.jsp</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>org.apache.jsp.include_005fjsp.admin.application.rankApplication_jsp</servlet-name>
+        <url-pattern>/include_jsp/admin/application/rankApplication.jsp</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>org.apache.jsp.include_005fjsp.admin.press.addPress_jsp</servlet-name>
+        <url-pattern>/include_jsp/admin/press/addPress.jsp</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>org.apache.jsp.include_005fjsp.admin.press.searchPress_jsp</servlet-name>
+        <url-pattern>/include_jsp/admin/press/searchPress.jsp</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>org.apache.jsp.include_005fjsp.admin.weather.addWeather_jsp</servlet-name>
+        <url-pattern>/include_jsp/admin/weather/addWeather.jsp</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>org.apache.jsp.include_005fjsp.admin.object.searchObject_jsp</servlet-name>
+        <url-pattern>/include_jsp/admin/object/searchObject.jsp</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>org.apache.jsp.include_005fjsp.admin.dico.exportDico_jsp</servlet-name>
+        <url-pattern>/include_jsp/admin/dico/exportDico.jsp</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>org.apache.jsp.include_005fjsp.admin.dico.importDico_jsp</servlet-name>
+        <url-pattern>/include_jsp/admin/dico/importDico.jsp</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>org.apache.jsp.include_005fjsp.admin.dico.searchDico_jsp</servlet-name>
+        <url-pattern>/include_jsp/admin/dico/searchDico.jsp</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>org.apache.jsp.include_005fjsp.admin.dico.addDico_jsp</servlet-name>
+        <url-pattern>/include_jsp/admin/dico/addDico.jsp</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>org.apache.jsp.include_005fjsp.admin.news.addNews_jsp</servlet-name>
+        <url-pattern>/include_jsp/admin/news/addNews.jsp</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>org.apache.jsp.include_005fjsp.admin.news.searchNews_jsp</servlet-name>
+        <url-pattern>/include_jsp/admin/news/searchNews.jsp</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>org.apache.jsp.include_005fjsp.admin.store.searchStore_jsp</servlet-name>
+        <url-pattern>/include_jsp/admin/store/searchStore.jsp</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>org.apache.jsp.include_005fjsp.admin.store.addStore_jsp</servlet-name>
+        <url-pattern>/include_jsp/admin/store/addStore.jsp</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>org.apache.jsp.WEB_002dINF.profil_jsp</servlet-name>
+        <url-pattern>/WEB-INF/profil.jsp</url-pattern>
+    </servlet-mapping>
+
+<!-- JSPC servlet mappings end -->
+
+    <servlet-mapping>
+        <servlet-name>action</servlet-name>
+        <url-pattern>*.do</url-pattern>
+    </servlet-mapping>
+    <!-- The Usual Welcome File List -->
+    <welcome-file-list>
+        <welcome-file>index.jsp</welcome-file>
+        <welcome-file>index.html</welcome-file>
+        <welcome-file>upload.jsp</welcome-file>
+    </welcome-file-list>
+    <!-- Struts Tag Library Descriptors -->
+    <taglib>
+        <taglib-uri>/tags/struts-bean</taglib-uri>
+        <taglib-location>/WEB-INF/struts-bean.tld</taglib-location>
+    </taglib>
+    <taglib>
+        <taglib-uri>/tags/struts-html</taglib-uri>
+        <taglib-location>/WEB-INF/struts-html.tld</taglib-location>
+    </taglib>
+    <taglib>
+        <taglib-uri>/tags/struts-logic</taglib-uri>
+        <taglib-location>/WEB-INF/struts-logic.tld</taglib-location>
+    </taglib>
+    <taglib>
+        <taglib-uri>/tags/struts-nested</taglib-uri>
+        <taglib-location>/WEB-INF/struts-nested.tld</taglib-location>
+    </taglib>
+
+</web-app>

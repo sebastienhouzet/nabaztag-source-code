@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry excluding="config/|scripts/|test/" kind="src" path=""/>
+	<classpathentry kind="src" path="test"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/Common"/>
+	<classpathentry kind="lib" path="/Common/lib/log4j-1.2.15.jar"/>
+	<classpathentry kind="lib" path="/Common/lib/commons-io-1.4.jar" sourcepath="/Common/lib-src/commons-io-1.4-src.zip"/>
+	<classpathentry kind="lib" path="/Common/lib/junit-4.4.jar"/>
+	<classpathentry kind="lib" path="/Common/lib/commons-logging-1.0.4.jar"/>
+	<classpathentry kind="lib" path="/Common/lib/concurrent.jar"/>
+	<classpathentry kind="output" path="classes"/>
+</classpath>

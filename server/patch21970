@@ -1,0 +1,55 @@
+Index: net/violet/platform/applications/FacebookHandler.java
+===================================================================
+--- net/violet/platform/applications/FacebookHandler.java	(révision 21969)
++++ net/violet/platform/applications/FacebookHandler.java	(copie de travail)
+@@ -24,6 +24,7 @@
+ 	public static final String LABEL = "label";
+ 
+ 	private final ApplicationData application;
++	private static final String START_FACEBOOK_URL = "http://www.facebook.com/feeds/notifications.php";
+ 
+ 	protected FacebookHandler(ApplicationData application) {
+ 		this.application = application;
+@@ -63,6 +64,10 @@
+ 			throw new MissingSettingException(FacebookHandler.LABEL);
+ 		}
+ 
++		if (!checkFacebookUrl(urlSetting.toString())) {
++			throw new InvalidSettingException(FacebookHandler.URL, urlSetting.toString());
++		}
++
+ 		if (!FeedsTools.isFeedValid(urlSetting.toString(), null, null)) {
+ 			throw new InvalidSettingException(FacebookHandler.URL, urlSetting.toString());
+ 		}
+@@ -84,4 +89,8 @@
+ 	public String getSubscriptionInformation(SubscriptionData subscription) {
+ 		return subscription.getSettings().get(FacebookHandler.LABEL).toString();
+ 	}
++
++	private boolean checkFacebookUrl(String inUrl) {
++		return inUrl.startsWith(FacebookHandler.START_FACEBOOK_URL);
++	}
+ }
+Index: net/violet/platform/handlers/rfid/AbstractFreeAngel.java
+===================================================================
+--- net/violet/platform/handlers/rfid/AbstractFreeAngel.java	(révision 21961)
++++ net/violet/platform/handlers/rfid/AbstractFreeAngel.java	(copie de travail)
+@@ -11,6 +11,11 @@
+ import net.violet.platform.events.ZtampRemovalEvent;
+ import net.violet.platform.schedulers.InteractionTriggerHandler;
+ 
++/**
++ * FreeAngel applications automatically install themself with a double activation :
++ * on ztamp detection and on ztamp removal
++ * @author christophe - Violet
++ */
+ public abstract class AbstractFreeAngel extends AbstractApplicationInitializer {
+ 
+ 	@Override
+
+Modification de propriétés sur .
+___________________________________________________________________
+Modifié : svnmerge-integrated
+   - /OS/branches/rc07052009:1-21907 /OS/trunk:1-21058,21060-21071,21074,21076-21079,21081,21083,21085-21088,21090,21095-21096,21098,21105,21107,21109-21110,21113-21119,21123-21124,21134-21137,21139,21141-21142,21145-21152,21154,21163,21167,21174,21178,21186,21188,21191-21192,21196,21199-21200,21204,21209,21226,21240,21253
+   + /OS/branches/rc07052009:1-21907 /OS/trunk:1-21058,21060-21071,21074,21076-21079,21081,21083,21085-21088,21090,21095-21096,21098,21105,21107,21109-21110,21113-21119,21123-21124,21134-21137,21139,21141-21142,21145-21152,21154,21163,21167,21174,21178,21186,21188,21191-21192,21196,21199-21200,21204,21209,21226,21240,21253,21967
+

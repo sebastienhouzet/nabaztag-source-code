@@ -1,0 +1,102 @@
+Index: scripts/crawlersLaunchList-martre_5556
+===================================================================
+--- scripts/crawlersLaunchList-martre_5556	(révision 21136)
++++ scripts/crawlersLaunchList-martre_5556	(copie de travail)
+@@ -1,2 +1,2 @@
+-PodcastFree
+-PodcastFull
+\ No newline at end of file
++NewPodcastFree
++NewPodcastFull
+\ No newline at end of file
+Index: scripts/crawlersLaunchList-havane_5556
+===================================================================
+--- scripts/crawlersLaunchList-havane_5556	(révision 21136)
++++ scripts/crawlersLaunchList-havane_5556	(copie de travail)
+@@ -6,6 +6,5 @@
+ AmbiantScheduler
+ DailyWithDurationScheduler
+ AmbiantWithKeywordScheduler
+-NewContentWithKeywordAndMediaScheduler
+ FrequencyScheduler
+ 
+Index: scripts/crawlerctl
+===================================================================
+--- scripts/crawlerctl	(révision 21136)
++++ scripts/crawlerctl	(copie de travail)
+@@ -92,7 +92,7 @@
+ 	    ;;
+ 	    NewRssFree)
+ 	    crawlerclass=net.violet.platform.feeds.crawlers.RssFreeCrawler
+-	    argline="-d 60000 -s 10 -a 50 -c 50"
++	    argline="-d 60000 -s 10 -a 5 -c 5"
+ 	    ;;
+ 	    RssFull)
+ 	    crawlerclass=net.violet.platform.daemons.crawlers.vaction.CrawlerRssFull
+@@ -100,7 +100,7 @@
+ 	    ;;
+ 	    NewRssFull)
+ 	    crawlerclass=net.violet.platform.feeds.crawlers.RssFullCrawler
+-	    argline="-d 60000 -s 10 -a 50 -c 50"
++	    argline="-d 60000 -s 10 -a 5 -c 5"
+ 	    ;;
+ 	    Twitter)
+ 	    crawlerclass=net.violet.platform.daemons.crawlers.application.CrawlerTwitter
+@@ -108,7 +108,7 @@
+ 	    ;;
+ 	    NewTwitter)
+ 	  	crawlerclass=net.violet.platform.feeds.crawlers.TwitterCrawler
+-	    argline="-d 60000 -s 10 -a 50 -c 50"
++	    argline="-d 60000 -s 10 -a 5 -c 5"
+ 	    ;;
+ 	    Gmail)
+ 	    crawlerclass=net.violet.platform.daemons.crawlers.application.CrawlerGmail
+@@ -116,7 +116,7 @@
+ 	    ;;
+ 	    NewGmail)
+ 	  	crawlerclass=net.violet.platform.feeds.crawlers.GmailCrawler
+-	    argline="-d 60000 -s 10 -a 50 -c 50"
++	    argline="-d 60000 -s 10 -a 5 -c 5"
+ 	    ;;
+ 	    PodcastFull)
+ 	    crawlerclass=net.violet.platform.daemons.crawlers.vaction.CrawlerPodcastFull
+@@ -124,7 +124,7 @@
+ 	    ;;
+ 	    NewPodcastFull)
+ 	    crawlerclass=net.violet.platform.feeds.crawlers.PodcastFullCrawler
+-	    argline="-d 60000 -s 10 -a 50 -c 50"
++	    argline="-d 60000 -s 10 -a 5 -c 5"
+ 	    ;;
+ 	    PodcastFree)
+ 	    crawlerclass=net.violet.platform.daemons.crawlers.vaction.CrawlerPodcastFree
+@@ -132,7 +132,7 @@
+ 	    ;;
+ 	    NewPodcastFree)
+ 	    crawlerclass=net.violet.platform.feeds.crawlers.PodcastFreeCrawler
+-	    argline="-d 60000 -s 10 -a 50 -c 50"
++	    argline="-d 60000 -s 10 -a 5 -c 5"
+ 	    ;;
+ 	    CachePulse)
+ 	    crawlerclass=net.violet.platform.daemons.crawlers.gestion.CrawlerCachePulse
+Index: scripts/crawlersLaunchList-angora_5556
+===================================================================
+--- scripts/crawlersLaunchList-angora_5556	(révision 21136)
++++ scripts/crawlersLaunchList-angora_5556	(copie de travail)
+@@ -1,5 +1,5 @@
+-RssFree
+-RssFull
+-Gmail
+-Twitter
++NewRssFree
++NewRssFull
++NewGmail
++NewTwitter
+ CachePulse
+\ No newline at end of file
+
+Modification de propriétés sur .
+___________________________________________________________________
+Modifié : svnmerge-integrated
+   - /OS/trunk:1-21058,21060-21066,21068-21070,21076-21079,21085,21087-21088,21090,21109,21113-21116,21118
+   + /OS/trunk:1-21058,21060-21066,21068-21070,21076-21079,21085,21087-21088,21090,21109,21113-21116,21118,21136
+

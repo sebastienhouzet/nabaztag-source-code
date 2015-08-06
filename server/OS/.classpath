@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/Common"/>
+	<classpathentry excluding="test/" including="net/" kind="src" path=""/>
+	<classpathentry kind="src" path="test"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/cos.jar" sourcepath="lib-src/cos-src.zip"/>
+	<classpathentry kind="lib" path="lib/commons-codec-1.3.jar" sourcepath="lib-src/commons-codec-1.3-src.zip"/>
+	<classpathentry kind="lib" path="lib/commons-collections-3.2.jar" sourcepath="lib-src/commons-collections-3.2.1-src.zip"/>
+	<classpathentry kind="lib" path="lib/commons-configuration-1.5.jar" sourcepath="lib-src/commons-configuration-1.5-src.zip"/>
+	<classpathentry kind="lib" path="lib/commons-digester-1.8.jar" sourcepath="lib-src/commons-digester-1.8.1-src.zip"/>
+	<classpathentry kind="lib" path="lib/commons-lang-2.3.jar" sourcepath="lib-src/commons-lang-2.3-src.zip"/>
+	<classpathentry kind="lib" path="lib/json-simple.jar" sourcepath="lib-src/json-simple-src.zip"/>
+	<classpathentry kind="lib" path="lib/mysql-connector-java-5.0.4-bin.jar"/>
+	<classpathentry kind="lib" path="lib/pop3.jar"/>
+	<classpathentry kind="lib" path="lib/rhino-1.6r7.jar" sourcepath="lib-src/rhino-1.6r7-src.zip"/>
+	<classpathentry kind="lib" path="lib/jdom-1.0.jar"/>
+	<classpathentry kind="lib" path="lib/smtp.jar"/>
+	<classpathentry kind="lib" path="lib/su-smack-1.2.jar"/>
+	<classpathentry kind="lib" path="lib/xmlenc-0.52.jar"/>
+	<classpathentry kind="lib" path="lib/xmlpull_1_1_3_4c.jar"/>
+	<classpathentry kind="lib" path="lib/xmlrpc-client-3.1.jar" sourcepath="lib-src/xmlrpc-client-3.1-src.zip"/>
+	<classpathentry kind="lib" path="lib/xmlrpc-common-3.1.jar" sourcepath="lib-src/xmlrpc-common-3.1-src.zip"/>
+	<classpathentry kind="lib" path="lib/xmlrpc-server-3.1.jar" sourcepath="lib-src/xmlrpc-server-3.1-src.zip"/>
+	<classpathentry kind="lib" path="lib/mail.jar"/>
+	<classpathentry kind="lib" path="lib/PDFBox-0.7.3.jar"/>
+	<classpathentry kind="lib" path="lib/hadoop-0.18.0-core.jar" sourcepath="lib-src/hadoop-0.18-src.zip"/>
+	<classpathentry kind="lib" path="lib/jsp-api.jar"/>
+	<classpathentry kind="lib" path="lib/icu4j-4_0_d02.jar"/>
+	<classpathentry kind="lib" path="lib/java-getopt-1.0.13.jar"/>
+	<classpathentry kind="lib" path="/Common/lib/jcs-1.3.jar" sourcepath="lib-src/jcs-1.3-src.jar"/>
+	<classpathentry kind="lib" path="lib/jl1.0.jar"/>
+	<classpathentry kind="lib" path="lib/language-identifier.jar"/>
+	<classpathentry kind="lib" path="lib/nutch-2008-04-30_04-01-32.jar"/>
+	<classpathentry kind="lib" path="lib/smack.jar" sourcepath="lib-src/smack-src.jar"/>
+	<classpathentry kind="lib" path="lib/antlr.jar"/>
+	<classpathentry kind="lib" path="lib/cobertura.jar"/>
+	<classpathentry kind="lib" path="lib/emma_ant.jar"/>
+	<classpathentry kind="lib" path="lib/emma.jar"/>
+	<classpathentry kind="lib" path="lib/imap.jar"/>
+	<classpathentry kind="lib" path="lib/csv-tools.jar"/>
+	<classpathentry kind="lib" path="lib/commons-pool-1.3.jar"/>
+	<classpathentry kind="lib" path="lib/smackx-debug.jar"/>
+	<classpathentry kind="lib" path="lib/smackx.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/DBEngine"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/Probes"/>
+	<classpathentry kind="lib" path="/Common/lib/commons-io-1.4.jar" sourcepath="/Common/lib-src/commons-io-1.4-src.zip"/>
+	<classpathentry kind="lib" path="/Common/lib/log4j-1.2.15.jar"/>
+	<classpathentry kind="lib" path="/Common/lib/commons-httpclient-3.1.jar" sourcepath="/Common/lib-src/commons-httpclient-3.1-src.zip"/>
+	<classpathentry kind="lib" path="/DBEngine/lib/commons-dbcp-1.2.2.jar" sourcepath="/DBEngine/lib-src/commons-dbcp-1.2.2-src.zip"/>
+	<classpathentry kind="lib" path="lib/OtpErlang.jar"/>
+	<classpathentry kind="lib" path="lib/SnakeYAML-1.0.1.jar" sourcepath="lib-src/SnakeYAML-1.0.1-src.zip"/>
+	<classpathentry kind="lib" path="/Common/lib/junit-4.4.jar"/>
+	<classpathentry kind="lib" path="/Common/lib/commons-logging-1.0.4.jar"/>
+	<classpathentry kind="lib" path="/Common/lib/concurrent.jar"/>
+	<classpathentry kind="lib" path="lib/ws-commons-util-1.0.2.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/ContentHandler"/>
+	<classpathentry kind="lib" path="/Common/lib/servlet-api.jar" sourcepath="/Common/lib-src/servlet-api-2.4-src.zip"/>
+	<classpathentry kind="lib" path="lib/activation.jar"/>
+	<classpathentry kind="lib" path="lib/romeByViolet.jar"/>
+	<classpathentry kind="output" path="build/WEB-INF/classes"/>
+</classpath>

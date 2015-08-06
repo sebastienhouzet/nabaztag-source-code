@@ -1,0 +1,83 @@
+<project name="DBEngine" default="compile.project">
+
+	<property name="lib.dir" value="${basedir}/lib" description="Location of the project libraries"/>
+	<property name="config.dir" value="${basedir}/config" description="Location of the project conf"/>
+	<property name="classes.dest" value="${basedir}/classes" description="Location of the project libraries"/>
+	<property name="test.classes.dest" value="${basedir}/build_test/classes" description="Destination directory for tests classes"/>
+	<property name="src.dir" value="${basedir}/net" description="Location of the project sources"/>
+	<property name="test.src.dir" value="${basedir}/test" description="Location of the test sources"/>
+	<property name="test.classes.dest" value="${basedir}/build_test/classes" description="Destination directory for tests classes"/>
+	<property name="test.report.dir" value="${basedir}/build_test/reports/junit" />
+
+	<property name="Xlib.dir" value="${COMMONDIR}/lib" description="Location of the project libraries"/>
+
+	<!-- ==================== SubversionAnt lib ======================== -->
+	<path id="svn.classpath">
+		<pathelement location="${Xlib.dir}/svnant.jar" />
+		<pathelement location="${Xlib.dir}/svnClientAdapter.jar" />
+		<pathelement location="${Xlib.dir}/svnjavahl.jar" />
+	</path>
+
+	<!-- load the svn task -->
+	<taskdef resource="svntask.properties" classpathref="svn.classpath" />
+
+	<!-- ==================== SVN Target ====================================== -->
+
+	<target name="svn.up" unless="prod" >
+		<svn username="tomcat" password="c36cb0fe8078ca8fe89ac521b45e4883">
+			<update dir="${basedir}" />
+		</svn>
+	</target>
+
+	<!-- ==================== Compile Target ================================== -->
+
+	<target name="common.compile" description="gets the common dev built">
+		<echo message="===== START BUILDING Common =====" />
+	    <ant antfile="${COMMONDIR}/build.xml" inheritAll="false" target="up.and.compile">
+	    	<property name="classes.dest" value="${classes.dest}"/>
+		</ant>
+	</target>
+
+	<target name="probes.compile" description="gets the probes built">
+		<echo message="===== START BUILDING Probes =====" />
+	    <ant antfile="${PROBESDIR}/build.xml" inheritAll="false" target="up.and.compile">
+	    	<property name="classes.dest" value="${classes.dest}"/>
+	    	<property name="Xlib.dir" value="${Xlib.dir}"/>
+		</ant>
+	</target>
+
+	<target name="compile.project" description="Compile Java sources" depends="common.compile, probes.compile,copy.config">
+		<javac srcdir="${src.dir}" destdir="${classes.dest}" debug="on" deprecation="on">
+			<classpath>
+				<fileset dir="${Xlib.dir}"/>
+				<fileset dir="${lib.dir}"/>
+				<pathelement location="${classes.dest}" />
+			</classpath>
+		</javac>
+	</target>
+
+	<target name="compile.tests" description="Compiles the test sources." depends="compile.project">
+		<mkdir dir="${test.classes.dest}" />
+		<!-- Copie des fichiers non-java dans build/WEB-INF/classes genre vasm et mid -->
+		<copy todir="${test.classes.dest}/net" includeEmptyDirs="false" overwrite="true">
+			<fileset dir="${src.dir}">
+				<exclude name="**/*.java"/>
+			</fileset>
+		</copy>
+		<javac srcdir="${test.src.dir}" destdir="${test.classes.dest}" debug="on" nowarn="on" >
+			<classpath>
+				<fileset dir="${lib.dir}" excludes="${exclude.from.classpath}"/>
+				<pathelement location="${classes.dest}" />
+				<fileset dir="${Xlib.dir}" excludes="${exclude.from.classpath}"/>
+			</classpath>
+		</javac>
+	</target>
+
+	<target name="up.and.compile" depends="svn.up, compile.project" />
+
+	<target name="copy.config">
+		<echo message="Copie des fichiers de configuration from '${config.dir}' for '${server}'"/>
+		<copy file="${config.dir}/db.constante.properties${server}" tofile="${classes.dest}/db.constante.properties" overwrite="true" />
+	</target>
+
+</project>

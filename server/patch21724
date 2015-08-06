@@ -1,0 +1,299 @@
+Index: build/include_jsp/mySrv/inc_dialog.jsp
+===================================================================
+--- build/include_jsp/mySrv/inc_dialog.jsp	(révision 21723)
++++ build/include_jsp/mySrv/inc_dialog.jsp	(copie de travail)
+@@ -23,33 +23,49 @@
+ <!-- Affichage des differentes Listes et demandes -->
+ <logic:greaterThan name="hasSomethingToDisplay" value="0">
+ 	<logic:notEmpty name="mySrvDialogForm" property="refusedInfo">
+-		<bean:define name="mySrvDialogForm" property="refusedInfo" id="rInfo" />
+-		<bean:define name="rInfo" property="friend_name" id="rName" />
++		<bean:define name="mySrvDialogForm" property="refusedInfo" id="rInfo" />
++		<bean:define name="rInfo" property="friend_name" id="rName" />
++		<bean:define name="rInfo" property="notification" id="notification"/>
++		<bean:define name="notification" property="id" id="nId" />
+ 		<br/><span class="bigWord"><%=rName%></span> <%=DicoTools.dico(dico_lang , "srv_communion/refused_your_demand")%>
+ 		<hr class="spacer" />
+-		<input type="button" class="genericBt" value="<%=DicoTools.dico(dico_lang , "srv_communion/refused_your_demand_button")%>" onclick="simpleAjaxRequest('srvDialogConfig.do?applicationId=<%=Application.NativeApplication.EARS_COMMUNION.getApplication().getId()%>&dispatch=delete', function(){ endSrvDialog('accept') } )" />		
++		<input type="button" class="genericBt" value="<%=DicoTools.dico(dico_lang , "srv_communion/refused_your_demand_button")%>" onclick="simpleAjaxRequest('srvDialogConfig.do?applicationId=<%=Application.NativeApplication.EARS_COMMUNION.getApplication().getId()%>&dispatch=delete&notificationId=<%=nId%>', function(){ endSrvDialog('accept') } )" />		
+ 		<!-- <input type="button" class="genericBt" value="<%=DicoTools.dico(dico_lang , "srv_communion/refused_your_demand_button")%>" onclick="endSrvDialog('refused')" /> -->		
++	</logic:notEmpty>
++	
++	<logic:notEmpty name="mySrvDialogForm" property="acceptedInfo">
++		<bean:define name="mySrvDialogForm" property="acceptedInfo" id="rInfo" />
++		<bean:define name="rInfo" property="friend_name" id="rName" />
++		<bean:define name="rInfo" property="notification" id="notification"/>
++		<bean:define name="notification" property="id" id="nId" />
++		<br/><span class="bigWord"><%=rName%></span> <%=DicoTools.dico(dico_lang , "srv_communion/message_accept")%>
++		<hr class="spacer" />
++		<input type="button" class="genericBt" value="OK" onclick="simpleAjaxRequest('srvDialogConfig.do?applicationId=<%=Application.NativeApplication.EARS_COMMUNION.getApplication().getId()%>&dispatch=delete&notificationId=<%=nId%>', function(){ endSrvDialog('accept') } )" />		
+ 	</logic:notEmpty>
+ 
+ 	<logic:notEmpty name="mySrvDialogForm" property="separatedInfo">
+ 		<bean:define name="mySrvDialogForm" property="separatedInfo" id="sInfo" />
+ 		<bean:define name="sInfo" property="friend" id="friend"/>
+ 		<bean:define name="friend" property="object_login" id="sName" />
+-		<bean:define name="friend" property="id" id="sId" />
++		<bean:define name="friend" property="id" id="sId" />
++		<bean:define name="sInfo" property="notification" id="notification"/>
++		<bean:define name="notification" property="id" id="nId" />
+ 		<span class="bigWord"><%=sName%></span><%=DicoTools.dico(dico_lang , "srv_communion/divorced_from_you")%>
+ 
+ 		<hr class="spacer" />
+-		<input type="button" class="genericBt" value="<%=DicoTools.dico(dico_lang , "srv_communion/divorced_from_you_button")%>" onclick= "simpleAjaxRequest('srvDialogConfig.do?applicationId=<%=Application.NativeApplication.EARS_COMMUNION.getApplication().getId()%>&dispatch=delete', function(){ endSrvDialog('accept') } )" />
++		<input type="button" class="genericBt" value="<%=DicoTools.dico(dico_lang , "srv_communion/divorced_from_you_button")%>" onclick= "simpleAjaxRequest('srvDialogConfig.do?applicationId=<%=Application.NativeApplication.EARS_COMMUNION.getApplication().getId()%>&dispatch=delete&notificationId=<%=nId%>', function(){ endSrvDialog('accept') } )" />
+ 	</logic:notEmpty>
+ 	
+ 	<logic:notEmpty name="mySrvDialogForm" property="cancelList">
+ 		<logic:iterate name="mySrvDialogForm" property="cancelList" id="srvDialogData">
+ 			<bean:define name="srvDialogData" property="friend" id="vObjectData"/>
+ 			<bean:define name="vObjectData" property="id" id="cId"/>
+-			<bean:define name="vObjectData" property="object_login" id="cName"/>
++			<bean:define name="vObjectData" property="object_login" id="cName"/>
++			<bean:define name="srvDialogData" property="notification" id="notification"/>
++			<bean:define name="notification" property="id" id="nId" />
+ 			<span class="bigWord"><%=cName%></span> <%=DicoTools.dico(dico_lang , "srv_communion/cancelled_his_demand")%>
+ 			<hr class="spacer" />
+-			<input type="button" class="genericBt" value="<%=DicoTools.dico(dico_lang , "srv_communion/cancelled_his_demand_button")%>" onclick="TB_remove()" />
++			<input type="button" class="genericBt" value="<%=DicoTools.dico(dico_lang , "srv_communion/cancelled_his_demand_button")%>" onclick= "simpleAjaxRequest('srvDialogConfig.do?applicationId=<%=Application.NativeApplication.EARS_COMMUNION.getApplication().getId()%>&dispatch=delete&notificationId=<%=nId%>', function(){ endSrvDialog('accept') } )" />
+ 			
+ 		</logic:iterate>
+ 	</logic:notEmpty>
+Index: net/violet/mynabaztag/form/MySrvDialogForm.java
+===================================================================
+--- net/violet/mynabaztag/form/MySrvDialogForm.java	(révision 21723)
++++ net/violet/mynabaztag/form/MySrvDialogForm.java	(copie de travail)
+@@ -11,6 +11,7 @@
+ 	private static final long serialVersionUID = 1L;
+ 
+ 	private long subscriptionId;
++	private long notificationId = 0;
+ 
+ 	private int hasSomethingToDisplay;
+ 	private int isMarried;
+@@ -26,6 +27,7 @@
+ 	// Les listes d'avertissements
+ 	private SrvDialogData separatedInfo;
+ 	private SrvDialogData refusedInfo;
++	private SrvDialogData acceptedInfo;
+ 	private List<SrvDialogData> waitingList = new ArrayList<SrvDialogData>();
+ 	private List<SrvDialogData> cancelList = new ArrayList<SrvDialogData>();
+ 	private String serviceName = StringShop.EMPTY_STRING;
+@@ -110,6 +112,14 @@
+ 		this.refusedInfo = refusedInfo;
+ 	}
+ 
++	public SrvDialogData getAcceptedInfo() {
++		return this.acceptedInfo;
++	}
++
++	public void setAcceptedInfo(SrvDialogData acceptedInfo) {
++		this.acceptedInfo = acceptedInfo;
++	}
++
+ 	public int getError_dne() {
+ 		return this.error_dne;
+ 	}
+@@ -141,4 +151,12 @@
+ 	public void setSubscriptionId(long subscriptionId) {
+ 		this.subscriptionId = subscriptionId;
+ 	}
++
++	public long getNotificationId() {
++		return this.notificationId;
++	}
++
++	public void setNotificationId(long notificationId) {
++		this.notificationId = notificationId;
++	}
+ }
+Index: net/violet/mynabaztag/action/MySrvDialogAction.java
+===================================================================
+--- net/violet/mynabaztag/action/MySrvDialogAction.java	(révision 21723)
++++ net/violet/mynabaztag/action/MySrvDialogAction.java	(copie de travail)
+@@ -10,9 +10,14 @@
+ 
+ import net.violet.mynabaztag.form.MySrvDialogForm;
+ import net.violet.platform.applications.EarsCommunionHandler;
++import net.violet.platform.applications.SubscriptionManager;
+ import net.violet.platform.datamodel.Application;
++import net.violet.platform.datamodel.Notification;
++import net.violet.platform.datamodel.Subscription;
+ import net.violet.platform.datamodel.VObject;
++import net.violet.platform.datamodel.Notification.NOTIFICATION_STATUS;
+ import net.violet.platform.datamodel.factories.Factories;
++import net.violet.platform.dataobjects.NotificationData;
+ import net.violet.platform.dataobjects.SrvDialogData;
+ import net.violet.platform.dataobjects.SubscriptionData;
+ import net.violet.platform.dataobjects.VObjectData;
+@@ -37,11 +42,12 @@
+ 		final MySrvDialogForm myForm = (MySrvDialogForm) form;
+ 
+ 		final Application earsCommunion = Application.NativeApplication.EARS_COMMUNION.getApplication();
+-		final List<SubscriptionData> subscriptions = SubscriptionData.findByApplicationAndObject(earsCommunion, theObject);
+ 
++		final List<NotificationData> theNotifications = NotificationData.getReceived(VObjectData.getData(theObject), 0, 0);
++
+ 		myForm.setServiceName(earsCommunion.getProfile().getTitle());
+ 
+-		int hasSomethingToDisplay = (subscriptions.size() > 0) ? 1 : 0;
++		int hasSomethingToDisplay = (theNotifications.size() > 0) ? 1 : 0;
+ 		int isMarried = 0;
+ 		int isWaiting = 0;
+ 
+@@ -50,48 +56,47 @@
+ 
+ 		SrvDialogData refused = null;
+ 		SrvDialogData separated = null;
++		SrvDialogData accepted = null;
+ 		final List<SrvDialogData> waiting = new ArrayList<SrvDialogData>();
+ 		final List<SrvDialogData> cancelled = new ArrayList<SrvDialogData>();
+ 
+-		for (final SubscriptionData subscription : subscriptions) {
++		for (final NotificationData notification : theNotifications) {
+ 
+-			final Map<String, Object> theSettings = subscription.getSettings();
+-			final EarsCommunionHandler.Status theStatus = EarsCommunionHandler.Status.findByLabel(theSettings.get(EarsCommunionHandler.STATUS).toString());
++			final String theStatus = notification.getStatus();
+ 
+-			final VObject friendObject = Factories.VOBJECT.find(Long.parseLong(subscription.getSettings().get(EarsCommunionHandler.FRIEND).toString()));
++			final VObject friendObject = notification.getSender().getReference();
+ 
+-			if (EarsCommunionHandler.Status.REFUSED == theStatus) {
+-				refused = new SrvDialogData(subscription, theObject, friendObject, EarsCommunionHandler.Status.REFUSED.getId());
+-				hasSomethingToDisplay = 1;
+-			} else if (EarsCommunionHandler.Status.SEPARATED == theStatus) {
+-				separated = new SrvDialogData(subscription, theObject, friendObject, EarsCommunionHandler.Status.SEPARATED.getId());
+-				hasSomethingToDisplay = 1;
+-			} else if (EarsCommunionHandler.Status.REQUEST == theStatus) {
+-				final VObject theFriend = Factories.VOBJECT.find(Long.parseLong(subscription.getSettings().get(EarsCommunionHandler.FRIEND).toString()));
+-				waiting.add(new SrvDialogData(subscription, theObject, theFriend, EarsCommunionHandler.Status.REQUEST.getId()));
+-				hasSomethingToDisplay = 0;
++			if (NOTIFICATION_STATUS.REJECTED.toString().equals(theStatus)) {
++				refused = new SrvDialogData(theObject, friendObject, notification);
++			} else if (NOTIFICATION_STATUS.FINISHED.toString().equals(theStatus)) {
++				separated = new SrvDialogData(theObject, friendObject, notification);
++			} else if (NOTIFICATION_STATUS.PENDING.toString().equals(theStatus)) {
++				waiting.add(new SrvDialogData(friendObject, theObject, notification));
++			} else if (NOTIFICATION_STATUS.CANCELLED.toString().equals(theStatus)) {
++				cancelled.add(new SrvDialogData(theObject, friendObject, notification));
++			} else if (NOTIFICATION_STATUS.ACCEPTED.toString().equals(theStatus)) {
++				accepted = new SrvDialogData(theObject, friendObject, notification);
++			}
++		}
++
++		final List<Subscription> theSubscriptions = Factories.SUBSCRIPTION.findByApplicationAndObject(earsCommunion, theObject);
++
++		if (!theSubscriptions.isEmpty()) {
++			final Map<String, Object> theSettings = theSubscriptions.get(0).getSettings();
++			final VObjectData theFriendObject = VObjectData.find(Long.parseLong(theSettings.get(EarsCommunionHandler.FRIEND_OBJECT_ID).toString()));
++			friendId = (int) theFriendObject.getId();
++			friendName = theFriendObject.getObject_login();
++			if (NOTIFICATION_STATUS.ACCEPTED.toString().equals(theSettings.get(EarsCommunionHandler.STATUS))) {
++				isMarried = 1;
++			} else {
+ 				isWaiting = 1;
+-				friendId = theFriend.getId().intValue();
+-				friendName = theFriend.getObject_login();
+-			} else if (EarsCommunionHandler.Status.CANCEL == theStatus) {
+-				cancelled.add(new SrvDialogData(subscription, theObject, friendObject, EarsCommunionHandler.Status.CANCEL.getId()));
+-				hasSomethingToDisplay = 1;
+-			} else if (EarsCommunionHandler.Status.OK == theStatus) {
+-				final VObject theFriend = Factories.VOBJECT.find(Long.parseLong(subscription.getSettings().get(EarsCommunionHandler.FRIEND).toString()));
+-				friendId = theFriend.getId().intValue();
+-				friendName = theFriend.getObject_login();
+-				hasSomethingToDisplay = 0;
+-				isMarried = 1;
+-			} else if (EarsCommunionHandler.Status.ANSWER == theStatus) {
+-				final VObject theFriend = Factories.VOBJECT.find(Long.parseLong(subscription.getSettings().get(EarsCommunionHandler.FRIEND).toString()));
+-				waiting.add(new SrvDialogData(subscription, theFriend, theObject, EarsCommunionHandler.Status.ANSWER.getId()));
+-				hasSomethingToDisplay = 1;
+ 			}
+ 		}
+ 
+ 		// Info quand on se loggue sur Nabaztaland
+ 		if (hasSomethingToDisplay > 0) {
+ 			myForm.setRefusedInfo(refused);
++			myForm.setAcceptedInfo(accepted);
+ 			myForm.setSeparatedInfo(separated);
+ 			myForm.setWaitingList(waiting);
+ 			myForm.setCancelList(cancelled);
+@@ -140,7 +145,7 @@
+ 		final VObject theObject = SessionTools.getRabbitFromSession(session);
+ 		final MySrvDialogForm myForm = (MySrvDialogForm) form;
+ 
+-		new EarsCommunionHandler().acceptRequest(theObject, myForm.getFriendId());
++		new EarsCommunionHandler().acceptRequest(VObjectData.getData(theObject), myForm.getFriendId());
+ 
+ 		return load(mapping, form, request, response);
+ 	}
+@@ -172,7 +177,7 @@
+ 				error_same = 1;
+ 			} else {
+ 				try {
+-					new EarsCommunionHandler().askForFriendship(VObjectData.getData(theObject), friendName);
++					new EarsCommunionHandler().askForFriendship(VObjectData.getData(theObject), VObjectData.getData(theFriend));
+ 				} catch (final Exception e) {
+ 					MySrvDialogAction.LOGGER.fatal(e, e);
+ 					return load(mapping, form, request, response);
+@@ -185,7 +190,7 @@
+ 	}
+ 
+ 	/**
+-	 * cas ou on divorce
++	 * cas ou on divorce ou supprime une notification recu
+ 	 * 
+ 	 * @param mapping
+ 	 * @param form
+@@ -196,10 +201,24 @@
+ 	public ActionForward delete(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
+ 		final HttpSession session = request.getSession(true);
+ 		final VObject theObject = SessionTools.getRabbitFromSession(session);
++		final MySrvDialogForm myForm = (MySrvDialogForm) form;
++		final long notificationId = myForm.getNotificationId();
+ 
+-		final Application earsCommunion = Application.NativeApplication.EARS_COMMUNION.getApplication();
+-		new EarsCommunionHandler().endCommunion(SubscriptionData.findByApplicationAndObject(earsCommunion, theObject).get(0));
++		if (notificationId != 0) {
++			final Notification theNotification = Factories.NOTIFICATION.find(notificationId);
++			if (theNotification != null) {
++				theNotification.delete();
++			}
++		} else {
++			final Application earsCommunion = Application.NativeApplication.EARS_COMMUNION.getApplication();
+ 
++			final List<SubscriptionData> theSubscriptions = SubscriptionData.findByApplicationAndObject(earsCommunion, theObject);
++
++			if (!theSubscriptions.isEmpty()) {
++				SubscriptionManager.deleteSubscription(SubscriptionData.findByApplicationAndObject(earsCommunion, theObject).get(0));
++			}
++		}
++
+ 		return load(mapping, form, request, response);
+ 	}
+ 
+@@ -216,15 +235,9 @@
+ 		final HttpSession session = request.getSession(true);
+ 		final VObject theObject = SessionTools.getRabbitFromSession(session);
+ 
+-		final MySrvDialogForm myForm = (MySrvDialogForm) form;
+-		SubscriptionData theSubscription = SubscriptionData.find(myForm.getSubscriptionId());
++		final Application earsCommunion = Application.NativeApplication.EARS_COMMUNION.getApplication();
++		SubscriptionManager.deleteSubscription(SubscriptionData.findByApplicationAndObject(earsCommunion, theObject).get(0));
+ 
+-		if ((theSubscription == null) || (theSubscription.getReference() == null)) {
+-			theSubscription = SubscriptionData.findByApplicationAndObject(Application.NativeApplication.EARS_COMMUNION.getApplication(), theObject).get(0);
+-		}
+-
+-		new EarsCommunionHandler().cancelRequest(theSubscription);
+-
+ 		return load(mapping, form, request, response);
+ 	}
+ 
+
+Modification de propriétés sur .
+___________________________________________________________________
+Modifié : svnmerge-integrated
+   - /MyNabaztag/trunk:1-21054
+   + /MyNabaztag/trunk:1-21054,21067-21098
+

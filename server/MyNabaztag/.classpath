@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry excluding="build-crawlers.xml|build-crawlersPP.xml|build.properties|build.xml|build/|test/" kind="src" path=""/>
+	<classpathentry kind="src" path="test"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/CommonDev"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/OS"/>
+	<classpathentry kind="lib" path="lib/struts-core-1.3.8.jar"/>
+	<classpathentry kind="lib" path="lib/struts-el-1.3.8.jar"/>
+	<classpathentry kind="lib" path="lib/struts-extras-1.3.8.jar"/>
+	<classpathentry kind="lib" path="lib/struts-faces-1.3.8.jar"/>
+	<classpathentry kind="lib" path="lib/struts-mailreader-dao-1.3.8.jar"/>
+	<classpathentry kind="lib" path="lib/struts-scripting-1.3.8.jar"/>
+	<classpathentry kind="lib" path="lib/struts-taglib-1.3.8.jar"/>
+	<classpathentry kind="lib" path="lib/struts-tiles-1.3.8.jar"/>
+	<classpathentry kind="lib" path="/OS/lib/PDFBox-0.7.3.jar"/>
+	<classpathentry kind="lib" path="/OS/lib/jdom-1.0.jar"/>
+	<classpathentry kind="lib" path="/OS/lib/commons-lang-2.3.jar"/>
+	<classpathentry kind="lib" path="/Common/lib/log4j-1.2.15.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/Common"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/DBEngine"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/ContentHandler"/>
+	<classpathentry kind="lib" path="/Common/lib/junit-4.4.jar"/>
+	<classpathentry kind="lib" path="/Common/lib/servlet-api.jar"/>
+	<classpathentry kind="lib" path="/OS/lib/romeByViolet.jar"/>
+	<classpathentry kind="output" path="build/WEB-INF/classes"/>
+</classpath>

@@ -1,0 +1,31 @@
+<project name="CommonDev" default="compile.project">
+
+	<!-- ==================== SubversionAnt lib ======================== -->
+
+	<path id="svn.classpath">
+		<pathelement location="${lib.dir}/svnant.jar" />
+		<pathelement location="${lib.dir}/svnClientAdapter.jar" />
+		<pathelement location="${lib.dir}/svnjavahl.jar" />
+	</path>
+
+	<!-- load the svn task -->
+	<taskdef resource="svntask.properties" classpathref="svn.classpath" />
+
+	<!-- ==================== SVN Target ====================================== -->
+
+	<target name="svn.up" unless="prod" >
+		<svn username="tomcat" password="c36cb0fe8078ca8fe89ac521b45e4883">
+			<update dir="${basedir}" />
+		</svn>
+	</target>
+
+	<!-- ==================== Compile Target ================================== -->
+
+	<target name="compile.project" description="Compile Java sources">
+		<javac srcdir="${basedir}/net" destdir="${classes.dest}" debug="on" deprecation="on" />
+	</target>
+
+	<target name="up.and.compile" depends="svn.up, compile.project" />
+
+</project>
+

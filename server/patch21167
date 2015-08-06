@@ -1,0 +1,24 @@
+Index: js/applications/OperationFuturEnSeine.js
+===================================================================
+--- js/applications/OperationFuturEnSeine.js	(révision 21167)
++++ js/applications/OperationFuturEnSeine.js	(copie de travail)
+@@ -6,6 +6,12 @@
+ 	name: "net.violet.js.operationfuturenseine"
+ };
+ 
++Object.complete(Array.prototype, {
++	pickRandom: function() {
++		return this[Math.floor(Math.random()*this.length)];
++	}
++});
++
+ /**
+  * Event handlers
+  */
+
+Modification de propriétés sur .
+___________________________________________________________________
+Modifié : svnmerge-integrated
+   - /OS/trunk:1-21058,21060-21066,21068-21070,21074,21076-21079,21085,21087-21088,21090,21096,21105,21107,21109-21110,21113-21119,21123-21124,21134-21137,21139,21141-21142,21145-21152,21154
+   + /OS/trunk:1-21058,21060-21066,21068-21070,21074,21076-21079,21085,21087-21088,21090,21096,21105,21107,21109-21110,21113-21119,21123-21124,21134-21137,21139,21141-21142,21145-21152,21154,21167
+

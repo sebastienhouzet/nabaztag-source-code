@@ -1,0 +1,148 @@
+<project name="ContentHandler" default="compile.project">
+
+	<property file="build.properties" />
+
+	<property name="src.dir" value="${basedir}/net" description="Location of the project sources"/>
+	<property name="classes.dest" value="${basedir}/classes" description="Location of the project libraries"/>
+	<property name="config.dir" value="${basedir}/config" description="Location of the project conf"/>
+
+	<property name="test.src.dir" value="${basedir}/test" description="Location of the test sources"/>
+	<property name="test.classes.dest" value="${basedir}/build_test/classes" description="Destination directory for tests classes"/>
+	<property name="test.report.dir" value="${basedir}/build_test/reports/junit" />
+
+	<property name="Xlib.dir" value="${COMMONDIR}/lib" description="Location of the project libraries"/>
+
+	<!-- ==================== SubversionAnt lib ======================== -->
+	<path id="svn.classpath">
+		<pathelement location="${Xlib.dir}/svnant.jar" />
+		<pathelement location="${Xlib.dir}/svnClientAdapter.jar" />
+		<pathelement location="${Xlib.dir}/svnjavahl.jar" />
+	</path>
+	
+	<path id="Xlib.path" >
+		<fileset dir="${COMMONDIR}/lib" excludes="${exclude.from.classpath}"/>
+	</path>
+
+	<!-- load the svn task -->
+	<taskdef resource="svntask.properties" classpathref="svn.classpath" />
+
+	<!-- ==================== SVN Target ====================================== -->
+
+	<target name="svn.up" unless="prod" >
+		<svn username="tomcat" password="c36cb0fe8078ca8fe89ac521b45e4883">
+			<update dir="${basedir}" />
+		</svn>
+	</target>
+
+	<!-- ==================== Compile Target ================================== -->
+
+	<target name="common.compile" description="gets the common dev built">
+		<echo message="===== START BUILDING Common =====" />
+	    <ant antfile="${COMMONDIR}/build.xml" inheritAll="false" target="up.and.compile">
+	    	<property name="classes.dest" value="${classes.dest}"/>
+	    	<property name="server" value="${server}"/>
+		</ant>
+	</target>
+
+	<target name="compile.project" description="Compile Java sources" depends="common.compile,copy.config">
+
+		<javac srcdir="${src.dir}" destdir="${classes.dest}" debug="on" deprecation="on">
+			<classpath>
+				<pathelement location="${classes.dest}" />
+				<fileset dir="${Xlib.dir}"/>
+			</classpath>
+		</javac>
+	</target>
+
+	<target name="compile.tests" description="Compiles the test sources." depends="compile.project">
+		<mkdir dir="${test.classes.dest}" />
+		<!-- Copie des fichiers non-java dans build/WEB-INF/classes genre vasm et mid -->
+		<copy todir="${test.classes.dest}/net" includeEmptyDirs="false" overwrite="true">
+			<fileset dir="${src.dir}">
+				<exclude name="**/*.java"/>
+			</fileset>
+		</copy>
+		<javac srcdir="${test.src.dir}" destdir="${test.classes.dest}" debug="on" nowarn="on" >
+			<classpath>
+				<pathelement location="${classes.dest}" />
+				<path refid="Xlib.path" />
+			</classpath>
+		</javac>
+	</target>
+
+	<!-- JUnit reports publication -->
+	<target name="tests" depends="compile.tests">
+		
+		<delete dir="${test.report.dir}" />
+		<mkdir dir="${test.report.dir}" />
+		
+		<junit fork="yes" printsummary="no" haltonfailure="no" failureproperty="junit.failure">
+	    	<jvmarg value="-Xmx2048m" />
+
+			<classpath>
+				<path refid="Xlib.path" />
+				<pathelement location="${classes.dest}" />
+				<pathelement location="${test.classes.dest}" />
+				<pathelement location="${src.dir}" />
+			</classpath>	
+
+			<formatter type="xml" />
+
+			<sysproperty key="silence" value="true"/>
+	        <sysproperty key="log4j.configuration" value="log4j-cli.properties"/>
+
+			<batchtest fork="yes" todir="${test.report.dir}">
+				<fileset dir="${test.src.dir}">
+					<include name="**/*Test.java" />
+					<exclude name="**/ConverterTest.java" />
+					<!-- Classes de base (ou autre) qui ne sont pas des tests -->
+				</fileset>
+			</batchtest>
+		</junit>
+
+		<!-- Generate Junit report -->
+		<delete dir="${test.report.dir}/html" />
+		<mkdir dir="${test.report.dir}/html" />
+		<junitreport todir="${test.report.dir}">
+			<fileset dir="${test.report.dir}">
+				<include name="TEST-*.xml" />
+			</fileset>
+			<report format="frames" todir="${test.report.dir}/html" />
+		</junitreport>
+
+	    <antcall target="archive.reports"/>
+
+		<!-- Erreur si un test a échoué. -->
+		<fail message="JUnit tests failed" if="junit.failure"/>
+	</target>
+		
+	<target name="archive.reports" if="reports.archive.dir">
+		<!-- Copy report -->
+		<tstamp>
+			<format property="now" pattern="yyyy.MM.dd_kk:mm:ss" locale="en" />
+		</tstamp>
+		
+	    <copy todir="${reports.archive.dir}/${now}">
+	        <fileset dir="${test.report.dir}"/>
+	    </copy>
+	    <exec executable="/usr/bin/unlink">
+		   	<arg value="${reports.archive.dir}/_latest"/>
+		</exec>
+	    <exec executable="/bin/ln">
+		   	<arg value="-s"/>
+		   	<arg value="${reports.archive.dir}/${now}"/>
+		   	<arg value="${reports.archive.dir}/_latest"/>
+		</exec>
+	</target>
+
+	<target name="up.and.compile" depends="svn.up, compile.project" />
+
+	<target name="copy.config">
+		<echo message="Copie des fichiers de configuration from '${config.dir}' for '${server}'"/>
+		<copy file="${config.dir}/script.constante.properties${server}" tofile="${classes.dest}/script.constante.properties" overwrite="true" />
+		<copy file="${config.dir}/log4j.properties${server}" tofile="${classes.dest}/log4j.properties" overwrite="true" />
+		<copy file="${config.dir}/log4j-cli.properties" tofile="${classes.dest}/log4j-cli.properties" overwrite="true" />
+		<copy file="${config.dir}/cache.ccf" tofile="${classes.dest}/cache.ccf" overwrite="true" />
+	</target>
+
+</project>

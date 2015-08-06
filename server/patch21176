@@ -1,0 +1,265 @@
+Index: net/violet/platform/daemons/crawlers/source/CrawlerSourceMail.java
+===================================================================
+--- net/violet/platform/daemons/crawlers/source/CrawlerSourceMail.java	(révision 21176)
++++ net/violet/platform/daemons/crawlers/source/CrawlerSourceMail.java	(copie de travail)
+@@ -67,7 +67,7 @@
+ 	public static final Palette MAIL_COLOR_PAL = Palette.LIGHT;
+ 
+ 	private static final String INBOX = "INBOX";
+-	private static final int THREADNBR = 100; // number of threads executing in the same time
++	private static final int THREADNBR = 50; // number of threads executing in the same time
+ 	private final BlockingExecutor<SubscriptionData> mBlockingExecutor;
+ 
+ 	/**
+@@ -96,15 +96,13 @@
+ 	@Override
+ 	protected void process() {
+ 		for (final Subscription aSubscription : Factories.SUBSCRIPTION.findAllByApplication(NativeApplication.MAIL.getApplication())) {
+-			final Map<String, Object> settings = aSubscription.getSettings();
+-			if (settings.containsKey(MailAlertHandler.SOURCE)) {
+-				try {
+-					CrawlerSourceMail.this.mBlockingExecutor.put(SubscriptionData.getData(aSubscription));
+-				} catch (final InterruptedException ie) {
+-					CrawlerSourceMail.LOGGER.fatal(ie, ie);
+-				}
++			try {
++				CrawlerSourceMail.this.mBlockingExecutor.put(SubscriptionData.getData(aSubscription));
++			} catch (final InterruptedException ie) {
++				CrawlerSourceMail.LOGGER.fatal(ie, ie);
+ 			}
+ 		}
++
+ 		try {
+ 			this.mBlockingExecutor.waitTermination();
+ 		} catch (final InterruptedException e) {
+@@ -112,13 +110,10 @@
+ 		}
+ 	}
+ 
+-	/**
+-	 * Function run, checks the previously defined srvSrc
+-	 */
+-	public void doProcessSubscription(SubscriptionData inSubscription) {
++	private void doProcessSubscription(SubscriptionData inSubscription) {
+ 		final PojoMap theSettings = inSubscription.getSettings();
+ 
+-		if (!theSettings.isEmpty()) {
++		if (theSettings.containsKey(MailAlertHandler.SOURCE)) {
+ 			final List<Source> theSources = Factories.SOURCE.findByRootPath(theSettings.get(MailAlertHandler.SOURCE).toString());
+ 
+ 			if (!theSources.isEmpty()) {
+@@ -179,23 +174,19 @@
+ 
+ 	private void processFolderAndSources(Folder inFolder, SubscriptionData inSubscription, List<Source> inSources, PojoMap inSettings) throws MessagingException {
+ 
+-		int nbMessages = inFolder.getMessageCount();
+-		if (nbMessages > CrawlerSourceMail.MAX_EMAILS_AMOUNT) {
+-			nbMessages = CrawlerSourceMail.MAX_EMAILS_AMOUNT;
+-		}
++		final int mostRecentMessageIndex = inFolder.getMessageCount();
++		final int eldestMessageIndex = Math.max(mostRecentMessageIndex - CrawlerSourceMail.MAX_EMAILS_AMOUNT, 1); // we will only check 50 messages, max
+ 
+-		final int theFirstNewMessageIndex = getFirstNewMessageIndex(inFolder, inSettings);
+-
+-		// all the keywords/medias to be broadcasted now
++		// all the keywords/medias to use for active alert
+ 		final Map<String, String> theMediaKeywords = new HashMap<String, String>();
+ 		for (final SubscriptionSchedulingData aScheduling : SubscriptionSchedulingData.findAllBySubscriptionAndType(inSubscription, SCHEDULING_TYPE.NewContentWithKeywordAndMedia)) {
+ 			final SubscriptionSchedulingSettingsData keywordSetting = SubscriptionSchedulingSettingsData.findBySubscriptionSchedulingAndKey(aScheduling, KeywordHandler.KEYWORD);
+ 			final SubscriptionSchedulingSettingsData mediaSetting = SubscriptionSchedulingSettingsData.findBySubscriptionSchedulingAndKey(aScheduling, NewContentWithKeywordAndMediaHandler.MEDIA);
+ 			theMediaKeywords.put(keywordSetting.getValue(), mediaSetting.getValue());
+ 		}
+-		// this list is empty if there isn't any keyword
++		// this list is empty if there isn't any keyword (default alert)
+ 
+-		// the sources (probably used by amibant alert)
++		// the sources, at least one default and possibly some others for keywords
+ 		final List<Pair<Source, String>> thePassiveKeywords = new LinkedList<Pair<Source, String>>();
+ 		for (final Source aSource : inSources) {
+ 			final Matcher theMatcher = CrawlerSourceMail.KEYWORD_PATTERN.matcher(aSource.getSource_path());
+@@ -208,9 +199,12 @@
+ 		}
+ 
+ 		final Set<String> newContentList = new HashSet<String>(); // all the new messages in the box since the last time
+-		final Set<String> allContentList = new HashSet<String>(); // all unseen messages in the box
++		final Set<String> allContentList = new HashSet<String>(); // all unread messages in the box
+ 
+-		for (int indexMessage = nbMessages; indexMessage > 0; indexMessage--) {
++		// here we retrieve the index of the first unread message (or messagesAmount + 1 if we didn't find any) : all previous messages are also new
++		final int theFirstNewMessageIndex = getFirstNewMessageIndex(inFolder, inSettings);
++
++		for (int indexMessage = mostRecentMessageIndex; indexMessage >= eldestMessageIndex; indexMessage--) {
+ 			final Message theMessage = inFolder.getMessage(indexMessage);
+ 			if (!theMessage.isSet(Flags.Flag.SEEN) && !theMessage.isSet(Flags.Flag.DELETED)) {
+ 				final String theContent = getMessageFilterMaterial(theMessage);
+@@ -222,7 +216,7 @@
+ 			}
+ 		}
+ 
+-		// Treatment of the passive alerts
++		// Treatment of the passive alerts : based on the unread messages
+ 		for (final Pair<Source, String> aKeyword : thePassiveKeywords) {
+ 			int amount = 0;
+ 
+@@ -233,23 +227,24 @@
+ 						amount++;
+ 					}
+ 				}
+-			} else { // the main source
++			} else { // no keyword, that's the default source
+ 				amount = allContentList.size();
+ 			}
+-
+ 			aKeyword.getFirst().setVal(amount);
+ 		}
+ 
+-		//Treatment of the media alerts
++		//Treatment of the media alerts : based on the new messages
+ 		final Set<MusicData> mediaToSend = new HashSet<MusicData>();
+-		if (theMediaKeywords.isEmpty()) { // there is not any keywords
+-			mediaToSend.add(MusicData.getDefaultMailAlert(inSubscription.getObject().getPreferences().getLang().getReference()));
+-		} else {
+-			for (final Entry<String, String> aKeywordWithMedia : theMediaKeywords.entrySet()) {
+-				final Pattern thePattern = Pattern.compile(".*" + Pattern.quote(aKeywordWithMedia.getKey()) + ".*");
+-				for (final String aContent : newContentList) {
+-					if (thePattern.matcher(aContent).matches()) {
+-						mediaToSend.add(MusicData.getData(Factories.MUSIC.find(Long.parseLong(aKeywordWithMedia.getValue()))));
++		if (!newContentList.isEmpty()) { // if there is at least one new message we can proceed
++			if (theMediaKeywords.isEmpty()) { // there is not any keywords : default alert
++				mediaToSend.add(MusicData.getDefaultMailAlert(inSubscription.getObject().getPreferences().getLang().getReference()));
++			} else {
++				for (final Entry<String, String> aKeywordWithMedia : theMediaKeywords.entrySet()) {
++					final Pattern thePattern = Pattern.compile(".*" + Pattern.quote(aKeywordWithMedia.getKey()) + ".*");
++					for (final String aContent : newContentList) {
++						if (thePattern.matcher(aContent).matches()) {
++							mediaToSend.add(MusicData.getData(Factories.MUSIC.find(Long.parseLong(aKeywordWithMedia.getValue()))));
++						}
+ 					}
+ 				}
+ 			}
+@@ -265,38 +260,26 @@
+ 			MessageServices.sendServiceMessage(filesToSend, inSubscription.getObject().getReference(), "Service Mail", null, Constantes.QUEUE_TTL_SERVICE, CrawlerSourceMail.MAIL_COLOR_PAL, MessageSignature.MAIL_SIGNATURE, false, JabberMessageFactory.IDLE_MODE);
+ 		}
+ 
+-		final Message theLastMessage;
+-		if (nbMessages > 0) {
+-			theLastMessage = inFolder.getMessage(nbMessages);
+-		} else {
+-			theLastMessage = null;
+-		}
+-
+-		if (theLastMessage != null) {
++		// if we did find a new message we update the settings
++		if (theFirstNewMessageIndex < mostRecentMessageIndex) {
++			final Message theNewReferenceMessage = inFolder.getMessage(mostRecentMessageIndex);
+ 			final String theUID;
+ 			if (inFolder instanceof IMAPFolder) {
+-				theUID = Long.toString(((IMAPFolder) inFolder).getUID(theLastMessage));
++				theUID = Long.toString(((IMAPFolder) inFolder).getUID(theNewReferenceMessage));
+ 			} else {
+-				theUID = (((POP3Folder) inFolder).getUID(theLastMessage)).toString();
++				theUID = (((POP3Folder) inFolder).getUID(theNewReferenceMessage)).toString();
+ 			}
+ 
+ 			inSubscription.setSetting(MailAlertHandler.ID_LAST_NEWS, theUID);
+-			String theLastTimeMessage = null;
+-			if (theLastMessage.getSentDate() == null) {
+-				theLastTimeMessage = new CCalendar(false).getTimestampUTC();
+-			} else {
+-				theLastTimeMessage = new CCalendar(theLastMessage.getSentDate().getTime()).getTimestampUTC();
+-			}
+ 
++			final String theLastTimeMessage = theNewReferenceMessage.getSentDate() == null ? new CCalendar(false).getTimestampUTC() : new CCalendar(theNewReferenceMessage.getSentDate().getTime()).getTimestampUTC();
+ 			inSubscription.setSetting(GmailTwitterHandler.LAST_MODIFIED, theLastTimeMessage);
+-
+ 		}
+ 
+ 	}
+ 
+ 	/**
+-	 * Retourne le premier index du message nouveau (non vu), ou nbMessages + 1
+-	 * si tous les messages ont été vus.
++	 * Returns the index of the first unread message, or messagesAmount+1 if there is not any.
+ 	 * 
+ 	 * @param inFolder
+ 	 * @param inMailUserData
+@@ -309,59 +292,52 @@
+ 
+ 		final String theStoredUIDStr = (inSettings.get(MailAlertHandler.ID_LAST_NEWS) == null) ? StringShop.ZERO : inSettings.get(MailAlertHandler.ID_LAST_NEWS).toString();
+ 
+-		int nbMessages = inFolder.getMessageCount();
+-		if (nbMessages > CrawlerSourceMail.MAX_EMAILS_AMOUNT) {
+-			nbMessages = CrawlerSourceMail.MAX_EMAILS_AMOUNT;
+-		}
++		final int mostRecentMessageIndex = inFolder.getMessageCount();
++		final int eldestMessageIndex = Math.max(mostRecentMessageIndex - CrawlerSourceMail.MAX_EMAILS_AMOUNT, 1); // we will only check 50 messages, max
+ 
+ 		if (inFolder instanceof IMAPFolder) {
+-			// Cas IMAP, le UID est croissant.
++			// in IMAP uid are increasing
+ 			final long theStoredUIDLong = Long.parseLong(theStoredUIDStr);
+-			// On itère depuis la fin.
+ 			theResult = 1; // Tous les messages sont nouveaux.
+-			for (int indexMessage = nbMessages; indexMessage > 0; indexMessage--) {
++			for (int indexMessage = mostRecentMessageIndex; indexMessage >= eldestMessageIndex; indexMessage--) {
+ 				final Message theMessage = inFolder.getMessage(indexMessage);
+ 				if (theMessage != null) {
+ 					final long theMessageUID = ((IMAPFolder) inFolder).getUID(theMessage);
+ 					if (theStoredUIDLong >= theMessageUID) {
+-						theResult = indexMessage + 1;
++						theResult = indexMessage + 1; // the previous message is the newest unread one.
+ 						break;
+ 					}
+ 				}
+ 			}
+ 		} else {
+-			// On prend un mix de la date d'envoi et de l'id.
+-			// 1- on cherche le UID.
+-			theResult = 0; // La recherche par UID n'a pas marché.
+-			for (int indexMessage = nbMessages; indexMessage > 0; indexMessage--) {
++			// POP protocol is not as easier :  we use both the id if we can, otherwise the delivery date
++			theResult = 0; // default value indicating that the search failed
++			for (int indexMessage = mostRecentMessageIndex; indexMessage >= eldestMessageIndex; indexMessage--) {
+ 				final Message theMessage = inFolder.getMessage(indexMessage);
+ 				if (theMessage != null) {
+ 					final String theMessageUID = ((POP3Folder) inFolder).getUID(theMessage);
+-					if (theStoredUIDStr.equals(theMessageUID)) {
++					if (theStoredUIDStr.equals(theMessageUID)) { // the stored id has been found, all previously encountered messages are new.
+ 						theResult = indexMessage + 1;
+ 						break;
+ 					}
+ 				}
+ 			}
+ 
+-			if (theResult == 0) {
++			if (theResult == 0) { // we failed finding the stored id
+ 				Date theStoredDate;
+ 				try {
+ 					theStoredDate = inSettings.getDate(GmailTwitterHandler.LAST_MODIFIED, new CCalendar(false).getTime());
+-
+ 				} catch (final InvalidParameterException e) {
+ 					CrawlerSourceMail.LOGGER.fatal("Invalid format for date param", e);
+ 					return theResult;
+ 				}
+ 
+-				// L'utilisateur l'a effacé.
+-				// On utilise la date d'envoi
+-				theResult = nbMessages + 1;
+-				for (int indexMessage = nbMessages; indexMessage > 0; indexMessage--) {
++				theResult = mostRecentMessageIndex + 1; // default : no new messages
++				for (int indexMessage = mostRecentMessageIndex; indexMessage >= eldestMessageIndex; indexMessage--) {
+ 					final Message theMessage = inFolder.getMessage(indexMessage);
+ 					if (theMessage != null) {
+ 						final Date theMessageDate = theMessage.getSentDate();
+-						if ((theMessageDate != null) && theMessageDate.before(theStoredDate)) {
++						if ((theMessageDate != null) && theMessageDate.before(theStoredDate)) { // this message has been sent earlier, all previous messages are new
+ 							theResult = indexMessage + 1;
+ 							break;
+ 						}
+
+Modification de propriétés sur .
+___________________________________________________________________
+Modifié : svnmerge-integrated
+   - /OS/trunk:1-21058,21060-21066,21068-21070,21074,21076-21079,21085,21087-21088,21090,21096,21105,21107,21109-21110,21113-21119,21123-21124,21134-21137,21139,21141-21142,21145-21152,21154,21167
+   + /OS/trunk:1-21058,21060-21066,21068-21070,21074,21076-21079,21085,21087-21088,21090,21096,21105,21107,21109-21110,21113-21119,21123-21124,21134-21137,21139,21141-21142,21145-21152,21154,21167,21174
+

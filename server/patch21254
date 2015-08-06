@@ -1,0 +1,82 @@
+Index: net/violet/platform/applications/VActionFullHandler.java
+===================================================================
+--- net/violet/platform/applications/VActionFullHandler.java	(révision 21254)
++++ net/violet/platform/applications/VActionFullHandler.java	(copie de travail)
+@@ -196,11 +196,13 @@
+ 	}
+ 
+ 	private void deleteFile(SubscriptionData subscription) {
+-		final Files theFiles = Factories.FILES.find(Integer.parseInt(subscription.getSettings().get(VActionFullHandler.FILE).toString()));
+-		if (theFiles != null) {
+-			theFiles.scheduleDeletion();
++		final Object fileId = subscription.getSettings().get(VActionFullHandler.FILE);
++		if (fileId != null) {
++			final Files theFiles = Factories.FILES.find(Long.parseLong(fileId.toString()));
++			if (theFiles != null) {
++				theFiles.scheduleDeletion();
++			}
+ 		}
+-
+ 	}
+ 
+ 	private FeedData getFeed(SubscriptionData subscription) {
+@@ -210,11 +212,15 @@
+ 
+ 	public void delete(SubscriptionData subscription) {
+ 		final FeedData feed = getFeed(subscription);
+-		final FeedSubscriptionData feedSubscription = FeedSubscriptionData.findByObjectAndFeed(subscription.getObject(), feed);
+-		feedSubscription.delete();
++		if ((feed != null) && feed.isValid()) {
++			final FeedSubscriptionData feedSubscription = FeedSubscriptionData.findByObjectAndFeed(subscription.getObject(), feed);
++			if ((feedSubscription != null) && feedSubscription.isValid()) {
++				feedSubscription.delete();
++			}
+ 
+-		if (feed.shouldBeDeleted()) {
+-			feed.delete();
++			if (feed.shouldBeDeleted()) {
++				feed.delete();
++			}
+ 		}
+ 
+ 		deleteFile(subscription);
+Index: net/violet/platform/api/actions/subscriptions/Get.java
+===================================================================
+--- net/violet/platform/api/actions/subscriptions/Get.java	(révision 21254)
++++ net/violet/platform/api/actions/subscriptions/Get.java	(copie de travail)
+@@ -12,13 +12,13 @@
+ import net.violet.platform.api.exceptions.NoSuchObjectException;
+ import net.violet.platform.api.exceptions.NoSuchSubscriptionException;
+ import net.violet.platform.api.maps.applications.ApplicationSubscriptionMap;
++import net.violet.platform.applications.SubscriptionManager;
+ import net.violet.platform.datamodel.Application;
+ import net.violet.platform.datamodel.Application.ApplicationClass;
+ import net.violet.platform.dataobjects.ApplicationData;
+ import net.violet.platform.dataobjects.SubscriptionData;
+ import net.violet.platform.dataobjects.VObjectData;
+ 
+-
+ public class Get extends AbstractSubscriptionAction {
+ 
+ 	@APIMethodParam(Level.OPTIONAL)
+@@ -43,7 +43,12 @@
+ 
+ 		final List<ApplicationSubscriptionMap> theResult = new ArrayList<ApplicationSubscriptionMap>(theSubscriptions.size());
+ 		for (final SubscriptionData theSubscription : theSubscriptions) {
+-			theResult.add(new ApplicationSubscriptionMap(inParam.getCaller(), theSubscription));
++			try {
++				theResult.add(new ApplicationSubscriptionMap(inParam.getCaller(), theSubscription));
++			} catch (final Exception e) {
++				// this subscription is not properly retrievable, it has been corrupted so we DELETE it !
++				SubscriptionManager.deleteSubscription(theSubscription);
++			}
+ 		}
+ 		return theResult;
+ 	}
+
+Modification de propriétés sur .
+___________________________________________________________________
+Modifié : svnmerge-integrated
+   - /OS/trunk:1-21058,21060-21066,21068-21070,21074,21076-21079,21085,21087-21088,21090,21096,21105,21107,21109-21110,21113-21119,21123-21124,21134-21137,21139,21141-21142,21145-21152,21154,21163,21167,21174,21178,21186,21188,21191-21192,21196,21199-21200,21204,21209,21226
+   + /OS/trunk:1-21058,21060-21066,21068-21070,21074,21076-21079,21085,21087-21088,21090,21096,21105,21107,21109-21110,21113-21119,21123-21124,21134-21137,21139,21141-21142,21145-21152,21154,21163,21167,21174,21178,21186,21188,21191-21192,21196,21199-21200,21204,21209,21226,21240,21253
+

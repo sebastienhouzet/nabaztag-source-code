@@ -1,0 +1,14 @@
+Index: net/violet/platform/handlers/rfid/RfidInitializerFactory.java
+===================================================================
+--- net/violet/platform/handlers/rfid/RfidInitializerFactory.java	(révision 21967)
++++ net/violet/platform/handlers/rfid/RfidInitializerFactory.java	(révision 21968)
+@@ -31,6 +31,9 @@
+ 		initializerMap.put(FreeAngelAdultInitializer.APPLICATION, new FreeAngelAdultInitializer());
+ 		initializerMap.put(FreeAngelAdoInitializer.APPLICATION, new FreeAngelAdoInitializer());
+ 		initializerMap.put(FreeAngelChildInitializer.APPLICATION, new FreeAngelChildInitializer());
++		initializerMap.put(ColoriGOBoyInitializer.APPLICATION, new ColoriGOBoyInitializer());
++		initializerMap.put(ColoriGOGirlInitializer.APPLICATION, new ColoriGOGirlInitializer());
++		initializerMap.put(ColoriGOMixteInitializer.APPLICATION, new ColoriGOMixteInitializer());
+ 
+ 		//theMap.put(CallUrlInitializer.APPLICATION, new CallUrlInitializer());
+ 

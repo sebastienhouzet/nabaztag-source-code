@@ -1,0 +1,13 @@
+Index: net/violet/platform/feeds/crawlers/FacebookCrawler.java
+===================================================================
+--- net/violet/platform/feeds/crawlers/FacebookCrawler.java	(révision 21964)
++++ net/violet/platform/feeds/crawlers/FacebookCrawler.java	(copie de travail)
+@@ -31,7 +31,7 @@
+ 
+ import com.sun.syndication.feed.synd.SyndEntry;
+ 
+-public abstract class FacebookCrawler extends FeedCrawler<Subscription> {
++public class FacebookCrawler extends FeedCrawler<Subscription> {
+ 
+ 	private static final Logger LOGGER = Logger.getLogger(FacebookCrawler.class);
+ 

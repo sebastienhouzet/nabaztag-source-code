@@ -1,0 +1,40 @@
+Index: net/violet/platform/feeds/crawlers/FacebookCrawler.java
+===================================================================
+--- net/violet/platform/feeds/crawlers/FacebookCrawler.java	(révision 21963)
++++ net/violet/platform/feeds/crawlers/FacebookCrawler.java	(copie de travail)
+@@ -6,7 +6,7 @@
+ import java.util.List;
+ import java.util.Map;
+ 
+-import net.violet.db.RecordWalker;
++import net.violet.db.records.Record.RecordWalker;
+ import net.violet.platform.applications.FacebookHandler;
+ import net.violet.platform.applications.GmailTwitterHandler;
+ import net.violet.platform.datamodel.Application;
+@@ -44,7 +44,7 @@
+ 
+ 	@Override
+ 	protected void process() {
+-		Factories.SUBSCRIPTION.walkByApplicationAndOnlineObjects(FacebookCrawler.APPLICATION, new RecordWalker<Subscription>() {
++		Factories.SUBSCRIPTION.walkByApplication(FacebookCrawler.APPLICATION, new RecordWalker<Subscription>() {
+ 
+ 			public void process(Subscription subscription) {
+ 				try {
+Index: net/violet/platform/feeds/processors/DetectTitleProcessor.java
+===================================================================
+--- net/violet/platform/feeds/processors/DetectTitleProcessor.java	(révision 21963)
++++ net/violet/platform/feeds/processors/DetectTitleProcessor.java	(copie de travail)
+@@ -37,11 +37,11 @@
+ 			if (theVoice == null) {
+ 				throw new IllegalArgumentException(" This given text is not recognized : " + textToConvert);
+ 			}
+-			final Files resultFiles = TTSServices.getInstance().postTTS(textToConvert, true, true, theVoice);
++			final Files resultFiles = TTSServices.getDefaultInstance().postTTS(textToConvert, true, true, theVoice);
+ 			if (resultFiles != null) {
+ 				return new ProcessedEntry(entry, Collections.singletonList(resultFiles));
+ 			}
+-			throw new ProcessingException("Failed to synthetize : [" + textToConvert + "] with voice : " + theVoice.getName());
++			throw new ProcessingException("Failed to synthetize : [" + textToConvert + "] with voice : " + theVoice.getTtsvoice_libelle());
+ 		}
+ 
+ 		throw new ProcessingException("Failed to synthetize : [" + textToConvert + "]");

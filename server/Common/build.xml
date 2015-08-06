@@ -1,0 +1,44 @@
+<project name="Common" default="compile.project">
+
+	<property name="lib.dir" value="${basedir}/lib" description="Location of the project libraries"/>
+	<property name="classes.dest" value="${basedir}/classes" description="Location of the project libraries"/>
+	<property name="config.dir" value="${basedir}/config" description="Location of the project conf"/>
+
+	<!-- ==================== SubversionAnt lib ======================== -->
+	<path id="svn.classpath">
+		<pathelement location="${lib.dir}/svnant.jar" />
+		<pathelement location="${lib.dir}/svnClientAdapter.jar" />
+		<pathelement location="${lib.dir}/svnjavahl.jar" />
+	</path>
+
+	<!-- load the svn task -->
+	<taskdef resource="svntask.properties" classpathref="svn.classpath" />
+
+	<!-- ==================== SVN Target ====================================== -->
+
+	<target name="svn.up" unless="prod" >
+		<svn username="tomcat" password="c36cb0fe8078ca8fe89ac521b45e4883">
+			<update dir="${basedir}" />
+		</svn>
+	</target>
+
+	<!-- ==================== Compile Target ================================== -->
+
+	<target name="compile.project" description="Compile Java sources" depends="copy.config" >
+
+		<javac srcdir="${basedir}/net" destdir="${classes.dest}" debug="on" deprecation="on">
+			<classpath>
+				<fileset dir="${lib.dir}"/>
+				<pathelement location="${classes.dest}" />
+			</classpath>
+		</javac>
+	</target>
+
+	<target name="up.and.compile" depends="svn.up, compile.project" />
+
+	<target name="copy.config">
+		<echo message="Copie des fichiers de configuration from '${config.dir}' for '${server}'"/>
+		<copy file="${config.dir}/common.constante.properties${server}" tofile="${classes.dest}/common.constante.properties" overwrite="true" />
+	</target>
+
+</project>

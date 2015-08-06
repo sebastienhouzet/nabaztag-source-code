@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry excluding=".classpath|.project|Copie de build.properties|Copie de build.xml|build.properties|build.xml|build/|classes/|classes/|classes/com/|classes/com/maxmind/|classes/com/maxmind/geoip/" kind="src" path=""/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="/usr/local/tomcat/common/lib/activation.jar"/>
+	<classpathentry kind="lib" path="/usr/local/tomcat/common/lib/antlr.jar"/>
+	<classpathentry kind="lib" path="/usr/local/tomcat/common/lib/commons-beanutils.jar"/>
+	<classpathentry kind="lib" path="/usr/local/tomcat/common/lib/commons-codec-1.3.jar"/>
+	<classpathentry kind="lib" path="/usr/local/tomcat/common/lib/commons-digester.jar"/>
+	<classpathentry kind="lib" path="/usr/local/tomcat/common/lib/commons-el.jar"/>
+	<classpathentry kind="lib" path="/usr/local/tomcat/common/lib/commons-fileupload.jar"/>
+	<classpathentry kind="lib" path="/usr/local/tomcat/common/lib/commons-fileupload-1.0.jar"/>
+	<classpathentry kind="lib" path="/usr/local/tomcat/common/lib/commons-lang-2.0.jar"/>
+	<classpathentry kind="lib" path="/usr/local/tomcat/common/lib/commons-logging.jar"/>
+	<classpathentry kind="lib" path="/usr/local/tomcat/common/lib/commons-validator.jar"/>
+	<classpathentry kind="lib" path="/usr/local/tomcat/common/lib/EJsapi.jar"/>
+	<classpathentry kind="lib" path="/usr/local/tomcat/common/lib/imap.jar"/>
+	<classpathentry kind="lib" path="/usr/local/tomcat/common/lib/jakarta-oro.jar"/>
+	<classpathentry kind="lib" path="/usr/local/tomcat/common/lib/jasper-compiler.jar"/>
+	<classpathentry kind="lib" path="/usr/local/tomcat/common/lib/jasper-compiler-jdt.jar"/>
+	<classpathentry kind="lib" path="/usr/local/tomcat/common/lib/jasper-runtime.jar"/>
+	<classpathentry kind="lib" path="/usr/local/tomcat/common/lib/jdic.jar"/>
+	<classpathentry kind="lib" path="/usr/local/tomcat/common/lib/jdic-native.jar"/>
+	<classpathentry kind="lib" path="/usr/local/tomcat/common/lib/jsp-api.jar"/>
+	<classpathentry kind="lib" path="/usr/local/tomcat/common/lib/jstl.jar"/>
+	<classpathentry kind="lib" path="/usr/local/tomcat/common/lib/mail.jar"/>
+	<classpathentry kind="lib" path="/usr/local/tomcat/common/lib/mailapi.jar"/>
+	<classpathentry kind="lib" path="/usr/local/tomcat/common/lib/mysql-connector-java-5.0.4-bin.jar"/>
+	<classpathentry kind="lib" path="/usr/local/tomcat/common/lib/naming-factory.jar"/>
+	<classpathentry kind="lib" path="/usr/local/tomcat/common/lib/naming-factory-dbcp.jar"/>
+	<classpathentry kind="lib" path="/usr/local/tomcat/common/lib/naming-resources.jar"/>
+	<classpathentry kind="lib" path="/usr/local/tomcat/common/lib/poi-2.5.1-final-20040804.jar"/>
+	<classpathentry kind="lib" path="/usr/local/tomcat/common/lib/pop3.jar"/>
+	<classpathentry kind="lib" path="/usr/local/tomcat/common/lib/servlet-api.jar"/>
+	<classpathentry kind="lib" path="/usr/local/tomcat/common/lib/smack.jar"/>
+	<classpathentry kind="lib" path="/usr/local/tomcat/common/lib/smackx.jar"/>
+	<classpathentry kind="lib" path="/usr/local/tomcat/common/lib/smackx-debug.jar"/>
+	<classpathentry kind="lib" path="/usr/local/tomcat/common/lib/smtp.jar"/>
+	<classpathentry kind="lib" path="/usr/local/tomcat/common/lib/standard.jar"/>
+
+
+	<classpathentry kind="lib" path="/usr/local/tomcat/common/lib/struts-tiles-1.3.5.jar"/>
+	<classpathentry kind="lib" path="/usr/local/tomcat/common/lib/struts-taglib-1.3.5.jar"/>
+	<classpathentry kind="lib" path="/usr/local/tomcat/common/lib/struts-scripting-1.3.5.jar"/>
+	<classpathentry kind="lib" path="/usr/local/tomcat/common/lib/struts-mailreader-dao-1.3.5.jar"/>
+	<classpathentry kind="lib" path="/usr/local/tomcat/common/lib/struts-faces-1.3.5.jar"/>
+	<classpathentry kind="lib" path="/usr/local/tomcat/common/lib/struts-extras-1.3.5.jar"/>
+	<classpathentry kind="lib" path="/usr/local/tomcat/common/lib/struts-el-1.3.5.jar"/>
+	<classpathentry kind="lib" path="/usr/local/tomcat/common/lib/struts-core-1.3.5.jar"/>
+	<classpathentry kind="lib" path="/usr/local/tomcat/common/lib/standard-1.0.2.jar"/>
+	<classpathentry kind="lib" path="/usr/local/tomcat/common/lib/oro-2.0.8.jar"/>
+	<classpathentry kind="lib" path="/usr/local/tomcat/common/lib/jstl-1.0.2.jar"/>
+	<classpathentry kind="lib" path="/usr/local/tomcat/common/lib/commons-validator-1.3.0.jar"/>
+	<classpathentry kind="lib" path="/usr/local/tomcat/common/lib/commons-logging-1.0.4.jar"/>
+	<classpathentry kind="lib" path="/usr/local/tomcat/common/lib/commons-io-1.1.jar"/>
+	<classpathentry kind="lib" path="/usr/local/tomcat/common/lib/commons-fileupload-1.1.1.jar"/>
+	<classpathentry kind="lib" path="/usr/local/tomcat/common/lib/commons-digester-1.6.jar"/>
+	<classpathentry kind="lib" path="/usr/local/tomcat/common/lib/commons-chain-1.1.jar"/>
+	<classpathentry kind="lib" path="/usr/local/tomcat/common/lib/commons-beanutils-1.7.0.jar"/>
+	<classpathentry kind="lib" path="/usr/local/tomcat/common/lib/bsf-2.3.0.jar"/>
+	<classpathentry kind="lib" path="/usr/local/tomcat/common/lib/antlr-2.7.2.jar"/>
+
+
+	<classpathentry kind="lib" path="/usr/local/tomcat/common/lib/struts.jar"/>
+	<classpathentry kind="lib" path="build/WEB-INF/lib/activation.jar"/>
+	<classpathentry kind="lib" path="build/WEB-INF/lib/commons-fileupload-1.0.jar"/>
+	<classpathentry kind="lib" path="build/WEB-INF/lib/imap.jar"/>
+	<classpathentry kind="lib" path="build/WEB-INF/lib/mail.jar"/>
+	<classpathentry kind="lib" path="build/WEB-INF/lib/mailapi.jar"/>
+	<classpathentry kind="lib" path="build/WEB-INF/lib/pop3.jar"/>
+	<classpathentry kind="lib" path="build/WEB-INF/lib/smtp.jar"/>
+	<classpathentry kind="lib" path="classes"/>
+	<classpathentry kind="output" path="build/WEB-INF/classes"/>
+</classpath>

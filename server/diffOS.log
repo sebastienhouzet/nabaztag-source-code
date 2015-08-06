@@ -1,0 +1,290 @@
+Binary files OS/build/OS.war and OS_OLD_02062009/build/OS.war differ
+Binary files OS/build/WEB-INF/classes/net/violet/content/converters/FFMPEGConverter.class and OS_OLD_02062009/build/WEB-INF/classes/net/violet/content/converters/FFMPEGConverter.class differ
+Binary files OS/build/WEB-INF/classes/net/violet/platform/api/actions/subscriptions/Get.class and OS_OLD_02062009/build/WEB-INF/classes/net/violet/platform/api/actions/subscriptions/Get.class differ
+Binary files OS/build/WEB-INF/classes/net/violet/platform/applications/VActionFullHandler.class and OS_OLD_02062009/build/WEB-INF/classes/net/violet/platform/applications/VActionFullHandler.class differ
+Only in OS_OLD_02062009/build/WEB-INF/classes/net/violet/platform/datamodel/factories/implementations: FeedItemFactoryImpl$1.class
+Binary files OS/build/WEB-INF/classes/net/violet/platform/datamodel/factories/implementations/FeedItemFactoryImpl.class and OS_OLD_02062009/build/WEB-INF/classes/net/violet/platform/datamodel/factories/implementations/FeedItemFactoryImpl.class differ
+Only in OS/build/WEB-INF/classes/net/violet/platform/handlers/rfid: AbstractFreeAngel.class
+Only in OS/build/WEB-INF/classes/net/violet/platform/handlers/rfid: FreeAngelAdoInitializer.class
+Only in OS/build/WEB-INF/classes/net/violet/platform/handlers/rfid: FreeAngelAdultInitializer.class
+Only in OS/build/WEB-INF/classes/net/violet/platform/handlers/rfid: FreeAngelChildInitializer.class
+Binary files OS/build/WEB-INF/classes/net/violet/platform/handlers/rfid/RfidInitializerFactory.class and OS_OLD_02062009/build/WEB-INF/classes/net/violet/platform/handlers/rfid/RfidInitializerFactory.class differ
+Binary files OS/build/WEB-INF/classes/net/violet/platform/message/application/factories/VActionMessageFactory$1.class and OS_OLD_02062009/build/WEB-INF/classes/net/violet/platform/message/application/factories/VActionMessageFactory$1.class differ
+Binary files OS/build/WEB-INF/classes/net/violet/platform/message/application/factories/VActionMessageFactory.class and OS_OLD_02062009/build/WEB-INF/classes/net/violet/platform/message/application/factories/VActionMessageFactory.class differ
+Only in OS: diffOS.log
+Only in OS/js/applications: FreeAngelAdo-config.xml
+Only in OS/js/applications: FreeAngelAdo-dico.csv
+Only in OS/js/applications: FreeAngelAdo-img.gif
+Only in OS/js/applications: FreeAngelAdo.js
+Only in OS/js/applications: FreeAngelAdo-serials.csv
+Only in OS/js/applications: FreeAngelAdult-config.xml
+Only in OS/js/applications: FreeAngelAdult-dico.csv
+Only in OS/js/applications: FreeAngelAdult-img.gif
+Only in OS/js/applications: FreeAngelAdult.js
+Only in OS/js/applications: FreeAngelAdult-serials.csv
+Only in OS/js/applications: FreeAngelChild-config.xml
+Only in OS/js/applications: FreeAngelChild-dico.csv
+Only in OS/js/applications: FreeAngelChild-img.gif
+Only in OS/js/applications: FreeAngelChild.js
+Only in OS/js/applications: FreeAngelChild-serials.csv
+diff -ru OS/js/applications/FreeAngel-config.xml OS_OLD_02062009/js/applications/FreeAngel-config.xml
+--- OS/js/applications/FreeAngel-config.xml	2009-06-02 14:10:26.000000000 +0200
++++ OS_OLD_02062009/js/applications/FreeAngel-config.xml	2009-05-13 10:20:41.000000000 +0200
+@@ -101,7 +101,7 @@
+ 
+ 		<items><list>
+ 			<item><map><value>"enfant"</value><label>"Activer le mode enfant"</label></map></item>
+-			<item><map><value>"ado"</value><label>"Activer le mode adolescent"</label></map></item>
++			<item><map><value>"adolescent"</value><label>"Activer le mode adolescent"</label></map></item>
+ 			<item><map><value>"adulte"</value><label>"Activer le mode adulte"</label></map></item>
+ 
+ 		</list></items>
+diff -ru OS/js/applications/FreeAngel.js OS_OLD_02062009/js/applications/FreeAngel.js
+--- OS/js/applications/FreeAngel.js	2009-06-02 14:10:26.000000000 +0200
++++ OS_OLD_02062009/js/applications/FreeAngel.js	2009-05-13 10:20:42.000000000 +0200
+@@ -20,11 +20,11 @@
+ 		"ja": "このアプリケーションを実行できません。そのアイテムをミラーにかざしてください！"
+ 	},
+ 
+-	DEFAULT_PROFILE: null, // "enfant", "ado", "adulte"
++	DEFAULT_PROFILE: null, // "enfant", "adolescent", "adulte"
+ 
+ 	onSuccess: {
+ 		"enfant": "Le mode enfant est maintenant activé.",
+-		"ado": "Le mode adolescent est maintenant activé.",
++		"adolescent": "Le mode adolescent est maintenant activé.",
+ 		"adulte": "Le contrôle parental est maintenant désactivé.",
+ 		"noweb": "Le contrôle parental est maintenant activé."
+ 	},
+@@ -36,7 +36,7 @@
+ 	onTriggerEvent: function(objectId, event) {
+ 
+ 		var lang = event.trigger.object.owner.lang;
+-		if (!this.notSupported[lang]) lang = "fr";
++		if (!this.notSupported[lang]) lang = "en";
+ 		var notSupportedMsg = this.notSupported[lang];
+ 
+ 		// get the application title and picture (for the bubble)
+diff -ru OS/js/applications/MailPost.js OS_OLD_02062009/js/applications/MailPost.js
+--- OS/js/applications/MailPost.js	2009-06-02 14:10:26.000000000 +0200
++++ OS_OLD_02062009/js/applications/MailPost.js	2009-05-19 13:59:57.000000000 +0200
+@@ -37,7 +37,6 @@
+ 
+ 		// template variables for the message body and confirmation
+ 		var replacementVals = Event.getVariables(this, event);
+-		replacementVals.dest = settings.emailDest;
+ 		var subject = settings.getString("subject", {defaultValue:""}).replaceTemplateVariables(replacementVals);
+ 		var message = settings.getString("message", {defaultValue:""}).replaceTemplateVariables(replacementVals);
+ 		// emails addresses are comma separated
+diff -ru OS/net/violet/platform/api/actions/subscriptions/Get.java OS_OLD_02062009/net/violet/platform/api/actions/subscriptions/Get.java
+--- OS/net/violet/platform/api/actions/subscriptions/Get.java	2009-06-05 10:12:34.000000000 +0200
++++ OS_OLD_02062009/net/violet/platform/api/actions/subscriptions/Get.java	2009-05-07 13:45:26.000000000 +0200
+@@ -12,13 +12,13 @@
+ import net.violet.platform.api.exceptions.NoSuchObjectException;
+ import net.violet.platform.api.exceptions.NoSuchSubscriptionException;
+ import net.violet.platform.api.maps.applications.ApplicationSubscriptionMap;
+-import net.violet.platform.applications.SubscriptionManager;
+ import net.violet.platform.datamodel.Application;
+ import net.violet.platform.datamodel.Application.ApplicationClass;
+ import net.violet.platform.dataobjects.ApplicationData;
+ import net.violet.platform.dataobjects.SubscriptionData;
+ import net.violet.platform.dataobjects.VObjectData;
+ 
++
+ public class Get extends AbstractSubscriptionAction {
+ 
+ 	@APIMethodParam(Level.OPTIONAL)
+@@ -43,12 +43,7 @@
+ 
+ 		final List<ApplicationSubscriptionMap> theResult = new ArrayList<ApplicationSubscriptionMap>(theSubscriptions.size());
+ 		for (final SubscriptionData theSubscription : theSubscriptions) {
+-			try {
+-				theResult.add(new ApplicationSubscriptionMap(inParam.getCaller(), theSubscription));
+-			} catch (final Exception e) {
+-				// this subscription is not properly retrievable, it has been corrupted so we DELETE it !
+-				SubscriptionManager.deleteSubscription(theSubscription);
+-			}
++			theResult.add(new ApplicationSubscriptionMap(inParam.getCaller(), theSubscription));
+ 		}
+ 		return theResult;
+ 	}
+diff -ru OS/net/violet/platform/applications/ApplicationHandlerManager.java OS_OLD_02062009/net/violet/platform/applications/ApplicationHandlerManager.java
+--- OS/net/violet/platform/applications/ApplicationHandlerManager.java	2009-06-02 09:25:12.000000000 +0200
++++ OS_OLD_02062009/net/violet/platform/applications/ApplicationHandlerManager.java	2009-06-02 10:25:41.000000000 +0200
+@@ -36,7 +36,7 @@
+ 		theMap.put(Application.NativeApplication.TAICHI, new TaichiHandler());
+ 		theMap.put(Application.NativeApplication.TRAFIC, new TraficHandler());
+ 		theMap.put(Application.NativeApplication.WEATHER, new WeatherHandler());
+-	//	theMap.put(Application.NativeApplication.EARS_COMMUNION, new EarsCommunionHandler());
++		//theMap.put(Application.NativeApplication.EARS_COMMUNION, new EarsCommunionHandler());
+ 
+ 		HANDLERS = Collections.unmodifiableMap(theMap);
+ 	}
+diff -ru OS/net/violet/platform/applications/MailAlertHandler.java OS_OLD_02062009/net/violet/platform/applications/MailAlertHandler.java
+--- OS/net/violet/platform/applications/MailAlertHandler.java	2009-07-06 11:37:01.000000000 +0200
++++ OS_OLD_02062009/net/violet/platform/applications/MailAlertHandler.java	2009-05-19 13:59:47.000000000 +0200
+@@ -46,12 +46,7 @@
+ 
+ 	public SubscriptionData create(VObjectData object, Map<String, Object> settings) {
+ 		final SubscriptionData theSubscription = SubscriptionData.create(MailAlertHandler.MAIL_APPLICATION, object);
+-		try {
+ 		return createUpdateEverything(theSubscription, settings);
+-		} catch (final Exception e) {
+-			theSubscription.delete();
+-		}
+-		return null;
+ 	}
+ 
+ 	private SubscriptionData createUpdateEverything(SubscriptionData subscription, Map<String, Object> settings) {
+@@ -63,8 +58,8 @@
+ 		theSettings.put(MailAlertHandler.PASSWORD, CipherTools.cipher(uncipheredPassword));
+ 		theSettings.put(MailAlertHandler.ID_LAST_NEWS, "0");
+ 
+-		final Object secure = theSettings.get(MailAlertHandler.SECURE);
+-		if ((secure != null) && !StringShop.EMPTY_STRING.equals(secure.toString()) && MailAlertHandler.SECURE.equals(secure.toString())) {
++		final String secure = theSettings.get(MailAlertHandler.SECURE).toString();
++		if ((secure != null) && !StringShop.EMPTY_STRING.equals(secure) && MailAlertHandler.SECURE.equals(secure)) {
+ 			theSettings.put(MailAlertHandler.SECURE, "1");
+ 		}
+ 
+diff -ru OS/net/violet/platform/applications/VActionFullHandler.java OS_OLD_02062009/net/violet/platform/applications/VActionFullHandler.java
+--- OS/net/violet/platform/applications/VActionFullHandler.java	2009-06-05 10:12:34.000000000 +0200
++++ OS_OLD_02062009/net/violet/platform/applications/VActionFullHandler.java	2009-05-19 13:59:47.000000000 +0200
+@@ -196,13 +196,11 @@
+ 	}
+ 
+ 	private void deleteFile(SubscriptionData subscription) {
+-		final Object fileId = subscription.getSettings().get(VActionFullHandler.FILE);
+-		if (fileId != null) {
+-			final Files theFiles = Factories.FILES.find(Long.parseLong(fileId.toString()));
+-			if (theFiles != null) {
+-				theFiles.scheduleDeletion();
+-			}
++		final Files theFiles = Factories.FILES.find(Integer.parseInt(subscription.getSettings().get(VActionFullHandler.FILE).toString()));
++		if (theFiles != null) {
++			theFiles.scheduleDeletion();
+ 		}
++
+ 	}
+ 
+ 	private FeedData getFeed(SubscriptionData subscription) {
+@@ -212,15 +210,11 @@
+ 
+ 	public void delete(SubscriptionData subscription) {
+ 		final FeedData feed = getFeed(subscription);
+-		if ((feed != null) && feed.isValid()) {
+-			final FeedSubscriptionData feedSubscription = FeedSubscriptionData.findByObjectAndFeed(subscription.getObject(), feed);
+-			if ((feedSubscription != null) && feedSubscription.isValid()) {
+-				feedSubscription.delete();
+-			}
++		final FeedSubscriptionData feedSubscription = FeedSubscriptionData.findByObjectAndFeed(subscription.getObject(), feed);
++		feedSubscription.delete();
+ 
+-			if (feed.shouldBeDeleted()) {
+-				feed.delete();
+-			}
++		if (feed.shouldBeDeleted()) {
++			feed.delete();
+ 		}
+ 
+ 		deleteFile(subscription);
+diff -ru OS/net/violet/platform/datamodel/factories/implementations/FeedItemFactoryImpl.java OS_OLD_02062009/net/violet/platform/datamodel/factories/implementations/FeedItemFactoryImpl.java
+--- OS/net/violet/platform/datamodel/factories/implementations/FeedItemFactoryImpl.java	2009-07-01 14:40:41.000000000 +0200
++++ OS_OLD_02062009/net/violet/platform/datamodel/factories/implementations/FeedItemFactoryImpl.java	2009-06-02 14:57:12.000000000 +0200
+@@ -2,10 +2,15 @@
+ 
+ import java.sql.SQLException;
+ import java.util.Arrays;
++import java.util.ArrayList;
+ import java.util.Collections;
+ import java.util.List;
++import java.util.Iterator;
+ import java.util.concurrent.atomic.AtomicInteger;
++import java.util.LinkedHashSet;
++import java.util.Set;
+ 
++import net.violet.db.cache.Cache;
+ import net.violet.db.records.Record.RecordWalker;
+ import net.violet.db.records.factories.RecordFactoryImpl;
+ import net.violet.platform.datamodel.Feed;
+@@ -44,22 +49,8 @@
+ 	}
+ 
+ 	public boolean usesFiles(final Files inFile) {
+-/*		final AtomicInteger amount = new AtomicInteger(0);
+-		walk(" id > 0 ", Collections.emptyList(), null, 0, new RecordWalker<FeedItem>() {
+-
+-			public void process(FeedItem item) {
+-				if (item.getContents().contains(inFile)) {
+-					amount.incrementAndGet();
+-				}
+-			}
+-
+-		});
+-
+-		return amount.get() > 0;*/
+-               final String theValue = "[" + inFile.getId() + "]"; //special case, in order to accelerate purge process
+-               return count(null, " contents = ? ", Collections.singletonList((Object) theValue), null) > 0;
+-
+-
++		final String theValue = "[" + inFile.getId() + "]"; //special case, in order to accelerate purge process 
++		return count(null, " contents = ? ", Collections.singletonList((Object) theValue), null) > 0;
+ 	}
+ 
+ 	public List<FeedItem> findAllNewer(FeedItem refItem) {
+Only in OS/net/violet/platform/handlers/rfid: AbstractFreeAngel.java
+Only in OS/net/violet/platform/handlers/rfid: FreeAngelAdoInitializer.java
+Only in OS/net/violet/platform/handlers/rfid: FreeAngelAdultInitializer.java
+Only in OS/net/violet/platform/handlers/rfid: FreeAngelChildInitializer.java
+diff -ru OS/net/violet/platform/handlers/rfid/RfidInitializerFactory.java OS_OLD_02062009/net/violet/platform/handlers/rfid/RfidInitializerFactory.java
+--- OS/net/violet/platform/handlers/rfid/RfidInitializerFactory.java	2009-06-02 15:03:08.000000000 +0200
++++ OS_OLD_02062009/net/violet/platform/handlers/rfid/RfidInitializerFactory.java	2009-05-28 15:14:58.000000000 +0200
+@@ -28,10 +28,6 @@
+ 		initializerMap.put(OperationAmusementInitializer.APPLICATION, new OperationAmusementInitializer());
+ 		initializerMap.put(OperationMobileadInitializer.MOBILEAD, new OperationMobileadInitializer());
+ 		initializerMap.put(OperationFuturEnSeineInitializer.APPLICATION, new OperationFuturEnSeineInitializer());
+-		initializerMap.put(FreeAngelAdultInitializer.APPLICATION, new FreeAngelAdultInitializer());
+-		initializerMap.put(FreeAngelAdoInitializer.APPLICATION, new FreeAngelAdoInitializer());
+-		initializerMap.put(FreeAngelChildInitializer.APPLICATION, new FreeAngelChildInitializer());
+-
+ 		//theMap.put(CallUrlInitializer.APPLICATION, new CallUrlInitializer());
+ 
+ 		INITIALIZERS_MAP = Collections.unmodifiableMap(initializerMap);
+diff -ru OS/net/violet/platform/message/application/factories/VActionMessageFactory.java OS_OLD_02062009/net/violet/platform/message/application/factories/VActionMessageFactory.java
+--- OS/net/violet/platform/message/application/factories/VActionMessageFactory.java	2009-07-01 14:31:45.000000000 +0200
++++ OS_OLD_02062009/net/violet/platform/message/application/factories/VActionMessageFactory.java	2009-05-07 13:44:27.000000000 +0200
+@@ -113,7 +113,7 @@
+ 
+ 				@Override
+ 				protected boolean isStream() {
+-					return SERVICE.PODCAST.getService().equals(theService);
++					return true;
+ 				}
+ 
+ 				@Override
+diff -ru OS/scripts/crawlerctl OS_OLD_02062009/scripts/crawlerctl
+--- OS/scripts/crawlerctl	2009-07-01 14:47:04.000000000 +0200
++++ OS_OLD_02062009/scripts/crawlerctl	2009-05-27 10:50:38.000000000 +0200
+@@ -153,7 +153,7 @@
+ 	    ;;
+ 	    PurgeFiles)
+ 	    crawlerclass=net.violet.platform.daemons.crawlers.PurgeFilesDaemon
+-	    argline="-d 300000 -e 1000 -p 1"
++	    argline="-d 21600000 -e 1000 -p 2"
+ 	    ;;
+ 	    Hadoop)
+ 	    crawlerclass=net.violet.platform.daemons.crawlers.HadoopCrawler
+diff -ru OS/scripts/deploy-all-js-apps.sh OS_OLD_02062009/scripts/deploy-all-js-apps.sh
+--- OS/scripts/deploy-all-js-apps.sh	2009-06-02 14:10:26.000000000 +0200
++++ OS_OLD_02062009/scripts/deploy-all-js-apps.sh	2009-05-13 10:20:37.000000000 +0200
+@@ -18,10 +18,6 @@
+ ./publish-jsapp-release.sh FacebookStatus JAVASCRIPT ../js/applications
+ ./publish-jsapp-release.sh FileLauncher JAVASCRIPT ../js/applications
+ ./publish-jsapp-release.sh FlickrsFavorites JAVASCRIPT ../js/applications
+-./publish-jsapp-release.sh FreeAngel JAVASCRIPT ../js/applications
+-./publish-jsapp-release.sh FreeAngelChild JAVASCRIPT ../js/applications
+-./publish-jsapp-release.sh FreeAngelAdo JAVASCRIPT ../js/applications
+-./publish-jsapp-release.sh FreeAngelAdulte JAVASCRIPT ../js/applications
+ ./publish-jsapp-release.sh iTunesPlayer JAVASCRIPT ../js/applications
+ ./publish-jsapp-release.sh iTunesControl JAVASCRIPT ../js/applications
+ ./publish-jsapp-release.sh iTunesPlay JAVASCRIPT ../js/applications

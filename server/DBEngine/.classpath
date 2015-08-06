@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry excluding="lib/|test/|db/|config/" kind="src" path=""/>
+	<classpathentry kind="src" path="test"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/spread-4.0.0.jar"/>
+	<classpathentry kind="lib" path="lib/mysql-connector-java-5.0.4-bin.jar"/>
+	<classpathentry kind="lib" path="lib/commons-dbcp-1.2.2.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/Probes"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/Common"/>
+	<classpathentry kind="lib" path="/Common/lib/log4j-1.2.15.jar"/>
+	<classpathentry kind="lib" path="/Common/lib/junit-4.4.jar"/>
+	<classpathentry kind="output" path="classes"/>
+</classpath>
